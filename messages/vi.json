@@ -1,0 +1,389 @@
+{
+  "Common": {
+    "actions": {
+      "bookCall": "Đặt lịch chiến lược",
+      "requestDeck": "Nhận hồ sơ năng lực"
+    }
+  },
+  "Metadata": {
+    "Home": {
+      "title": "Radiant | Phát triển thương hiệu cho doanh nghiệp tăng trưởng",
+      "description": "Radiant xây dựng định vị, hệ thống nhận diện, thông điệp và nền tảng triển khai thương hiệu cho những doanh nghiệp đang bước vào giai đoạn tăng trưởng tiếp theo.",
+      "keywords": [
+        "Radiant",
+        "công ty phát triển thương hiệu",
+        "định vị thương hiệu doanh nghiệp",
+        "hệ thống nhận diện thương hiệu",
+        "chiến lược thương hiệu cho doanh nghiệp tăng trưởng",
+        "thông điệp thương hiệu",
+        "brand rollout và guideline"
+      ]
+    }
+  },
+  "HomePage": {
+    "Brand": {
+      "name": "Radiant",
+      "descriptor": "Phát Triển Thương Hiệu",
+      "menu": "Menu",
+      "navigation": {
+        "services": "Dịch vụ"
+      },
+      "advisoryLabel": "Liên hệ tư vấn",
+      "advisoryValue": "hello@radiant.studio",
+      "focusLabel": "Phù hợp với:",
+      "focusItems": [
+        "Doanh nghiệp đang tăng trưởng",
+        "Giai đoạn tái định vị",
+        "Ra mắt thị trường mới"
+      ]
+    },
+    "Hero": {
+      "title": {
+        "premium": "Strategic",
+        "esthetic": "Brand",
+        "dentistry": "Systems"
+      },
+      "promise": "Radiant phát triển thương hiệu với độ rõ chiến lược, độ chính xác ngôn ngữ và tính sẵn sàng triển khai mà doanh nghiệp cần trước giai đoạn tăng trưởng tiếp theo.",
+      "supporting": "Định vị, nhận diện, hệ thống thông điệp và nguyên tắc triển khai được thiết kế để leadership, marketing, product và sales cùng đi theo một hướng.",
+      "marquee": "Làm rõ hướng đi tiếp theo cho thương hiệu của bạn"
+    },
+    "Services": {
+      "eyebrow": "Chuỗi năng lực",
+      "title": "Dịch Vụ Trọng Tâm",
+      "intro": "Tám nhóm năng lực cốt lõi đi từ làm rõ chiến lược đến sẵn sàng triển khai thương hiệu.",
+      "order": [
+        "strategy",
+        "positioning",
+        "naming",
+        "messaging",
+        "identity",
+        "digital",
+        "guidelines",
+        "rollout"
+      ],
+      "items": {
+        "strategy": {
+          "eyebrow": "Chiến lược thương hiệu",
+          "title": "Nền Tảng Chiến Lược",
+          "description": "Làm rõ tham vọng tăng trưởng, áp lực thị trường, nhu cầu của khách hàng và những quyết định kinh doanh mà thương hiệu cần hỗ trợ tiếp theo."
+        },
+        "positioning": {
+          "eyebrow": "Định vị thị trường",
+          "title": "Định Vị Cho Giai Đoạn Tăng Trưởng",
+          "description": "Xác lập một vị thế sắc nét hơn để doanh nghiệp trở nên khác biệt, đáng tin và dễ được lựa chọn hơn trên thị trường."
+        },
+        "naming": {
+          "eyebrow": "Naming & kiến trúc",
+          "title": "Naming Và Kiến Trúc Thương Hiệu",
+          "description": "Sắp xếp danh mục, offer và hệ naming để doanh nghiệp có thể mở rộng qua sản phẩm, sub-brand và thị trường mới một cách nhất quán."
+        },
+        "messaging": {
+          "eyebrow": "Hệ thống ngôn ngữ",
+          "title": "Thông Điệp Và Verbal System",
+          "description": "Xây dựng ngôn ngữ cốt lõi để thương hiệu giao tiếp rõ ràng, khác biệt và có độ tự tin trên mọi touchpoint."
+        },
+        "identity": {
+          "eyebrow": "Nhận diện hình ảnh",
+          "title": "Hệ Thống Nhận Diện",
+          "description": "Tạo nên một hệ nhận diện có cảm giác cao cấp, dễ nhận biết và đủ linh hoạt cho vận hành thương hiệu hiện đại."
+        },
+        "digital": {
+          "eyebrow": "Định hướng digital",
+          "title": "Website Và Digital Brand Direction",
+          "description": "Chuyển chiến lược và nhận diện thành trải nghiệm số, nơi brand presence, user flow và mục tiêu chuyển đổi cùng được sắp đặt đúng."
+        },
+        "guidelines": {
+          "eyebrow": "Quản trị thương hiệu",
+          "title": "Guidelines Và Governance",
+          "description": "Biến thương hiệu thành một hệ thống nội bộ có thể dùng được hằng ngày, thay vì chỉ đẹp trong một bản trình bày."
+        },
+        "rollout": {
+          "eyebrow": "Triển khai ra mắt",
+          "title": "Launch Và Rollout Enablement",
+          "description": "Chuẩn bị tài sản, thứ tự rollout và các điểm chạm nội bộ cần thiết để thương hiệu mới được ra mắt một cách tự tin."
+        }
+      }
+    },
+    "CapabilityMatrix": {
+      "eyebrow": "Năng lực",
+      "topTickerLabel": "RADIANT",
+      "bottomTickerLabel": "RADIANT",
+      "slotAltLabel": "Hình ảnh năng lực của Radiant",
+      "rows": {
+        "branding": "BRANDING",
+        "marketing": "MARKETING",
+        "socials": "SOCIALS",
+        "storytelling": "STORYTELLING"
+      }
+    },
+    "Projects": {
+      "eyebrow": "Dự án chọn lọc",
+      "title": "Our Works",
+      "intro": "Một kho dự án mẫu về hệ thống thương hiệu, launch frame, editorial study và digital direction để thể hiện cách Radiant tư duy qua hình thức và độ rõ.",
+      "filterOrder": [
+        "all",
+        "strategy",
+        "identity",
+        "digital",
+        "editorial",
+        "launch"
+      ],
+      "filters": {
+        "all": "Tất cả",
+        "strategy": "Chiến lược",
+        "identity": "Nhận diện",
+        "digital": "Digital",
+        "editorial": "Editorial",
+        "launch": "Ra mắt"
+      },
+      "order": [
+        "global-brand-systems",
+        "apple-architecture",
+        "north-south-market",
+        "still-young-issue",
+        "signal-25-launch",
+        "nocturne-orbit",
+        "meridian-columns",
+        "luma-gallery",
+        "atlas-blueprint",
+        "mono-curve",
+        "gradient-campaign",
+        "kinetic-type"
+      ],
+      "items": {
+        "global-brand-systems": {
+          "date": "23 tháng 3, 2026",
+          "title": "Từ hỗn loạn naming đến một hệ thống thương hiệu toàn cầu thống nhất",
+          "filter": "identity",
+          "visual": "signage-grid",
+          "mediaHeight": "tall"
+        },
+        "apple-architecture": {
+          "date": "6 tháng 3, 2026",
+          "title": "Chiếc Mac rẻ nhất của Apple không phải câu chuyện giảm giá. Đó là bài học về brand architecture",
+          "filter": "strategy",
+          "visual": "stacked-boards",
+          "mediaHeight": "tall"
+        },
+        "north-south-market": {
+          "date": "27 tháng 2, 2026",
+          "title": "Giải mã thị trường Bắc - Nam: vượt qua những lối nghĩ sáo mòn",
+          "filter": "strategy",
+          "visual": "spectrum-ribbon",
+          "mediaHeight": "tall"
+        },
+        "still-young-issue": {
+          "date": "18 tháng 2, 2026",
+          "title": "Biến một đợt audit hệ thống thành tín hiệu editorial rõ ràng",
+          "filter": "editorial",
+          "visual": "editorial-cover",
+          "mediaHeight": "standard"
+        },
+        "signal-25-launch": {
+          "date": "12 tháng 2, 2026",
+          "title": "Thiết kế một launch system xoay quanh một con số dễ nhớ",
+          "filter": "launch",
+          "visual": "numeric-column",
+          "mediaHeight": "standard"
+        },
+        "nocturne-orbit": {
+          "date": "29 tháng 1, 2026",
+          "title": "Một câu chuyện sản phẩm dark-mode cuối cùng cũng đủ cảm giác premium",
+          "filter": "digital",
+          "visual": "blue-orbit",
+          "mediaHeight": "compact"
+        },
+        "meridian-columns": {
+          "date": "17 tháng 1, 2026",
+          "title": "Xây ngôn ngữ dashboard sao cho đọc lên vẫn thấy tinh thần thương hiệu",
+          "filter": "digital",
+          "visual": "signal-columns",
+          "mediaHeight": "tall"
+        },
+        "luma-gallery": {
+          "date": "9 tháng 1, 2026",
+          "title": "Khung hình sản phẩm mềm hơn cho một thương hiệu sức khỏe cao cấp mới",
+          "filter": "identity",
+          "visual": "glass-gallery",
+          "mediaHeight": "standard"
+        },
+        "atlas-blueprint": {
+          "date": "19 tháng 12, 2025",
+          "title": "Định hướng website được dựng từ blueprint thay vì moodboard",
+          "filter": "digital",
+          "visual": "blueprint-sheets",
+          "mediaHeight": "standard"
+        },
+        "mono-curve": {
+          "date": "8 tháng 12, 2025",
+          "title": "Rút gọn một danh mục phức tạp thành một motion shape rõ ràng",
+          "filter": "identity",
+          "visual": "monochrome-curve",
+          "mediaHeight": "standard"
+        },
+        "gradient-campaign": {
+          "date": "26 tháng 11, 2025",
+          "title": "Khung campaign đủ mạnh để lời chào hàng vẫn có thể ở trạng thái tiết chế",
+          "filter": "launch",
+          "visual": "gradient-board",
+          "mediaHeight": "tall"
+        },
+        "kinetic-type": {
+          "date": "12 tháng 11, 2025",
+          "title": "Một hệ kinetic type dùng được cho story, deck và social cut",
+          "filter": "editorial",
+          "visual": "kinetic-type",
+          "mediaHeight": "compact"
+        }
+      }
+    },
+    "Plans": {
+      "title": "Engagement Plans",
+      "order": [
+        "strategy-sprint",
+        "brand-system"
+      ],
+      "items": {
+        "strategy-sprint": {
+          "icon": "target",
+          "title": "Khởi động chiến lược",
+          "description": "Phù hợp cho leadership team cần làm rõ định hướng trước khi đi tiếp sang thiết kế, rollout hay các quyết định thương hiệu lớn hơn.",
+          "price": "10.000.000đ",
+          "originalPrice": "11.000.000đ",
+          "buttonLabel": "Liên hệ",
+          "features": [
+            "Chẩn đoán định vị hiện tại",
+            "Khung nhìn audience và thị trường",
+            "Định hướng hệ thông điệp",
+            "Workshop ra quyết định với leadership",
+            "Deck khuyến nghị rõ ràng"
+          ]
+        },
+        "brand-system": {
+          "icon": "gem",
+          "title": "Hệ thống thương hiệu",
+          "description": "Dành cho doanh nghiệp đã sẵn sàng chuyển độ rõ chiến lược thành một hệ verbal, visual và rollout có thể dùng được ngay trong vận hành.",
+          "price": "12.000.000đ",
+          "originalPrice": "13.500.000đ",
+          "badge": "Ưu đãi tốt nhất",
+          "featured": true,
+          "buttonLabel": "Bắt đầu engagement",
+          "features": [
+            "Tinh chỉnh strategic positioning",
+            "Hệ verbal và messaging",
+            "Định hướng visual identity",
+            "Website và digital art direction",
+            "Rollout plan và governance",
+            "Hướng dẫn adoption nội bộ",
+            "Danh sách launch assets ưu tiên"
+          ]
+        }
+      }
+    },
+    "About": {
+      "eyebrow": "Về Radiant",
+      "title": "Chiến lược, ngôn ngữ và hình ảnh được xây như một hệ thống thống nhất.",
+      "intro": "Cách làm việc này dành cho founder, leadership team và những nhà vận hành đã đi qua giai đoạn chỉnh sửa thương hiệu kiểu nhỏ lẻ.",
+      "body": "Chúng tôi tiếp cận phát triển thương hiệu như một operating system cho tăng trưởng, không phải một lớp trang trí. Mỗi engagement được xây dựng để làm rõ doanh nghiệp đang đứng vì điều gì, nên được hiểu theo cách nào và cách hiểu đó cần đi tiếp ra sao trong ngôn ngữ, thiết kế, trải nghiệm số và quá trình đội ngũ nội bộ tiếp nhận. Kết quả sau cùng là một thương hiệu giúp mọi người ra quyết định nhanh hơn, phối hợp tốt hơn và ra mắt tự tin hơn."
+    },
+    "CTA": {
+      "eyebrow": "Xây giai đoạn tiếp theo",
+      "title": "Nơi khác biệt trở thành chuẩn mực.",
+      "body": "Chọn Radiant khi giai đoạn tiếp theo đòi hỏi định vị sắc hơn, hệ nhận diện kỷ luật hơn và những quyết định thương hiệu đã sẵn sàng để triển khai.",
+      "buttonLabel": "Liên hệ",
+      "secondary": "Hoặc bắt đầu bằng một email ngắn để xem nhanh mức độ phù hợp."
+    },
+    "Footer": {
+      "socials": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "x": "X",
+        "youtube": "YouTube"
+      },
+      "columns": {
+        "studio": {
+          "title": "Radiant",
+          "items": [
+            {
+              "label": "Về chúng tôi",
+              "href": "#about"
+            },
+            {
+              "label": "Năng lực",
+              "href": "#showcase"
+            },
+            {
+              "label": "Dự án",
+              "href": "#projects"
+            },
+            {
+              "label": "Gói làm việc",
+              "href": "#plans"
+            },
+            {
+              "label": "Liên hệ",
+              "href": "#contact"
+            }
+          ]
+        },
+        "services": {
+          "title": "Dịch vụ",
+          "items": [
+            {
+              "label": "Chiến lược thương hiệu",
+              "href": "#showcase"
+            },
+            {
+              "label": "Định vị",
+              "href": "#showcase"
+            },
+            {
+              "label": "Hệ nhận diện",
+              "href": "#showcase"
+            },
+            {
+              "label": "Định hướng digital",
+              "href": "#showcase"
+            },
+            {
+              "label": "Rollout thương hiệu",
+              "href": "#showcase"
+            }
+          ]
+        },
+        "industries": {
+          "title": "Ngành phù hợp",
+          "items": [
+            {
+              "label": "Hospitality & lifestyle",
+              "href": "#projects"
+            },
+            {
+              "label": "Professional services",
+              "href": "#projects"
+            },
+            {
+              "label": "Wellness & beauty",
+              "href": "#projects"
+            },
+            {
+              "label": "Real estate & places",
+              "href": "#projects"
+            },
+            {
+              "label": "Cultural launches",
+              "href": "#projects"
+            }
+          ]
+        }
+      },
+      "contact": {
+        "phone": "+84 28 7300 1144",
+        "email": "hello@radiant.studio",
+        "address": "Quận 1, TP. Hồ Chí Minh, Việt Nam"
+      },
+      "patternLabel": "RADIANT"
+    }
+  }
+}

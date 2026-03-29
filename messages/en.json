@@ -1,0 +1,389 @@
+{
+  "Common": {
+    "actions": {
+      "bookCall": "Book Strategy Call",
+      "requestDeck": "Request Capability Deck"
+    }
+  },
+  "Metadata": {
+    "Home": {
+      "title": "Radiant | Brand Development For Growth-Stage Businesses",
+      "description": "Radiant builds strategic positioning, identity systems, messaging, and rollout-ready brand foundations for ambitious businesses entering their next phase of growth.",
+      "keywords": [
+        "Radiant",
+        "brand development agency",
+        "brand strategy for growth-stage businesses",
+        "visual identity systems",
+        "brand messaging consulting",
+        "positioning and naming",
+        "brand rollout and guidelines"
+      ]
+    }
+  },
+  "HomePage": {
+    "Brand": {
+      "name": "Radiant",
+      "descriptor": "Brand Development",
+      "menu": "Menu",
+      "navigation": {
+        "services": "Services"
+      },
+      "advisoryLabel": "Brand advisory",
+      "advisoryValue": "hello@radiant.studio",
+      "focusLabel": "Best fit for:",
+      "focusItems": [
+        "Growth-stage businesses",
+        "Repositioning moments",
+        "Multi-market launches"
+      ]
+    },
+    "Hero": {
+      "title": {
+        "premium": "Strategic",
+        "esthetic": "Brand",
+        "dentistry": "Systems"
+      },
+      "promise": "Radiant develops brands with the strategic clarity, verbal precision, and rollout discipline ambitious businesses need before their next stage of growth.",
+      "supporting": "Positioning, identity, messaging, and adoption systems designed to help leadership, marketing, product, and sales move in one direction.",
+      "marquee": "Clarity for where your brand goes next"
+    },
+    "Services": {
+      "eyebrow": "Capability Sequence",
+      "title": "Core Services",
+      "intro": "Eight core workstreams structured from strategic clarity through rollout readiness.",
+      "order": [
+        "strategy",
+        "positioning",
+        "naming",
+        "messaging",
+        "identity",
+        "digital",
+        "guidelines",
+        "rollout"
+      ],
+      "items": {
+        "strategy": {
+          "eyebrow": "Brand strategy",
+          "title": "Brand Strategy Foundations",
+          "description": "Clarify ambition, audience tension, competitive context, and the strategic decisions the brand must support next."
+        },
+        "positioning": {
+          "eyebrow": "Market positioning",
+          "title": "Positioning For Growth",
+          "description": "Define a sharper place in the market so the business reads as more distinct, more credible, and easier to choose."
+        },
+        "naming": {
+          "eyebrow": "Naming & architecture",
+          "title": "Naming And Brand Architecture",
+          "description": "Structure portfolios, offers, and naming systems so they scale cleanly across products, sub-brands, and new market entry."
+        },
+        "messaging": {
+          "eyebrow": "Verbal identity",
+          "title": "Messaging And Verbal Systems",
+          "description": "Build the core language the brand needs to sound clear, differentiated, and confident across every touchpoint."
+        },
+        "identity": {
+          "eyebrow": "Visual identity",
+          "title": "Identity Systems",
+          "description": "Create visual systems that feel premium, recognizable, and flexible enough for modern brand operations."
+        },
+        "digital": {
+          "eyebrow": "Digital direction",
+          "title": "Website And Digital Brand Direction",
+          "description": "Translate strategy and identity into a digital expression that aligns brand presence, user flow, and conversion intent."
+        },
+        "guidelines": {
+          "eyebrow": "Governance",
+          "title": "Guidelines And Governance",
+          "description": "Turn the brand into an internal system that teams can use consistently, not just admire in a presentation."
+        },
+        "rollout": {
+          "eyebrow": "Launch enablement",
+          "title": "Launch And Rollout Enablement",
+          "description": "Prepare the assets, rollout sequence, and internal adoption touchpoints needed to launch the new brand with confidence."
+        }
+      }
+    },
+    "CapabilityMatrix": {
+      "eyebrow": "Capabilities",
+      "topTickerLabel": "RADIANT",
+      "bottomTickerLabel": "RADIANT",
+      "slotAltLabel": "Radiant capability work sample",
+      "rows": {
+        "branding": "BRANDING",
+        "marketing": "MARKETING",
+        "socials": "SOCIALS",
+        "storytelling": "STORYTELLING"
+      }
+    },
+    "Projects": {
+      "eyebrow": "Selected Work",
+      "title": "Our Works",
+      "intro": "A working archive of brand systems, launch frames, editorial studies, and digital directions that show how Radiant thinks through form and clarity.",
+      "filterOrder": [
+        "all",
+        "strategy",
+        "identity",
+        "digital",
+        "editorial",
+        "launch"
+      ],
+      "filters": {
+        "all": "All",
+        "strategy": "Strategy",
+        "identity": "Identity",
+        "digital": "Digital",
+        "editorial": "Editorial",
+        "launch": "Launch"
+      },
+      "order": [
+        "global-brand-systems",
+        "apple-architecture",
+        "north-south-market",
+        "still-young-issue",
+        "signal-25-launch",
+        "nocturne-orbit",
+        "meridian-columns",
+        "luma-gallery",
+        "atlas-blueprint",
+        "mono-curve",
+        "gradient-campaign",
+        "kinetic-type"
+      ],
+      "items": {
+        "global-brand-systems": {
+          "date": "March 23, 2026",
+          "title": "From Naming Chaos to Consistent Global Brand Systems",
+          "filter": "identity",
+          "visual": "signage-grid",
+          "mediaHeight": "tall"
+        },
+        "apple-architecture": {
+          "date": "March 6, 2026",
+          "title": "Apple's Cheapest Mac Is Not a Discount Story. It Is a Brand Architecture Lesson",
+          "filter": "strategy",
+          "visual": "stacked-boards",
+          "mediaHeight": "tall"
+        },
+        "north-south-market": {
+          "date": "February 27, 2026",
+          "title": "Decoding the North-South Market: Moving Beyond the Cliche",
+          "filter": "strategy",
+          "visual": "spectrum-ribbon",
+          "mediaHeight": "tall"
+        },
+        "still-young-issue": {
+          "date": "February 18, 2026",
+          "title": "Turning a System Audit Into an Editorial Signal",
+          "filter": "editorial",
+          "visual": "editorial-cover",
+          "mediaHeight": "standard"
+        },
+        "signal-25-launch": {
+          "date": "February 12, 2026",
+          "title": "Designing a Launch System Around One Memorable Number",
+          "filter": "launch",
+          "visual": "numeric-column",
+          "mediaHeight": "standard"
+        },
+        "nocturne-orbit": {
+          "date": "January 29, 2026",
+          "title": "A Dark-Mode Product Story That Finally Feels Premium",
+          "filter": "digital",
+          "visual": "blue-orbit",
+          "mediaHeight": "compact"
+        },
+        "meridian-columns": {
+          "date": "January 17, 2026",
+          "title": "Building a Dashboard Language That Reads Like a Brand",
+          "filter": "digital",
+          "visual": "signal-columns",
+          "mediaHeight": "tall"
+        },
+        "luma-gallery": {
+          "date": "January 9, 2026",
+          "title": "Soft-Focus Product Framing for a New Luxury Health Brand",
+          "filter": "identity",
+          "visual": "glass-gallery",
+          "mediaHeight": "standard"
+        },
+        "atlas-blueprint": {
+          "date": "December 19, 2025",
+          "title": "Website Direction Built From Blueprint, Not Moodboard",
+          "filter": "digital",
+          "visual": "blueprint-sheets",
+          "mediaHeight": "standard"
+        },
+        "mono-curve": {
+          "date": "December 8, 2025",
+          "title": "Reducing a Complex Portfolio to One Clear Motion Shape",
+          "filter": "identity",
+          "visual": "monochrome-curve",
+          "mediaHeight": "standard"
+        },
+        "gradient-campaign": {
+          "date": "November 26, 2025",
+          "title": "Campaign Frames That Let the Offer Stay Quiet",
+          "filter": "launch",
+          "visual": "gradient-board",
+          "mediaHeight": "tall"
+        },
+        "kinetic-type": {
+          "date": "November 12, 2025",
+          "title": "A Kinetic Type System for Stories, Decks, and Social Cuts",
+          "filter": "editorial",
+          "visual": "kinetic-type",
+          "mediaHeight": "compact"
+        }
+      }
+    },
+    "Plans": {
+      "title": "Engagement Plans",
+      "order": [
+        "strategy-sprint",
+        "brand-system"
+      ],
+      "items": {
+        "strategy-sprint": {
+          "icon": "target",
+          "title": "Strategy Sprint",
+          "description": "A focused engagement for leadership teams who need strategic clarity before design and rollout decisions move any further.",
+          "price": "10.000.000đ",
+          "originalPrice": "11.000.000đ",
+          "buttonLabel": "Book a Call",
+          "features": [
+            "Brand positioning diagnostic",
+            "Audience and market framing",
+            "Message hierarchy direction",
+            "Decision workshop with leadership",
+            "Clear recommendation deck"
+          ]
+        },
+        "brand-system": {
+          "icon": "gem",
+          "title": "Brand System",
+          "description": "A broader scope for companies ready to turn strategic clarity into a cohesive verbal, visual, and rollout-ready operating system.",
+          "price": "12.000.000đ",
+          "originalPrice": "13.500.000đ",
+          "badge": "Best value",
+          "featured": true,
+          "buttonLabel": "Start The Engagement",
+          "features": [
+            "Strategic positioning refinement",
+            "Messaging and verbal system",
+            "Visual identity direction",
+            "Website and digital art direction",
+            "Rollout planning and governance",
+            "Internal adoption guidance",
+            "Priority launch asset list"
+          ]
+        }
+      }
+    },
+    "About": {
+      "eyebrow": "About Radiant",
+      "title": "Brand strategy, language, and visual systems built as one.",
+      "intro": "The work is shaped for founders, leadership teams, and ambitious operators who have outgrown incremental brand updates.",
+      "body": "We approach brand development as an operating system for growth, not a cosmetic exercise. Every engagement is built to clarify what the business stands for, how it should be understood, and how that understanding should carry into language, design, digital expression, and internal adoption. The result is a brand that helps people decide faster, align better, and launch with more confidence."
+    },
+    "CTA": {
+      "eyebrow": "Build The Next Stage",
+      "title": "Where Different Becomes The Standard.",
+      "body": "Choose Radiant when the next stage demands sharper positioning, more disciplined identity systems, and rollout-ready brand decisions.",
+      "buttonLabel": "Get in touch",
+      "secondary": "Or start with a short capability review over email."
+    },
+    "Footer": {
+      "socials": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "x": "X",
+        "youtube": "YouTube"
+      },
+      "columns": {
+        "studio": {
+          "title": "Radiant",
+          "items": [
+            {
+              "label": "About us",
+              "href": "#about"
+            },
+            {
+              "label": "Capabilities",
+              "href": "#showcase"
+            },
+            {
+              "label": "Our works",
+              "href": "#projects"
+            },
+            {
+              "label": "Plans",
+              "href": "#plans"
+            },
+            {
+              "label": "Contact",
+              "href": "#contact"
+            }
+          ]
+        },
+        "services": {
+          "title": "Services",
+          "items": [
+            {
+              "label": "Brand strategy",
+              "href": "#showcase"
+            },
+            {
+              "label": "Positioning",
+              "href": "#showcase"
+            },
+            {
+              "label": "Identity systems",
+              "href": "#showcase"
+            },
+            {
+              "label": "Digital direction",
+              "href": "#showcase"
+            },
+            {
+              "label": "Rollout enablement",
+              "href": "#showcase"
+            }
+          ]
+        },
+        "industries": {
+          "title": "Industries",
+          "items": [
+            {
+              "label": "Hospitality & lifestyle",
+              "href": "#projects"
+            },
+            {
+              "label": "Professional services",
+              "href": "#projects"
+            },
+            {
+              "label": "Wellness & beauty",
+              "href": "#projects"
+            },
+            {
+              "label": "Real estate & places",
+              "href": "#projects"
+            },
+            {
+              "label": "Cultural launches",
+              "href": "#projects"
+            }
+          ]
+        }
+      },
+      "contact": {
+        "phone": "+84 28 7300 1144",
+        "email": "hello@radiant.studio",
+        "address": "District 1, Ho Chi Minh City, Vietnam"
+      },
+      "patternLabel": "RADIANT"
+    }
+  }
+}
