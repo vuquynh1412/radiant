@@ -1,0 +1,7 @@
+interface:
+  display_name: "Figma Design QA"
+  short_description: "Compare Figma designs against code or related screens."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#DC2626"
+  default_prompt: "Use $figma-design-qa to find spacing, typography, and responsive mismatches in this design."

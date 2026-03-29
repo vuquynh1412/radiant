@@ -1,0 +1,7 @@
+interface:
+  display_name: "Figma Responsive Screen Builder"
+  short_description: "Build responsive Figma screens from briefs or wireframes."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#EA580C"
+  default_prompt: "Use $figma-responsive-screen-builder to build a responsive web screen in Figma from this brief."

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Figma Component Library Builder"
+  short_description: "Create robust component sets and variants in Figma."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#7C3AED"
+  default_prompt: "Use $figma-component-library-builder to define variants, properties, and usage rules for this component."

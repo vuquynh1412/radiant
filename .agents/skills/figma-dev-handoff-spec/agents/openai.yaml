@@ -1,0 +1,7 @@
+interface:
+  display_name: "Figma Dev Handoff Spec"
+  short_description: "Generate implementation-ready specs from Figma designs."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#9333EA"
+  default_prompt: "Use $figma-dev-handoff-spec to turn this approved Figma screen into a developer handoff spec."
