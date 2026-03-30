@@ -105,7 +105,6 @@
       }
     },
     "CapabilityMatrix": {
-      "eyebrow": "Capabilities",
       "topTickerLabel": "RADIANT",
       "bottomTickerLabel": "RADIANT",
       "slotAltLabel": "Radiant capability work sample",
@@ -117,9 +116,7 @@
       }
     },
     "Projects": {
-      "eyebrow": "Selected Work",
       "title": "Our Works",
-      "intro": "A working archive of brand systems, launch frames, editorial studies, and digital directions that show how Radiant thinks through form and clarity.",
       "filterOrder": [
         "all",
         "strategy",

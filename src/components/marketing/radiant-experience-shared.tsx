@@ -1,8 +1,4 @@
-import {
-  useId,
-  type RefObject,
-  type ReactNode,
-} from "react";
+import { useId, type RefObject, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -84,6 +80,35 @@ export function BrandMonogram({
   );
 }
 
+export function RadiantBrandLogo({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 563 474"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M465.04 32.94C437.2 7.95 391.77 0 338.94 0H281.01V20.12L283.91 164.71C284.66 202.1 309.41 232.67 345.19 233.7C345.19 233.7 356.58 233.77 360.38 233.72C363.95 233.67 371.18 233.42 374.67 233.23C392.06 232.28 421.78 228.05 441.83 214.71C475.19 192.51 495.1 151.73 495.1 111.9C495.1 75.55 484.34 49.99 465.04 32.94ZM359.26 213.2C342.02 220.21 327.84 210.52 327.84 191.91V21.59C327.84 17.8 330.94 14.77 334.73 14.77C358.55 14.79 374.73 24.44 385.51 40.33C397.43 58.51 401.7 83.22 401.7 111.62C401.7 179.05 380.1 204.72 359.25 213.2H359.26Z"
+        fill="currentColor"
+      />
+      <path
+        d="M210 0V0.85C211.74 0.85 224.61 3.67 230.97 27.24C232.94 34.54 234.21 43.84 234.21 55.66V129.48C234.21 148.56 234.17 173.45 234.17 192.53C234.17 203.08 228.75 211.67 221.92 213.65C210.87 216.84 196.8 204.94 188.66 180.52C174.07 136.75 161.08 99.81 145.97 56.21C135.18 23.29 126.09 0 75.54 0H0V1.14C4.54 1.14 32.45 15.26 54.81 74.7C61.12 91.47 80.72 141.53 80.72 141.53C80.72 141.53 90.75 168.75 99.98 182.71C111.36 199.93 120.49 207.89 136.67 218.19C145.53 223.83 164.71 230.62 178.19 231.89C187.9 232.8 197.85 233.58 217.15 233.58C250.56 233.58 277.29 204.27 278.11 164.71L281.01 20.12V0H210.01H210Z"
+        fill="currentColor"
+      />
+      <path
+        d="M96.9702 440.2C124.81 465.19 170.24 473.14 223.07 473.14H281V453.02L278.1 308.43C277.35 271.04 252.6 240.47 216.82 239.44C216.82 239.44 205.43 239.37 201.63 239.42C198.06 239.47 190.83 239.72 187.34 239.91C169.95 240.86 140.23 245.09 120.18 258.43C86.8202 280.63 66.9102 321.41 66.9102 361.24C66.9102 397.59 77.6702 423.15 96.9702 440.2ZM202.75 259.94C219.99 252.93 234.17 262.62 234.17 281.23V451.55C234.17 455.34 231.07 458.37 227.28 458.37C203.46 458.35 187.28 448.7 176.5 432.81C164.58 414.63 160.31 389.92 160.31 361.52C160.31 294.09 181.91 268.42 202.76 259.94H202.75Z"
+        fill="currentColor"
+      />
+      <path
+        d="M352.01 473.14V472.29C350.27 472.29 337.4 469.47 331.04 445.9C329.07 438.6 327.8 429.3 327.8 417.48V343.66C327.8 324.58 327.84 299.69 327.84 280.61C327.84 270.06 333.26 261.47 340.09 259.49C351.14 256.3 365.21 268.2 373.35 292.62C387.94 336.39 400.93 373.33 416.04 416.93C426.83 449.87 435.92 473.16 486.47 473.16H562.01V472.02C557.47 472.02 529.56 457.9 507.2 398.46C500.89 381.69 481.29 331.63 481.29 331.63C481.29 331.63 471.26 304.41 462.03 290.45C450.65 273.23 441.52 265.27 425.34 254.97C416.48 249.33 397.3 242.54 383.82 241.27C374.11 240.36 364.16 239.58 344.86 239.58C311.45 239.58 284.72 268.89 283.9 308.45L281 453.04V473.16H352L352.01 473.14Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export function RadiantHeroLogo({ className }: { className?: string }) {
   return (
     <svg
@@ -133,7 +158,7 @@ export function VisualSurface({
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden bg-black/[0.03] shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]",
+        "relative isolate overflow-hidden bg-black/3 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]",
         className,
       )}
     >
@@ -150,7 +175,7 @@ export function VisualSurface({
         {variant === "portrait" ? (
           <>
             <div className="absolute inset-0 bg-[linear-gradient(135deg,#b8aea8_0%,#8a7f77_35%,#514640_72%,#28211f_100%)]" />
-            <div className="absolute right-[-10%] top-[-8%] h-[90%] w-[62%] rounded-full bg-[#d9c5ba]/35 blur-[64px]" />
+            <div className="absolute right-[-10%] top-[-8%] h-[90%] w-[62%] rounded-full bg-[#d9c5ba]/35 blur-3xl" />
             <div className="absolute left-[6%] top-[24%] h-[50%] w-[26%] rounded-full bg-[#efe1d4]/30 blur-[34px]" />
             <div className="absolute right-[8%] top-[18%] h-[54%] w-[32%] rounded-full bg-[#241f1c]/62 blur-[10px]" />
           </>
@@ -193,7 +218,7 @@ export function VisualSurface({
             <div className="absolute inset-0 bg-[linear-gradient(180deg,#e8ddd1_0%,#d4cabd_34%,#bcae9c_100%)]" />
             <div className="absolute left-[10%] top-[16%] h-[48%] w-[28%] rounded-full bg-[#fff5eb]/45 blur-[48px]" />
             <div className="absolute right-[16%] bottom-[12%] h-[38%] w-[24%] rounded-full bg-[#866c57]/34 blur-[34px]" />
-            <div className="absolute inset-x-[18%] bottom-[10%] h-[24%] rounded-[42%] bg-[#8d7866]/36 blur-[24px]" />
+            <div className="absolute inset-x-[18%] bottom-[10%] h-[24%] rounded-[42%] bg-[#8d7866]/36 blur-xl" />
           </>
         ) : null}
         {variant === "noir" ? (
@@ -227,7 +252,7 @@ export function ServiceTile({
       )}
       variant={variant}
     >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-transparent to-white/8" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/28 via-transparent to-white/8" />
     </VisualSurface>
   );
 }
@@ -262,23 +287,46 @@ export function ServiceCard({
   className,
   description,
   eyebrow,
+  hideDescription = false,
+  hideEyebrow = false,
+  tileClassName,
+  titleClassName,
   title,
   variant,
 }: {
   className?: string;
   description: string;
   eyebrow: string;
+  hideDescription?: boolean;
+  hideEyebrow?: boolean;
+  tileClassName?: string;
+  titleClassName?: string;
   title: string;
   variant: VisualVariant;
 }) {
   return (
-    <article className={cn("flex flex-col gap-4", className)}>
-      <ServiceTile variant={variant} />
-      <ServiceCopy
-        description={description}
-        eyebrow={eyebrow}
-        title={title}
-      />
+    <article className={cn("flex flex-col gap-3", className)}>
+      <ServiceTile className={tileClassName} variant={variant} />
+      <div className="flex flex-col gap-2">
+        <h3
+          className={cn(
+            "font-inika text-[1.5rem] font-bold leading-[1.08] tracking-[-0.03em] text-[#27272A]",
+            titleClassName,
+          )}
+        >
+          {title}
+        </h3>
+        {hideEyebrow ? null : (
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-muted-foreground uppercase">
+            {eyebrow}
+          </p>
+        )}
+        {hideDescription ? null : (
+          <p className="max-w-lg text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">
+            {description}
+          </p>
+        )}
+      </div>
     </article>
   );
 }
@@ -296,21 +344,14 @@ export function HeroTitleCopy({
 }) {
   return (
     <div
-      className={cn(
-        "relative mx-auto h-[clamp(11.5rem,18vw,15rem)] w-full",
-        className,
-      )}
+      className={cn("relative mx-auto h-36 w-full md:h-48 lg:h-74", className)}
     >
-      <p className="absolute left-1/2 top-[4%] -translate-x-1/2 font-heading text-[clamp(4rem,8vw,7.4rem)] leading-[0.9] tracking-[-0.065em]">
+      <p className="hero-title-display absolute left-1/2 top-[4%] -translate-x-1/2 whitespace-nowrap">
         {premium}
       </p>
-      <div className="absolute inset-x-0 top-[50%] flex items-end justify-center gap-[clamp(0.75rem,1.5vw,1.4rem)]">
-        <p className="font-heading text-[clamp(4.2rem,8.7vw,7.95rem)] leading-[0.88] tracking-[-0.075em]">
-          {esthetic}
-        </p>
-        <p className="font-heading text-[clamp(4.35rem,8.9vw,8.2rem)] leading-[0.82] tracking-[-0.085em] italic">
-          {dentistry}
-        </p>
+      <div className="absolute inset-x-0 top-[48%] flex items-end justify-center gap-2 md:gap-3 lg:gap-5">
+        <p className="hero-title-display">{esthetic}</p>
+        <p className="hero-title-display italic">{dentistry}</p>
       </div>
     </div>
   );

@@ -24,6 +24,10 @@ export type RadiantServiceItem = OrderedServiceItem;
 export type RadiantExperienceRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
   showcaseSectionRef: RefObject<HTMLDivElement | null>;
+  mobileHeroSectionRef: RefObject<HTMLDivElement | null>;
+  mobileHeroMarqueeRef: RefObject<HTMLParagraphElement | null>;
+  mobileHeroTopContentRef: RefObject<HTMLDivElement | null>;
+  mobileHeroTopOverlayRef: RefObject<HTMLDivElement | null>;
   heroMatteRef: RefObject<HTMLDivElement | null>;
   heroMediaRef: RefObject<HTMLDivElement | null>;
   heroTitleRef: RefObject<HTMLDivElement | null>;
@@ -39,6 +43,7 @@ export type RadiantExperienceRefs = {
   aboutContentRef: RefObject<HTMLDivElement | null>;
   aboutCharRefs: RefObject<Array<HTMLSpanElement | null>>;
   capabilityMatrixSectionRef: RefObject<HTMLElement | null>;
+  projectsSectionRef: RefObject<HTMLElement | null>;
   capabilityMatrixContentRef: RefObject<HTMLDivElement | null>;
   capabilityMatrixTopTickerRef: RefObject<HTMLDivElement | null>;
   capabilityMatrixBottomTickerRef: RefObject<HTMLDivElement | null>;

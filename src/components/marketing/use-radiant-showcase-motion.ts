@@ -229,7 +229,7 @@ export function useRadiantShowcaseMotion({
           );
           const { aboutScrub, showcaseScrub, useTouchProfile } =
             getRadiantScrollProfile();
-          const animateAboutChars = !useTouchProfile;
+          const animateAboutChars = aboutCharNodes.length > 0;
           const serviceItemCount = serviceItems.length;
           const getStableViewportHeight = () =>
             refs.heroMediaRef.current?.parentElement?.clientHeight ?? window.innerHeight;
@@ -709,10 +709,10 @@ export function useRadiantShowcaseMotion({
             const currentHeroRowState =
               gridProgress > 0
                 ? morphState(
-                    terminalRowStates[0],
-                    gridStates[0],
-                    gridProgress,
-                  )
+                  terminalRowStates[0],
+                  gridStates[0],
+                  gridProgress,
+                )
                 : rowStates[0];
 
             if (progress <= 0.4) {
@@ -799,10 +799,10 @@ export function useRadiantShowcaseMotion({
               const rowState =
                 gridProgress > 0
                   ? morphState(
-                      terminalRowStates[itemIndex],
-                      gridStates[itemIndex],
-                      gridProgress,
-                    )
+                    terminalRowStates[itemIndex],
+                    gridStates[itemIndex],
+                    gridProgress,
+                  )
                   : rowStates[itemIndex];
 
               const currentState =
@@ -913,6 +913,170 @@ export function useRadiantShowcaseMotion({
             window.removeEventListener("resize", handleResize);
             cancelAnimationFrame(resizeFrame);
             showcaseTrigger.kill();
+            aboutTrigger.kill();
+          };
+        },
+      );
+
+      mm.add(
+        "(prefers-reduced-motion: no-preference) and (max-width: 767px)",
+        () => {
+          if (
+            !refs.mobileHeroSectionRef.current ||
+            !refs.mobileHeroMarqueeRef.current ||
+            !refs.mobileHeroTopContentRef.current ||
+            !refs.mobileHeroTopOverlayRef.current ||
+            !refs.aboutContentRef.current
+          ) {
+            return undefined;
+          }
+
+          const { aboutScrub, showcaseScrub } = getRadiantScrollProfile();
+          const aboutCharNodes = refs.aboutCharRefs.current.filter(
+            (char): char is HTMLSpanElement => char !== null,
+          );
+          const animateAboutChars = aboutCharNodes.length > 0;
+          const marqueeX = gsap.quickSetter(
+            refs.mobileHeroMarqueeRef.current,
+            "x",
+            "px",
+          ) as NumericSetter;
+          const marqueeOpacity = gsap.quickSetter(
+            refs.mobileHeroMarqueeRef.current,
+            "opacity",
+          ) as NumericSetter;
+          const topContentOpacity = gsap.quickSetter(
+            refs.mobileHeroTopContentRef.current,
+            "opacity",
+          ) as NumericSetter;
+          const topContentY = gsap.quickSetter(
+            refs.mobileHeroTopContentRef.current,
+            "y",
+            "px",
+          ) as NumericSetter;
+          const topContentFilter = gsap.quickSetter(
+            refs.mobileHeroTopContentRef.current,
+            "filter",
+          ) as StringSetter;
+          const topOverlayOpacity = gsap.quickSetter(
+            refs.mobileHeroTopOverlayRef.current,
+            "opacity",
+          ) as NumericSetter;
+          const aboutContentSetters = createOpacityYSetters(
+            refs.aboutContentRef.current,
+          );
+          const aboutCharSetters = aboutCharNodes.map(createAboutCharSetters);
+          const aboutRevealSpan = aboutCharNodes.length + 10;
+
+          const getMetrics = () => {
+            const viewportWidth = window.innerWidth;
+            const marqueeWidth =
+              refs.mobileHeroMarqueeRef.current?.offsetWidth ?? viewportWidth;
+            const endInset = Math.max(24, viewportWidth * 0.06);
+
+            return {
+              endX: Math.min(0, viewportWidth - marqueeWidth - endInset),
+              startX: viewportWidth,
+            };
+          };
+
+          let metrics = getMetrics();
+
+          aboutContentSetters.opacity(0.38);
+          aboutContentSetters.y(48);
+          aboutCharSetters.forEach((setters) => {
+            setters.opacity(animateAboutChars ? 0.18 : 1);
+            setters.color(animateAboutChars ? "#bdb7b0" : "var(--foreground)");
+          });
+
+          const renderMobileHero = (progress: number) => {
+            const blurProgress = gsap.utils.clamp(
+              0,
+              1,
+              (progress - 0.05) / 0.28,
+            );
+            const travelProgress = gsap.utils.clamp(
+              0,
+              1,
+              progress / 0.55,
+            );
+
+            topContentOpacity(1 - blurProgress * 0.55);
+            topContentY(-blurProgress * 10);
+            topContentFilter(`blur(${blurProgress * 6}px)`);
+            topOverlayOpacity(blurProgress * 0.38);
+            marqueeOpacity(1);
+            marqueeX(lerp(metrics.startX, metrics.endX, travelProgress));
+          };
+
+          const renderAbout = (progress: number) => {
+            const contentProgress = gsap.utils.clamp(0, 1, progress / 0.24);
+            const charProgress = gsap.utils.clamp(0, 1, (progress - 0.08) / 0.78);
+            const easedContentProgress = aboutContentEase(contentProgress);
+            const easedCharProgress = aboutCharEase(charProgress);
+            const revealPosition = easedCharProgress * aboutRevealSpan;
+
+            aboutContentSetters.opacity(lerp(0.38, 1, easedContentProgress));
+            aboutContentSetters.y(lerp(48, 0, easedContentProgress));
+
+            if (!animateAboutChars) {
+              return;
+            }
+
+            aboutCharSetters.forEach((setters, index) => {
+              const localProgress = gsap.utils.clamp(
+                0,
+                1,
+                revealPosition - index,
+              );
+
+              setters.opacity(0.18 + localProgress * 0.82);
+              setters.color(
+                localProgress > 0.5 ? "var(--foreground)" : "#bdb7b0",
+              );
+            });
+          };
+
+          const getAboutRevealDistance = () => {
+            const aboutContentHeight =
+              refs.aboutContentRef.current?.offsetHeight ?? 0;
+
+            return Math.max(window.innerHeight * 0.9, aboutContentHeight * 1.1);
+          };
+
+          const mobileHeroTrigger = ScrollTrigger.create({
+            trigger: refs.mobileHeroSectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: Math.max(showcaseScrub, 1.1),
+            onRefresh: (self) => {
+              metrics = getMetrics();
+              renderMobileHero(self.progress);
+            },
+            onUpdate: (self) => {
+              renderMobileHero(self.progress);
+            },
+          });
+
+          const aboutTrigger = ScrollTrigger.create({
+            trigger: refs.aboutContentRef.current,
+            start: "top 78%",
+            end: () => `+=${getAboutRevealDistance()}`,
+            scrub: Math.max(aboutScrub, 0.8),
+            invalidateOnRefresh: true,
+            onRefresh: (self) => {
+              renderAbout(self.progress);
+            },
+            onUpdate: (self) => {
+              renderAbout(self.progress);
+            },
+          });
+
+          renderMobileHero(mobileHeroTrigger.progress);
+          renderAbout(aboutTrigger.progress);
+
+          return () => {
+            mobileHeroTrigger.kill();
             aboutTrigger.kill();
           };
         },
