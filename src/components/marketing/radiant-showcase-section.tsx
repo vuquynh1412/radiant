@@ -71,12 +71,12 @@ export function RadiantShowcaseSection({
           </div>
           <div
             ref={heroMatteRef}
-            className="absolute inset-y-0 left-0 hidden bg-[#f6f1eb] md:block"
+            className="absolute inset-y-0 left-0 hidden bg-[#f6f1eb] will-change-transform md:block"
           />
 
           <div
             ref={heroMediaRef}
-            className="absolute left-0 top-0 z-10 hidden overflow-hidden md:block"
+            className="absolute left-0 top-0 z-10 hidden overflow-hidden will-change-transform md:block"
             style={{ transformOrigin: "top center" }}
           >
             <VisualSurface className="size-full rounded-none" variant="vista" />
@@ -90,7 +90,7 @@ export function RadiantShowcaseSection({
 
           <div
             ref={heroMonogramRef}
-            className="pointer-events-none absolute inset-0 z-20 hidden md:block"
+            className="pointer-events-none absolute inset-0 z-20 hidden will-change-transform md:block"
           >
             <div
               className="absolute inset-0"
@@ -112,7 +112,10 @@ export function RadiantShowcaseSection({
             </div>
           </div>
 
-          <div ref={heroTitleRef} className="absolute inset-0 z-30">
+          <div
+            ref={heroTitleRef}
+            className="absolute inset-0 z-30 will-change-transform"
+          >
             <div className="relative size-full">
               <div
                 className="pointer-events-none absolute left-1/2 top-[49%] hidden -translate-x-1/2 -translate-y-1/2 px-4 md:block"
@@ -220,11 +223,11 @@ export function RadiantShowcaseSection({
 
           <div
             ref={heroMarqueeRef}
-            className="pointer-events-none absolute inset-0 z-40 hidden items-center md:flex"
+            className="pointer-events-none absolute inset-0 z-40 hidden items-center opacity-0 md:flex"
           >
             <div
               ref={heroMarqueeTrackRef}
-              className="font-heading whitespace-nowrap px-[8vw] text-[clamp(6rem,10vw,10rem)] leading-none tracking-[-0.08em] text-white text-shadow-soft italic"
+              className="font-heading whitespace-nowrap px-[8vw] text-[clamp(6rem,10vw,10rem)] leading-none tracking-[-0.08em] text-white text-shadow-soft italic will-change-transform"
             >
               {content.hero.marquee}
             </div>
@@ -232,7 +235,7 @@ export function RadiantShowcaseSection({
 
           <div
             ref={serviceHeaderRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden md:block"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
           >
             <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
               <h2 className="font-heading text-[clamp(2.45rem,4vw,4.15rem)] leading-none tracking-[-0.07em]">
@@ -243,7 +246,7 @@ export function RadiantShowcaseSection({
 
           <div
             ref={activeServiceCopyShellRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden md:block"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
           >
             <div className="relative mx-auto h-[16rem] w-[min(92vw,42rem)]">
               {content.services.items.map((item, index) => (
@@ -252,7 +255,7 @@ export function RadiantShowcaseSection({
                   ref={(node) => {
                     serviceCopyRefs.current[index] = node;
                   }}
-                  className="absolute inset-0 text-center"
+                  className="absolute inset-0 text-center opacity-0 will-change-transform"
                 >
                   <ServiceCopy
                     className="items-center"
@@ -268,9 +271,12 @@ export function RadiantShowcaseSection({
           <div className="pointer-events-none absolute inset-0 hidden md:block">
             <div
               ref={sampleTileRef}
-              className="absolute left-0 top-0 z-10 w-[clamp(25.5rem,32vw,31rem)] opacity-0"
+              className="absolute left-0 top-0 z-10 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
             >
-              <ServiceTile variant={serviceVisuals[1]} />
+              <ServiceTile
+                className="size-full rounded-[inherit] border-0 shadow-none"
+                variant={serviceVisuals[1]}
+              />
             </div>
 
             {content.services.items.slice(1).map((item, index) => (
@@ -279,10 +285,11 @@ export function RadiantShowcaseSection({
                 ref={(node) => {
                   serviceCardsRef.current[index] = node;
                 }}
-                className="absolute left-0 top-0 z-20 w-[clamp(25.5rem,32vw,31rem)] will-change-transform"
+                className="absolute left-0 top-0 z-20 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
                 style={{ transformOrigin: "top center" }}
               >
                 <ServiceTile
+                  className="size-full rounded-[inherit] border-0 shadow-none"
                   variant={serviceVisuals[(index + 1) % serviceVisuals.length]}
                 />
               </div>

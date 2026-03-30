@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type RefObject } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -21,22 +21,56 @@ const ctaStarPath =
   "M756.5 436L767.296 476.098C768.82 481.758 773.242 486.179 778.902 487.703L819 498.5L778.902 509.296C773.242 510.82 768.82 515.241 767.296 520.902L756.5 561L745.704 520.902C744.18 515.241 739.758 510.82 734.098 509.296L694 498.5L734.098 487.703C739.758 486.179 744.18 481.758 745.704 476.098L756.5 436Z";
 const ctaStarMaskId = "radiant-cta-star-mask";
 
+type OrbitMarker = {
+  angle: number;
+  className: string;
+  glowClassName?: string;
+};
+
 function OrbitRing({
   className,
   dotted = false,
+  ringRef,
+  markers = [],
 }: {
   className?: string;
   dotted?: boolean;
+  ringRef?: RefObject<HTMLDivElement | null>;
+  markers?: OrbitMarker[];
 }) {
   return (
     <div
       aria-hidden="true"
+      ref={ringRef}
       className={cn(
-        "absolute left-1/2 top-[43%] rounded-full border border-white/8",
-        dotted ? "border-dashed border-white/14" : "",
+        "pointer-events-none absolute left-1/2 top-1/2 rounded-full border border-white/18 [will-change:transform,opacity]",
+        dotted ? "border-[1.5px] border-dashed border-white/24" : "",
         className,
       )}
-    />
+    >
+      {markers.map((marker, index) => (
+        <div
+          key={`${marker.angle}-${index}`}
+          className="absolute inset-0"
+          style={{ transform: `rotate(${marker.angle}deg)` }}
+        >
+          {marker.glowClassName ? (
+            <span
+              className={cn(
+                "absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full blur-[10px]",
+                marker.glowClassName,
+              )}
+            />
+          ) : null}
+          <span
+            className={cn(
+              "absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full",
+              marker.className,
+            )}
+          />
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -66,6 +100,8 @@ export function RadiantCallToActionSection({
           return undefined;
         }
 
+        const useTouchProfile =
+          ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
         const easeOut = gsap.parseEase("power3.out");
         const easeInOut = gsap.parseEase("power2.inOut");
         const copyNodes = [
@@ -75,38 +111,56 @@ export function RadiantCallToActionSection({
           actionsRef.current,
         ].filter(Boolean);
 
+        if (maskedRevealRef.current) {
+          maskedRevealRef.current.style.filter = useTouchProfile ? "none" : "";
+        }
+
         const renderStage = (progress: number) => {
           const launchProgress = gsap.utils.clamp(0, 1, (progress - 0.04) / 0.2);
           const bloomProgress = gsap.utils.clamp(0, 1, (progress - 0.18) / 0.48);
           const copyProgress = gsap.utils.clamp(0, 1, (progress - 0.42) / 0.18);
           const footerProgress = gsap.utils.clamp(0, 1, (progress - 0.79) / 0.12);
+          const orbitProgress = gsap.utils.clamp(0, 1, (progress - 0.06) / 0.72);
           const launchEase = easeOut(launchProgress);
           const bloomEase = easeInOut(bloomProgress);
           const copyEase = easeOut(copyProgress);
           const footerEase = easeInOut(footerProgress);
+          const orbitEase = easeInOut(orbitProgress);
           const cardProgress = gsap.utils.clamp(0, 1, footerProgress / 0.62);
           const cardEase = easeInOut(cardProgress);
           const panelVisible = progress >= 0.64;
+          const outerRotation =
+            progress < 0.82
+              ? gsap.utils.interpolate(-24, 168, orbitEase)
+              : gsap.utils.interpolate(168, 214, footerEase);
+          const innerRotation =
+            progress < 0.82
+              ? gsap.utils.interpolate(22, -146, orbitEase)
+              : gsap.utils.interpolate(-146, -182, footerEase);
 
           gsap.set(orbitOuterRef.current, {
             opacity:
               progress < 0.72
-                ? gsap.utils.interpolate(0.18, 0.28, launchEase)
-                : gsap.utils.interpolate(0.28, 0.05, gsap.utils.clamp(0, 1, (progress - 0.72) / 0.12)),
+                ? gsap.utils.interpolate(0.38, 0.56, launchEase)
+                : gsap.utils.interpolate(0.56, 0.18, gsap.utils.clamp(0, 1, (progress - 0.72) / 0.12)),
+            rotation: outerRotation,
             scale:
               progress < 0.84
                 ? gsap.utils.interpolate(0.94, 1.06, bloomEase)
                 : gsap.utils.interpolate(1.06, 0.98, footerEase),
+            transformOrigin: "center center",
           });
           gsap.set(orbitInnerRef.current, {
             opacity:
               progress < 0.68
-                ? gsap.utils.interpolate(0.08, 0.14, launchEase)
-                : gsap.utils.interpolate(0.14, 0.018, gsap.utils.clamp(0, 1, (progress - 0.68) / 0.12)),
+                ? gsap.utils.interpolate(0.22, 0.34, launchEase)
+                : gsap.utils.interpolate(0.34, 0.1, gsap.utils.clamp(0, 1, (progress - 0.68) / 0.12)),
+            rotation: innerRotation,
             scale:
               progress < 0.84
                 ? gsap.utils.interpolate(0.98, 1.04, bloomEase)
                 : gsap.utils.interpolate(1.04, 0.985, footerEase),
+            transformOrigin: "center center",
           });
 
           const preFooterScale =
@@ -206,9 +260,32 @@ export function RadiantCallToActionSection({
 
         <OrbitRing
           dotted
+          ringRef={orbitOuterRef}
+          markers={[
+            {
+              angle: 28,
+              className: "size-2.5 bg-[#f4ece4]/88 shadow-[0_0_0_1px_rgba(255,255,255,0.24)]",
+              glowClassName: "size-8 bg-[#f4ece4]/22",
+            },
+            {
+              angle: 214,
+              className: "size-2 bg-white/54",
+              glowClassName: "size-6 bg-white/14",
+            },
+          ]}
           className="top-1/2 size-[62rem] -translate-x-1/2 -translate-y-1/2 sm:size-[72rem]"
         />
-        <OrbitRing className="top-1/2 size-[28rem] -translate-x-1/2 -translate-y-1/2 sm:size-[36rem]" />
+        <OrbitRing
+          ringRef={orbitInnerRef}
+          markers={[
+            {
+              angle: -52,
+              className: "size-2.5 bg-[#f6efe8] shadow-[0_0_0_1px_rgba(255,255,255,0.22)]",
+              glowClassName: "size-7 bg-[#f6efe8]/18",
+            },
+          ]}
+          className="top-1/2 size-[28rem] -translate-x-1/2 -translate-y-1/2 sm:size-[36rem]"
+        />
 
         <div
           ref={surfaceRef}

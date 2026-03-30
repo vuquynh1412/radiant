@@ -29,6 +29,10 @@ export function useRadiantCapabilityMatrixMotion({
           return undefined;
         }
 
+        const useTouchProfile =
+          ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
+        const scrubAmount = useTouchProfile ? 0.22 : 1;
+
         gsap.set(refs.capabilityMatrixContentRef.current, {
           opacity: 0.36,
           y: 72,
@@ -45,7 +49,7 @@ export function useRadiantCapabilityMatrixMotion({
           trigger: refs.capabilityMatrixSectionRef.current,
           start: "top 88%",
           end: "top 28%",
-          scrub: 1,
+          scrub: scrubAmount,
           onUpdate: (self) => {
             gsap.set(refs.capabilityMatrixContentRef.current, {
               opacity: gsap.utils.interpolate(0.36, 1, self.progress),
@@ -58,7 +62,7 @@ export function useRadiantCapabilityMatrixMotion({
           trigger: refs.capabilityMatrixSectionRef.current,
           start: "top bottom",
           end: "bottom top",
-          scrub: 1,
+          scrub: scrubAmount,
           onUpdate: (self) => {
             gsap.set(refs.capabilityMatrixTopTickerRef.current, {
               xPercent: gsap.utils.interpolate(6, -18, self.progress),

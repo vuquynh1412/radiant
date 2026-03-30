@@ -10,7 +10,14 @@ import {
   XIcon,
 } from "lucide-react";
 import { useLocale } from "next-intl";
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useEffectEvent,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { createPortal } from "react-dom";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -20,6 +27,7 @@ import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
 import { BrandMonogram } from "./radiant-experience-shared";
+import { radiantSocialLinks } from "./radiant-social-links";
 
 type RadiantExperienceHeaderProps = {
   content: RadiantExperienceContent;
@@ -30,6 +38,12 @@ type MenuLink = {
   label: string;
 };
 
+type SocialLink = {
+  href: string;
+  icon: ReactNode;
+  label: string;
+};
+
 const bookCallHref =
   "mailto:hello@radiant.studio?subject=Radiant%20strategy%20call";
 const requestDeckHref =
@@ -37,6 +51,20 @@ const requestDeckHref =
 const menuPanelId = "radiant-header-menu-panel";
 const servicesPanelId = "radiant-header-services-panel";
 const menuTransitionDurationMs = 500;
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  "[tabindex]:not([tabindex='-1'])",
+].join(",");
+
+function getFocusableElements(container: HTMLElement) {
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(focusableSelector),
+  ).filter((element) => element.getClientRects().length > 0);
+}
 
 function getLinkLabel(
   links: Array<{ href: string; label: string }>,
@@ -59,6 +87,11 @@ export function RadiantExperienceHeader({
   const [isMenuRendered, setIsMenuRendered] = useState(false);
   const [isServicesExpanded, setIsServicesExpanded] = useState(false);
   const menuCloseTimeoutRef = useRef<number | null>(null);
+  const lastFocusedElementRef = useRef<HTMLElement | null>(null);
+  const menuPortalRef = useRef<HTMLDivElement | null>(null);
+  const menuDialogRef = useRef<HTMLDivElement | null>(null);
+  const menuCloseButtonRef = useRef<HTMLButtonElement | null>(null);
+  const menuToggleButtonRef = useRef<HTMLButtonElement | null>(null);
   const isHydrated = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -106,18 +139,20 @@ export function RadiantExperienceHeader({
       label: content.common.actions.requestDeck,
     },
   ];
-  const socialLinks = [
+  const socialLinks: SocialLink[] = [
     {
-      href: "mailto:hello@radiant.studio?subject=Radiant%20Instagram",
+      href: radiantSocialLinks.instagram,
       icon: <span className="text-[0.82rem] font-semibold uppercase">ig</span>,
       label: content.footer.socials.instagram,
     },
     {
-      href: "mailto:hello@radiant.studio?subject=Radiant%20LinkedIn",
+      href: radiantSocialLinks.linkedin,
       icon: <span className="text-[0.88rem] font-semibold lowercase">in</span>,
       label: content.footer.socials.linkedin,
     },
-  ];
+  ].flatMap((item) =>
+    item.href ? [{ ...item, href: item.href }] : [],
+  );
 
   useEffect(() => {
     let previousY = window.scrollY;
@@ -178,6 +213,10 @@ export function RadiantExperienceHeader({
 
   const openMenu = () => {
     clearMenuCloseTimeout();
+    lastFocusedElementRef.current =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
     setIsServicesExpanded(false);
     setIsMenuRendered(true);
     window.requestAnimationFrame(() => {
@@ -185,39 +224,112 @@ export function RadiantExperienceHeader({
     });
   };
 
+  const closeMenuFromEffect = useEffectEvent(() => {
+    closeMenu();
+  });
+
   useEffect(() => {
     if (!isMenuRendered) {
       return;
     }
 
+    const portal = menuPortalRef.current;
+    const dialog = menuDialogRef.current;
+
+    if (!portal || !dialog) {
+      return;
+    }
+
     const previousBodyOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
+    const siblings = Array.from(document.body.children).filter(
+      (element) => element !== portal,
+    );
+    const previousSiblingState = siblings.map((element) => {
+      const htmlElement = element as HTMLElement;
+
+      return {
+        ariaHidden: element.getAttribute("aria-hidden"),
+        element: htmlElement,
+        inert: htmlElement.inert,
+      };
+    });
 
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
+    previousSiblingState.forEach(({ element }) => {
+      element.inert = true;
+      element.setAttribute("aria-hidden", "true");
+    });
+    const menuToggleButton = menuToggleButtonRef.current;
+
+    const focusFrame = window.requestAnimationFrame(() => {
+      const focusTarget =
+        menuCloseButtonRef.current ?? getFocusableElements(dialog)[0] ?? dialog;
+      focusTarget.focus();
+    });
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        if (menuCloseTimeoutRef.current !== null) {
-          window.clearTimeout(menuCloseTimeoutRef.current);
-          menuCloseTimeoutRef.current = null;
-        }
+        event.preventDefault();
+        closeMenuFromEffect();
+        return;
+      }
 
-        setIsMenuOpen(false);
-        setIsServicesExpanded(false);
-        menuCloseTimeoutRef.current = window.setTimeout(() => {
-          setIsMenuRendered(false);
-          menuCloseTimeoutRef.current = null;
-        }, menuTransitionDurationMs);
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const focusableElements = getFocusableElements(dialog);
+
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        dialog.focus();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (!dialog.contains(activeElement)) {
+        event.preventDefault();
+        (event.shiftKey ? lastElement : firstElement).focus();
+        return;
+      }
+
+      if (!event.shiftKey && activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      } else if (event.shiftKey && activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
 
     return () => {
+      window.cancelAnimationFrame(focusFrame);
       document.body.style.overflow = previousBodyOverflow;
       document.documentElement.style.overflow = previousHtmlOverflow;
-      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown);
+      previousSiblingState.forEach(({ ariaHidden, element, inert }) => {
+        element.inert = inert;
+
+        if (ariaHidden === null) {
+          element.removeAttribute("aria-hidden");
+        } else {
+          element.setAttribute("aria-hidden", ariaHidden);
+        }
+      });
+
+      const focusTarget =
+        lastFocusedElementRef.current ?? menuToggleButton;
+
+      if (focusTarget?.isConnected) {
+        focusTarget.focus();
+      }
     };
   }, [isMenuRendered]);
 
@@ -343,6 +455,7 @@ export function RadiantExperienceHeader({
 
               <button
                 type="button"
+                ref={menuToggleButtonRef}
                 onClick={handleMenuToggle}
                 aria-controls={menuPanelId}
                 aria-expanded={isMenuOpen}
@@ -369,6 +482,7 @@ export function RadiantExperienceHeader({
       {canRenderMenuPortal
         ? createPortal(
             <div
+              ref={menuPortalRef}
               className={cn(
                 "fixed inset-0 z-[60]",
                 isMenuRendered ? "pointer-events-auto" : "pointer-events-none",
@@ -395,9 +509,11 @@ export function RadiantExperienceHeader({
             >
               <div
                 id={menuPanelId}
+                ref={menuDialogRef}
                 role="dialog"
                 aria-modal="true"
                 aria-label={`${content.brand.name} navigation`}
+                tabIndex={-1}
                 className="relative h-full overflow-y-auto bg-[#111218] text-[#f5f1eb]"
               >
                 <div className="pointer-events-none absolute inset-0">
@@ -429,6 +545,7 @@ export function RadiantExperienceHeader({
 
                     <button
                       type="button"
+                      ref={menuCloseButtonRef}
                       onClick={closeMenu}
                       aria-label="Close navigation menu"
                       className="flex size-14 items-center justify-center rounded-full bg-[#f1ece8] text-[#15161d] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5"
@@ -462,50 +579,52 @@ export function RadiantExperienceHeader({
                       </div>
                     </div>
 
-                    <div className="space-y-8">
-                      <div className="flex items-center gap-3">
-                        {socialLinks.map((item) => (
-                          <a
-                            key={item.label}
-                            href={item.href}
-                            aria-label={item.label}
-                            className="flex size-16 items-center justify-center rounded-full bg-white/8 text-white/88 transition-all hover:bg-white/12 hover:text-white"
-                          >
-                            {item.icon}
-                          </a>
-                        ))}
-                      </div>
+                      <div className="space-y-8">
+                        {socialLinks.length > 0 ? (
+                          <div className="flex items-center gap-3">
+                            {socialLinks.map((item) => (
+                              <a
+                                key={item.label}
+                                href={item.href}
+                                aria-label={item.label}
+                                className="flex size-16 items-center justify-center rounded-full bg-white/8 text-white/88 transition-all hover:bg-white/12 hover:text-white"
+                              >
+                                {item.icon}
+                              </a>
+                            ))}
+                          </div>
+                        ) : null}
 
-                      <div className="flex items-center justify-between gap-8 border-t border-white/10 pt-5 text-sm">
-                        {utilityLinks.map((item) => (
-                          <a
-                            key={item.label}
-                            href={item.href}
-                            onClick={closeMenu}
-                            className="font-medium text-white/84 underline underline-offset-4 transition-colors hover:text-white"
-                          >
-                            {item.label}
-                          </a>
-                        ))}
-                      </div>
+                        <div className="flex items-center justify-between gap-8 border-t border-white/10 pt-5 text-sm">
+                          {utilityLinks.map((item) => (
+                            <a
+                              key={item.label}
+                              href={item.href}
+                              onClick={closeMenu}
+                              className="font-medium text-white/84 underline underline-offset-4 transition-colors hover:text-white"
+                            >
+                              {item.label}
+                            </a>
+                          ))}
+                        </div>
 
-                      <button
-                        type="button"
-                        onClick={handleLocaleSwitch}
-                        className={cn(
-                          buttonVariants({
-                            className:
-                              "h-11 rounded-full border-white/14 bg-transparent px-4 text-white hover:bg-white/8",
-                            size: "sm",
-                            variant: "outline",
-                          }),
-                        )}
-                      >
-                        <LanguagesIcon data-icon="inline-start" />
-                        {nextLocale.toUpperCase()}
-                      </button>
+                        <button
+                          type="button"
+                          onClick={handleLocaleSwitch}
+                          className={cn(
+                            buttonVariants({
+                              className:
+                                "h-11 rounded-full border-white/14 bg-transparent px-4 text-white hover:bg-white/8",
+                              size: "sm",
+                              variant: "outline",
+                            }),
+                          )}
+                        >
+                          <LanguagesIcon data-icon="inline-start" />
+                          {nextLocale.toUpperCase()}
+                        </button>
+                      </div>
                     </div>
-                  </div>
 
                   <div className="flex flex-1 flex-col lg:justify-end">
                     <div className="mx-auto w-full max-w-[18rem] lg:mx-0 lg:ml-auto lg:max-w-[38rem]">
@@ -618,18 +737,20 @@ export function RadiantExperienceHeader({
                         ))}
                       </div>
 
-                      <div className="mt-8 flex items-center justify-center gap-3">
-                        {socialLinks.map((item) => (
-                          <a
-                            key={item.label}
-                            href={item.href}
-                            aria-label={item.label}
-                            className="flex size-16 items-center justify-center rounded-full bg-white/8 text-white/88 transition-all hover:bg-white/12 hover:text-white"
-                          >
-                            {item.icon}
-                          </a>
-                        ))}
-                      </div>
+                      {socialLinks.length > 0 ? (
+                        <div className="mt-8 flex items-center justify-center gap-3">
+                          {socialLinks.map((item) => (
+                            <a
+                              key={item.label}
+                              href={item.href}
+                              aria-label={item.label}
+                              className="flex size-16 items-center justify-center rounded-full bg-white/8 text-white/88 transition-all hover:bg-white/12 hover:text-white"
+                            >
+                              {item.icon}
+                            </a>
+                          ))}
+                        </div>
+                      ) : null}
 
                       <div className="mt-8 flex justify-center">
                         <button
