@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
   useSyncExternalStore,
+  type CSSProperties,
   type ReactNode,
 } from "react";
 
@@ -38,6 +39,7 @@ const tickerRepeatCount = 8;
 const desktopMediaQuery = "(min-width: 768px)";
 const supportsIntersectionObserver =
   typeof IntersectionObserver !== "undefined";
+const desktopRowHeight = "clamp(9.5rem, 16.5vh, 12rem)";
 
 function subscribeToDesktopBreakpoint(onStoreChange: () => void) {
   const mediaQuery = window.matchMedia(desktopMediaQuery);
@@ -85,10 +87,10 @@ function PatternTicker({
       >
         {Array.from({ length: tickerRepeatCount * 2 }).map((_, index) => (
           <div key={`${label}-${index}`} className="flex items-center gap-3 md:gap-4">
-            <span className="font-heading text-[clamp(2rem,3.6vw,3.2rem)] leading-none tracking-[-0.05em] text-black">
+            <span className="font-heading text-[clamp(2.15rem,3.95vw,3.75rem)] leading-none tracking-[0.03em] text-[#8C5725]/80">
               {label}
             </span>
-            <RadiantSparkIcon className="size-4 text-black md:size-5" />
+            <RadiantSparkIcon className="size-4 text-[#8C5725]/80 md:size-5 lg:size-[2.35rem]" />
           </div>
         ))}
       </div>
@@ -187,7 +189,7 @@ function MobileMatrix({
           key={row.key}
           className="grid gap-4 border-t border-[#d4c4b5]/75 pt-5 first:border-t-0 first:pt-0"
         >
-          <p className="font-sans text-[clamp(2.4rem,9vw,3.8rem)] font-semibold leading-none tracking-[-0.08em] text-[#cfb8a1]/78">
+          <p className="font-inika text-[clamp(2.4rem,9vw,3.8rem)] font-bold leading-none tracking-[0em] text-[#8C5725]/20">
             {row.label}
           </p>
           <div
@@ -214,8 +216,23 @@ function MobileMatrix({
   );
 }
 
-function DesktopRowFrame({ children }: { children: ReactNode }) {
-  return <div className="flex items-center gap-8 py-5 lg:gap-12 lg:py-6">{children}</div>;
+function DesktopRowFrame({
+  children,
+  className,
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "min-h-0 flex-1",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 }
 
 function DesktopMatrix({
@@ -229,26 +246,36 @@ function DesktopMatrix({
   isActive: boolean;
   rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
 }) {
+  const labelClassName =
+    "inline-block w-max font-inika font-bold leading-[0.9] tracking-[0em] whitespace-nowrap text-[#8C5725]/28";
+  const labelStyle: CSSProperties = {
+    fontSize: `calc(${desktopRowHeight} * 0.66)`,
+  };
+
   return (
-    <div className="divide-y divide-[#d4c4b5]/75">
-      <DesktopRowFrame>
-        <div className="min-w-[10.5rem] flex-1 basis-0">
+    <div className="flex min-h-[clamp(31rem,58vh,36.5rem)] flex-1 flex-col justify-center gap-3">
+      <DesktopRowFrame
+        className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 md:gap-5 lg:gap-6"
+      >
+        <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
-            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            className="h-full w-full"
             delayMs={0}
             images={imageSlots.slotA}
             isActive={isActive}
             priority
           />
         </div>
-        <p className="shrink-0 text-center font-sans text-[clamp(3.35rem,5.8vw,5.9rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
-          {rows.branding}
-        </p>
-        <div className="min-w-[10.5rem] flex-1 basis-0">
+        <div className="flex items-center justify-center">
+          <p className={labelClassName} style={labelStyle}>
+            {rows.branding}
+          </p>
+        </div>
+        <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
-            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            className="h-full w-full"
             delayMs={180}
             images={imageSlots.slotB}
             isActive={isActive}
@@ -256,41 +283,51 @@ function DesktopMatrix({
         </div>
       </DesktopRowFrame>
 
-      <DesktopRowFrame>
-        <p className="shrink-0 font-sans text-[clamp(3.25rem,5.8vw,5.8rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
-          {rows.marketing}
-        </p>
-        <div className="min-w-[12rem] flex-1 basis-0">
+      <DesktopRowFrame
+        className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-t border-[#d7c5b4] pt-3 md:gap-5 lg:gap-6"
+      >
+        <div className="flex items-center justify-start">
+          <p className={labelClassName} style={labelStyle}>
+            {rows.marketing}
+          </p>
+        </div>
+        <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
-            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            className="h-full w-full"
             delayMs={360}
             images={imageSlots.slotC}
             isActive={isActive}
           />
         </div>
-        <p className="shrink-0 text-right font-sans text-[clamp(3rem,5.1vw,4.9rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
-          {rows.socials}
-        </p>
+        <div className="flex items-center justify-end">
+          <p className={labelClassName} style={labelStyle}>
+            {rows.socials}
+          </p>
+        </div>
       </DesktopRowFrame>
 
-      <DesktopRowFrame>
-        <div className="min-w-[10.5rem] flex-1 basis-0">
+      <DesktopRowFrame
+        className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 border-t border-[#d7c5b4] pt-3 md:gap-5 lg:gap-6"
+      >
+        <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
-            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            className="h-full w-full"
             delayMs={540}
             images={imageSlots.slotD}
             isActive={isActive}
           />
         </div>
-        <p className="shrink-0 text-center font-sans text-[clamp(3.4rem,6vw,6rem)] font-semibold leading-[0.9] tracking-[-0.078em] text-[#d1b8a0]/76 whitespace-nowrap">
-          {rows.storytelling}
-        </p>
-        <div className="min-w-[10.5rem] flex-1 basis-0">
+        <div className="flex items-center justify-center">
+          <p className={labelClassName} style={labelStyle}>
+            {rows.storytelling}
+          </p>
+        </div>
+        <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
-            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            className="h-full w-full"
             delayMs={720}
             images={imageSlots.slotE}
             isActive={isActive}
@@ -345,9 +382,9 @@ export function RadiantCapabilityMatrixSection({
   return (
     <section
       ref={capabilityMatrixSectionRef}
-      className="relative z-20 overflow-hidden bg-[#e9ddd1] pb-16 pt-8 sm:pb-20 sm:pt-10 md:pb-24 md:pt-12 lg:pt-14"
+      className="relative z-20 min-h-svh overflow-hidden bg-[#e9ddd1] py-6 md:py-8 lg:py-10"
     >
-      <div className="space-y-6 md:space-y-8">
+      <div className="flex min-h-[calc(100svh-3rem)] flex-col justify-center gap-6">
         <PatternTicker
           label={matrix.topTickerLabel}
           trackRef={capabilityMatrixTopTickerRef}
@@ -355,29 +392,31 @@ export function RadiantCapabilityMatrixSection({
 
         <div
           ref={capabilityMatrixContentRef}
-          className="mx-auto max-w-[76rem] px-4 sm:px-6 lg:px-8"
+          className="site-gutter mx-auto flex w-full max-w-[96rem] flex-1 items-stretch"
         >
-          <div className="mb-6 md:hidden">
-            <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
-              {matrix.eyebrow}
-            </p>
-          </div>
+          <div className="flex w-full flex-1 self-stretch flex-col gap-3">
+            <div className="mb-6 md:hidden">
+              <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
+                {matrix.eyebrow}
+              </p>
+            </div>
 
-          {isDesktop ? (
-            <DesktopMatrix
-              altLabel={matrix.slotAltLabel}
-              imageSlots={matrix.imageSlots}
-              isActive={isSectionActive}
-              rows={matrix.rows}
-            />
-          ) : (
-            <MobileMatrix
-              altLabel={matrix.slotAltLabel}
-              imageSlots={matrix.imageSlots}
-              isActive={isSectionActive}
-              rows={matrix.rows}
-            />
-          )}
+            {isDesktop ? (
+              <DesktopMatrix
+                altLabel={matrix.slotAltLabel}
+                imageSlots={matrix.imageSlots}
+                isActive={isSectionActive}
+                rows={matrix.rows}
+              />
+            ) : (
+              <MobileMatrix
+                altLabel={matrix.slotAltLabel}
+                imageSlots={matrix.imageSlots}
+                isActive={isSectionActive}
+                rows={matrix.rows}
+              />
+            )}
+          </div>
         </div>
 
         <PatternTicker

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import localFont from "next/font/local";
+import { Geist_Mono, Inika } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import "@/app/globals.css";
@@ -14,9 +15,21 @@ import { routing } from "@/i18n/routing";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
-const geistSans = Geist({
-  variable: "--font-sans",
-  subsets: ["latin", "latin-ext"],
+const montserrat = localFont({
+  src: [
+    {
+      path: "../fonts/Montserrat-VariableFont_wght.ttf",
+      style: "normal",
+      weight: "100 900",
+    },
+    {
+      path: "../fonts/Montserrat-Italic-VariableFont_wght.ttf",
+      style: "italic",
+      weight: "100 900",
+    },
+  ],
+  display: "swap",
+  variable: "--font-montserrat",
 });
 
 const geistMono = Geist_Mono({
@@ -24,10 +37,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin", "latin-ext"],
 });
 
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const eleanor = localFont({
+  src: [
+    {
+      path: "../fonts/1FTV-VIP-Eleanor-Goenka.otf",
+      style: "normal",
+      weight: "400",
+    },
+  ],
+  display: "swap",
+  variable: "--font-eleanor",
+});
+
+const inika = Inika({
+  display: "swap",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-inika",
+  weight: ["400", "700"],
 });
 
 type LocaleLayoutProps = Readonly<{
@@ -104,9 +130,9 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${montserrat.variable} ${geistMono.variable} ${eleanor.variable} ${inika.variable} h-full antialiased`}
     >
-      <body className="min-h-screen bg-background text-foreground">
+      <body className="min-h-screen bg-background font-sans text-foreground">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

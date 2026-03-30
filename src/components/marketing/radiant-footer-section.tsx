@@ -60,12 +60,12 @@ export function RadiantFooterSection({
   );
 
   return (
-    <footer className="relative z-10 -mt-[1svh] min-h-svh overflow-hidden bg-[#1b1a18] px-4 pb-24 pt-[10svh] text-white sm:px-6 sm:pt-[9svh] lg:px-8 lg:pt-[8svh]">
+    <footer className="site-gutter relative z-10 -mt-[1svh] min-h-svh overflow-hidden bg-[#1b1a18] pb-24 pt-[10svh] text-white sm:pt-[9svh] lg:pt-[8svh]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/24 via-black/8 to-transparent" />
 
       <div className="relative mx-auto flex min-h-[calc(100svh-7rem)] max-w-[88rem] flex-col">
         <div className="flex flex-col items-center text-center">
-          <div className="text-[#9f682b]">
+          <div className="text-primary">
             <RadiantBrandLogo className="h-[5.65rem] w-auto sm:h-[6.25rem]" />
           </div>
 
@@ -144,7 +144,7 @@ export function RadiantFooterSection({
               {Array.from({ length: footerTickerRepeats }).map((_, index) => (
                 <span
                   key={`footer-track-a-${index}`}
-                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(5rem,14vw,13rem)] leading-none tracking-[-0.08em] text-white/[0.13]"
+                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(5rem,14vw,13rem)] leading-none tracking-[0.02em] text-white/[0.13]"
                 >
                   <span>{content.footer.patternLabel}</span>
                   <span className="text-[0.44em]">✦</span>
@@ -158,7 +158,7 @@ export function RadiantFooterSection({
               {Array.from({ length: footerTickerRepeats }).map((_, index) => (
                 <span
                   key={`footer-track-b-${index}`}
-                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(5rem,14vw,13rem)] leading-none tracking-[-0.08em] text-white/[0.13]"
+                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(5rem,14vw,13rem)] leading-none tracking-[0.02em] text-white/[0.13]"
                 >
                   <span>{content.footer.patternLabel}</span>
                   <span className="text-[0.44em]">✦</span>

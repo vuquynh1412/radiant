@@ -247,7 +247,7 @@ export function RadiantPlansSection({
     <section
       id="plans"
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#e8ddd3] px-4 pt-12 pb-[16svh] scroll-mt-32 sm:px-6 sm:pt-14 sm:pb-[18svh] sm:scroll-mt-36 lg:px-8 lg:pt-16 lg:pb-[19svh]"
+      className="site-gutter relative overflow-hidden bg-[#e8ddd3] pt-12 pb-[16svh] scroll-mt-32 sm:pt-14 sm:pb-[18svh] sm:scroll-mt-36 lg:pt-16 lg:pb-[19svh]"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-8 bg-gradient-to-b from-[#171614]/12 via-[#171614]/6 to-transparent" />
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -258,7 +258,7 @@ export function RadiantPlansSection({
 
       <div className="relative mx-auto max-w-[90rem]">
         <div ref={headerRef} className="mx-auto max-w-3xl text-center">
-          <h2 className="font-heading text-[clamp(3.15rem,4.9vw,5.35rem)] leading-[0.94] tracking-[-0.055em] text-[#111111]">
+          <h2 className="title-display text-[#27272A]">
             {content.plans.title}
           </h2>
         </div>

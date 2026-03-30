@@ -114,7 +114,7 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "mx-auto mt-4 max-w-[13ch] font-heading text-[clamp(2.9rem,5vw,5.6rem)] leading-[0.94] tracking-[-0.04em] text-[#171614]",
+          "title-display-inika mx-auto mt-4 max-w-[13ch] text-[#171614]",
           titleClassName,
         )}
       >
@@ -170,7 +170,7 @@ function ReducedMotionCallToAction({
   content: RadiantExperienceContent;
 }) {
   return (
-    <div className="hidden bg-[#1b1a18] px-4 py-16 text-white motion-reduce:block sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+    <div className="site-gutter hidden bg-[#1b1a18] py-16 text-white motion-reduce:block sm:py-20 lg:py-24">
       <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.6rem] border border-white/10 bg-[radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.07),transparent_36%),linear-gradient(180deg,#1b1a18_0%,#111111_100%)] p-3 shadow-[0_36px_120px_-56px_rgba(0,0,0,0.75)]">
         <div className="pointer-events-none absolute left-1/2 top-[-10rem] h-[24rem] w-[24rem] -translate-x-1/2 rounded-full border border-white/10 opacity-40" />
         <div className="pointer-events-none absolute left-1/2 top-[-3rem] h-[10rem] w-[10rem] -translate-x-1/2 rounded-full border border-white/14 opacity-60" />
@@ -447,7 +447,7 @@ export function RadiantCallToActionSection({
               />
             </svg>
 
-            <div className="relative z-20 flex h-full items-center justify-center px-5 pt-[5rem] text-center sm:px-8 lg:px-12">
+            <div className="site-gutter relative z-20 flex h-full items-center justify-center pt-[5rem] text-center">
               <CallToActionBody
                 actionsClassName="opacity-0"
                 actionsRef={actionsRef}

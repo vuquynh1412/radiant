@@ -48,7 +48,7 @@ function ReducedMotionDesktopShowcase({
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(255,255,255,0.08),transparent_38%)]" />
         </div>
 
-        <div className="relative mx-auto flex min-h-[42rem] max-w-6xl flex-col items-center justify-center px-8 py-24 text-center">
+        <div className="site-gutter relative mx-auto flex min-h-[42rem] max-w-[96rem] flex-col items-center justify-center py-24 text-center">
           <div className="mb-10 h-[min(18rem,24vw)] w-[min(13rem,18vw)] text-white/16">
             <RadiantHeroLogo className="size-full" />
           </div>
@@ -71,13 +71,13 @@ function ReducedMotionDesktopShowcase({
         </div>
       </div>
 
-      <div className="bg-background px-6 py-16 lg:px-8 lg:py-20">
+      <div className="site-gutter bg-background py-16 lg:py-20">
         <div className="mx-auto max-w-6xl">
           <div className="max-w-3xl">
             <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
               {content.services.eyebrow}
             </p>
-            <h2 className="mt-5 font-heading text-[clamp(3rem,5vw,4.9rem)] leading-[0.92] tracking-[-0.07em]">
+            <h2 className="title-display mt-5">
               {content.services.title}
             </h2>
             <p className="mt-5 text-[1.05rem] leading-8 text-muted-foreground">
@@ -189,7 +189,7 @@ export function RadiantShowcaseSection({
             <div className="relative size-full">
               <div
                 className="pointer-events-none absolute left-1/2 top-[49%] hidden -translate-x-1/2 -translate-y-1/2 px-4 md:block"
-                style={{ width: "min(calc(100vw - 4rem), 76rem)" }}
+                style={{ width: "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)" }}
               >
                 <div className="invisible">
                   <HeroTitleCopy
@@ -207,7 +207,7 @@ export function RadiantShowcaseSection({
               >
                 <div
                   className="absolute left-1/2 top-[49%] -translate-x-1/2 -translate-y-1/2 px-4"
-                  style={{ width: "min(calc(100vw - 4rem), 76rem)" }}
+                  style={{ width: "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)" }}
                 >
                   <HeroTitleCopy
                     dentistry={content.hero.title.dentistry}
@@ -222,7 +222,7 @@ export function RadiantShowcaseSection({
               >
                 <div
                   className="absolute left-1/2 top-[49%] -translate-x-1/2 -translate-y-1/2 px-4"
-                  style={{ width: "min(calc(100vw - 4rem), 76rem)" }}
+                  style={{ width: "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)" }}
                 >
                   <HeroTitleCopy
                     className="text-shadow-soft"
@@ -232,7 +232,7 @@ export function RadiantShowcaseSection({
                   />
                 </div>
               </div>
-              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-8 pt-24 text-white md:hidden sm:px-6">
+              <div className="site-gutter absolute inset-0 flex flex-col justify-end pb-8 pt-24 text-white md:hidden">
                 <div className="flex max-w-[22rem] flex-col gap-6">
                   <div className="inline-flex w-fit items-center gap-3 rounded-full border border-white/14 bg-white/8 px-3 py-2 backdrop-blur-md">
                     <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
@@ -242,13 +242,13 @@ export function RadiantShowcaseSection({
                   </div>
 
                   <div className="space-y-1.5">
-                    <p className="font-heading text-[clamp(3.35rem,14vw,4.75rem)] leading-[0.88] tracking-[-0.065em] text-shadow-soft">
+                    <p className="hero-title-display text-shadow-soft">
                       {content.hero.title.premium}
                     </p>
-                    <p className="font-heading text-[clamp(3.45rem,14.4vw,4.95rem)] leading-[0.84] tracking-[-0.07em] text-shadow-soft">
+                    <p className="hero-title-display text-shadow-soft">
                       {content.hero.title.esthetic}
                     </p>
-                    <p className="font-heading text-[clamp(3.55rem,14.8vw,5.1rem)] leading-[0.8] tracking-[-0.08em] italic text-shadow-soft">
+                    <p className="hero-title-display italic text-shadow-soft">
                       {content.hero.title.dentistry}
                     </p>
                   </div>
@@ -269,7 +269,7 @@ export function RadiantShowcaseSection({
           >
             <div
               ref={heroMarqueeTrackRef}
-              className="font-heading whitespace-nowrap px-[8vw] text-[clamp(6rem,10vw,10rem)] leading-none tracking-[-0.08em] text-white text-shadow-soft italic will-change-transform"
+              className="hero-marquee-display whitespace-nowrap px-[8vw] text-white text-shadow-soft italic will-change-transform"
             >
               {content.hero.marquee}
             </div>
@@ -280,7 +280,7 @@ export function RadiantShowcaseSection({
             className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
           >
             <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-              <h2 className="font-heading text-[clamp(2.45rem,4vw,4.15rem)] leading-none tracking-[-0.07em]">
+              <h2 className="title-display">
                 {content.services.title}
               </h2>
             </div>
@@ -342,7 +342,7 @@ export function RadiantShowcaseSection({
 
       <ReducedMotionDesktopShowcase content={content} />
 
-      <div className="px-4 py-16 md:hidden">
+      <div className="site-gutter py-16 md:hidden">
         <div className="flex flex-col gap-5">
           <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
             {content.services.eyebrow}

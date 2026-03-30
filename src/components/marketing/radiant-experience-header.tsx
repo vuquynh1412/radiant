@@ -382,7 +382,7 @@ export function RadiantExperienceHeader({
               className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
             >
               <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="text-[#8c5725]">
+                <div className="text-primary">
                   <RadiantBrandLogo className="h-8 w-auto sm:h-9" />
                 </div>
                 <div className="min-w-0 leading-[0.92]">
@@ -529,7 +529,7 @@ export function RadiantExperienceHeader({
                       className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
                     >
                       <div className="flex items-center gap-2.5 sm:gap-3">
-                        <div className="text-[#8c5725]">
+                        <div className="text-primary">
                           <RadiantBrandLogo className="h-7 w-auto sm:h-8" />
                         </div>
                         <div className="min-w-0 leading-[0.92] text-white">

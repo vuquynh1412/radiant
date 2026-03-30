@@ -301,13 +301,19 @@ export function ServiceCard({
   variant: VisualVariant;
 }) {
   return (
-    <article className={cn("flex flex-col gap-4", className)}>
+    <article className={cn("flex flex-col gap-3", className)}>
       <ServiceTile variant={variant} />
-      <ServiceCopy
-        description={description}
-        eyebrow={eyebrow}
-        title={title}
-      />
+      <div className="flex flex-col gap-2">
+        <h3 className="font-inika text-[1.5rem] font-bold leading-[1.08] tracking-[-0.03em] text-[#27272A]">
+          {title}
+        </h3>
+        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-muted-foreground uppercase">
+          {eyebrow}
+        </p>
+        <p className="max-w-lg text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">
+          {description}
+        </p>
+      </div>
     </article>
   );
 }
@@ -326,18 +332,18 @@ export function HeroTitleCopy({
   return (
     <div
       className={cn(
-        "relative mx-auto h-[clamp(11.5rem,18vw,15rem)] w-full",
+        "relative mx-auto h-[9rem] w-full md:h-[12rem] lg:h-[18.5rem]",
         className,
       )}
     >
-      <p className="absolute left-1/2 top-[4%] -translate-x-1/2 font-heading text-[clamp(4rem,8vw,7.4rem)] leading-[0.9] tracking-[-0.065em]">
+      <p className="hero-title-display absolute left-1/2 top-[4%] -translate-x-1/2 whitespace-nowrap">
         {premium}
       </p>
-      <div className="absolute inset-x-0 top-[50%] flex items-end justify-center gap-[clamp(0.75rem,1.5vw,1.4rem)]">
-        <p className="font-heading text-[clamp(4.2rem,8.7vw,7.95rem)] leading-[0.88] tracking-[-0.075em]">
+      <div className="absolute inset-x-0 top-[48%] flex items-end justify-center gap-2 md:gap-3 lg:gap-5">
+        <p className="hero-title-display">
           {esthetic}
         </p>
-        <p className="font-heading text-[clamp(4.35rem,8.9vw,8.2rem)] leading-[0.82] tracking-[-0.085em] italic">
+        <p className="hero-title-display italic">
           {dentistry}
         </p>
       </div>

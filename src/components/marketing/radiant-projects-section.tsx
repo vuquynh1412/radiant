@@ -53,7 +53,7 @@ function ProjectVisual({ item }: { item: RadiantProjectItem }) {
             <MiniBadge className="bg-[#ff6b1d]" label="GOOD HUMOR" />
             <MiniBadge className="bg-[#1c4f9d]" label="LANGNESE" />
           </div>
-          <div className="absolute inset-x-8 bottom-7 flex items-center justify-between text-[0.62rem] font-medium tracking-[0.2em] text-black/55 uppercase">
+          <div className="absolute inset-x-8 bottom-7 flex items-center justify-between text-[0.62rem] font-medium tracking-[0.2em] text-[#27272A]/55 uppercase">
             <span>System</span>
             <span>Global</span>
             <span>Rollout</span>
@@ -112,7 +112,7 @@ function ProjectVisual({ item }: { item: RadiantProjectItem }) {
         <div className="relative h-full w-full overflow-hidden bg-[#060606]">
           <div className="absolute left-[12%] top-[16%] h-[68%] w-[44%] rotate-[-10deg] rounded-[0.9rem] bg-[linear-gradient(155deg,#171717_0%,#f3f0e6_78%)] shadow-[0_24px_42px_-24px_rgba(0,0,0,0.7)]" />
           <div className="absolute left-[18%] top-[24%] h-[40%] w-[30%] rotate-[-10deg] border border-white/12" />
-          <div className="absolute left-[18%] top-[24%] rotate-[-10deg] text-[2.1rem] font-semibold tracking-[-0.08em] text-[#ff6d33]">
+          <div className="absolute left-[18%] top-[24%] rotate-[-10deg] text-[2.1rem] font-semibold tracking-[0.02em] text-[#ff6d33]">
             ION.
           </div>
           <div className="absolute bottom-[20%] left-[18%] max-w-[34%] rotate-[-10deg] text-[0.72rem] font-medium tracking-[0.14em] text-white/78 uppercase">
@@ -127,7 +127,7 @@ function ProjectVisual({ item }: { item: RadiantProjectItem }) {
           {Array.from({ length: 5 }).map((_, column) => (
             <div
               key={column}
-              className="absolute inset-y-0 flex flex-col justify-between py-4 text-[4.6rem] font-semibold leading-none tracking-[-0.12em] text-black"
+              className="absolute inset-y-0 flex flex-col justify-between py-4 text-[4.6rem] font-semibold leading-none tracking-[-0.12em] text-[#27272A]"
               style={{ left: `${7 + column * 19}%` }}
             >
               <span>{column === 2 ? "25" : "30"}</span>
@@ -156,12 +156,12 @@ function ProjectVisual({ item }: { item: RadiantProjectItem }) {
               ["#0b8f6b", "12rem"],
               ["#fefefe", "7.5rem"],
             ].map(([color, height]) => (
-                <div
-                  key={color}
-                  className="rounded-[1rem] shadow-[0_12px_24px_-14px_rgba(21,15,11,0.4)]"
-                  style={{ backgroundColor: color, height }}
-                />
-              ))}
+              <div
+                key={color}
+                className="rounded-[1rem] shadow-[0_12px_24px_-14px_rgba(21,15,11,0.4)]"
+                style={{ backgroundColor: color, height }}
+              />
+            ))}
           </div>
         </div>
       );
@@ -210,18 +210,18 @@ function ProjectVisual({ item }: { item: RadiantProjectItem }) {
       return (
         <div className="relative h-full w-full overflow-hidden bg-[linear-gradient(180deg,#f5efe5_0%,#d9d1c4_100%)]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_22%_18%,rgba(255,111,76,0.14),transparent_24%),radial-gradient(circle_at_78%_24%,rgba(57,186,255,0.2),transparent_22%)]" />
-          <div className="absolute inset-x-5 top-5 grid gap-2 text-[2.8rem] font-semibold leading-none tracking-[-0.12em] text-black/88">
+          <div className="absolute inset-x-5 top-5 grid gap-2 text-[2.8rem] font-semibold leading-none tracking-[-0.12em] text-[#27272A]/88">
             <div className="flex justify-between">
               <span>BR</span>
               <span>ND</span>
               <span>OS</span>
             </div>
-            <div className="flex justify-between text-black/72">
+            <div className="flex justify-between text-[#27272A]/72">
               <span>LA</span>
               <span>UN</span>
               <span>CH</span>
             </div>
-            <div className="flex justify-between text-black/54">
+            <div className="flex justify-between text-[#27272A]/54">
               <span>GRID</span>
               <span>TYPE</span>
             </div>
@@ -246,14 +246,14 @@ export function RadiantProjectsSection({
   return (
     <section
       id="projects"
-      className="relative overflow-hidden bg-[#171614] px-4 py-16 text-[#f5f1e8] sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+      className="site-gutter relative overflow-hidden bg-[#171614] py-16 text-[#f5f1e8] sm:py-20 lg:py-24"
     >
       <div className="mx-auto max-w-[84rem]">
         <div className="mx-auto max-w-4xl text-center">
           <p className="text-[0.72rem] font-medium tracking-[0.22em] text-white/46 uppercase">
             {projects.eyebrow}
           </p>
-          <h2 className="mt-4 font-heading text-[clamp(3rem,6vw,5.4rem)] leading-[0.92] tracking-[-0.065em] text-[#f8f3eb]">
+          <h2 className="title-display mt-4 text-[#f8f3eb]">
             {projects.title}
           </h2>
           <p className="mt-5 text-base leading-7 text-white/58 sm:text-lg">
@@ -291,7 +291,7 @@ export function RadiantProjectsSection({
           {visibleItems.map((item) => (
             <article
               key={item.key}
-              className="mb-6 break-inside-avoid overflow-hidden rounded-[1.75rem] bg-[#f3efe8] text-[#111111] shadow-[0_28px_70px_-38px_rgba(0,0,0,0.45)]"
+              className="mb-6 break-inside-avoid overflow-hidden rounded-[1.75rem] bg-[#f3efe8] text-[#27272A] shadow-[0_28px_70px_-38px_rgba(0,0,0,0.45)]"
             >
               <div
                 className={cn(
@@ -302,13 +302,13 @@ export function RadiantProjectsSection({
                 <ProjectVisual item={item} />
               </div>
               <div className="space-y-3 px-5 pb-5 pt-4 sm:px-6 sm:pb-6">
-                <p className="text-[0.72rem] font-medium tracking-[0.08em] text-black/54 uppercase">
+                <p className="text-[0.72rem] font-medium tracking-[0.08em] text-[#27272A]/54 uppercase">
                   {item.date}
                 </p>
-                <h3 className="font-sans text-[clamp(1.7rem,2.25vw,2.45rem)] font-semibold leading-[0.92] tracking-[-0.06em]">
+                <h3 className="font-sans text-[24px] font-semibold leading-[1] tracking-[-0.04em] text-[#27272A]">
                   {item.title}
                 </h3>
-                <p className="text-[0.78rem] font-medium tracking-[0.12em] text-black/56 uppercase">
+                <p className="text-[0.78rem] font-medium tracking-[0.12em] text-[#27272A]/56 uppercase">
                   {projects.filterLabels[item.filter]}
                 </p>
               </div>
