@@ -1,30 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useLocale, useMessages } from "next-intl";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
+import { useLocale, useMessages } from "next-intl";
+import { useEffect, useRef, useState } from "react";
 
 import type { Locale } from "@/i18n/config";
 import { getHomePageContent } from "@/i18n/get-homepage-content";
 import type { AppMessages } from "@/i18n/messages";
 
+import { cn } from "@/lib/utils";
 import { RadiantAboutSection } from "./radiant-about-section";
 import { RadiantCapabilityMatrixSection } from "./radiant-capability-matrix-section";
 import { RadiantCallToActionSection } from "./radiant-cta-section";
 import { RadiantExperienceHeader } from "./radiant-experience-header";
 import { RadiantExperienceSplash } from "./radiant-experience-splash";
-import { RadiantFooterSection } from "./radiant-footer-section";
-import { RadiantPlansSection } from "./radiant-plans-section";
-import { RadiantProjectsSection } from "./radiant-projects-section";
-import { RadiantShowcaseSection } from "./radiant-showcase-section";
 import type {
   RadiantExperienceProps,
   RadiantExperienceRefs,
 } from "./radiant-experience.types";
+import { RadiantFooterSection } from "./radiant-footer-section";
+import { RadiantProjectsSection } from "./radiant-projects-section";
+import { RadiantShowcaseSection } from "./radiant-showcase-section";
 import { useRadiantCapabilityMatrixMotion } from "./use-radiant-capability-matrix-motion";
 import { useRadiantShowcaseMotion } from "./use-radiant-showcase-motion";
-import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,6 +36,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
 
   const rootRef = useRef<HTMLDivElement | null>(null);
   const showcaseSectionRef = useRef<HTMLDivElement | null>(null);
+  const mobileHeroSectionRef = useRef<HTMLDivElement | null>(null);
+  const mobileHeroMarqueeRef = useRef<HTMLParagraphElement | null>(null);
+  const mobileHeroTopContentRef = useRef<HTMLDivElement | null>(null);
+  const mobileHeroTopOverlayRef = useRef<HTMLDivElement | null>(null);
   const heroMatteRef = useRef<HTMLDivElement | null>(null);
   const heroMediaRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);
@@ -51,6 +55,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const aboutContentRef = useRef<HTMLDivElement | null>(null);
   const aboutCharRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const capabilityMatrixSectionRef = useRef<HTMLElement | null>(null);
+  const projectsSectionRef = useRef<HTMLElement | null>(null);
   const capabilityMatrixContentRef = useRef<HTMLDivElement | null>(null);
   const capabilityMatrixTopTickerRef = useRef<HTMLDivElement | null>(null);
   const capabilityMatrixBottomTickerRef = useRef<HTMLDivElement | null>(null);
@@ -58,6 +63,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const motionRefs: RadiantExperienceRefs = {
     rootRef,
     showcaseSectionRef,
+    mobileHeroSectionRef,
+    mobileHeroMarqueeRef,
+    mobileHeroTopContentRef,
+    mobileHeroTopOverlayRef,
     heroMatteRef,
     heroMediaRef,
     heroTitleRef,
@@ -73,6 +82,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     aboutContentRef,
     aboutCharRefs,
     capabilityMatrixSectionRef,
+    projectsSectionRef,
     capabilityMatrixContentRef,
     capabilityMatrixTopTickerRef,
     capabilityMatrixBottomTickerRef,
@@ -136,6 +146,45 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     };
   }, [isBooting]);
 
+  useEffect(() => {
+    if (
+      isBooting ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      !window.matchMedia("(max-width: 767px)").matches
+    ) {
+      return undefined;
+    }
+
+    const lenis = new Lenis({
+      duration: 1.15,
+      smoothWheel: true,
+      syncTouch: true,
+      syncTouchLerp: 0.12,
+      touchMultiplier: 0.85,
+      wheelMultiplier: 0.85,
+    });
+
+    let frame = 0;
+
+    const onScroll = () => {
+      ScrollTrigger.update();
+    };
+
+    const raf = (time: number) => {
+      lenis.raf(time);
+      frame = window.requestAnimationFrame(raf);
+    };
+
+    lenis.on("scroll", onScroll);
+    frame = window.requestAnimationFrame(raf);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      lenis.off("scroll", onScroll);
+      lenis.destroy();
+    };
+  }, [isBooting]);
+
   useRadiantShowcaseMotion({ content, refs: motionRefs });
   useRadiantCapabilityMatrixMotion({ refs: motionRefs });
 
@@ -154,6 +203,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
           <RadiantShowcaseSection
             activeServiceCopyShellRef={activeServiceCopyShellRef}
             content={content}
+            mobileHeroMarqueeRef={mobileHeroMarqueeRef}
+            mobileHeroSectionRef={mobileHeroSectionRef}
+            mobileHeroTopContentRef={mobileHeroTopContentRef}
+            mobileHeroTopOverlayRef={mobileHeroTopOverlayRef}
             heroMarqueeRef={heroMarqueeRef}
             heroMarqueeTrackRef={heroMarqueeTrackRef}
             heroMatteRef={heroMatteRef}
@@ -179,8 +232,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
             capabilityMatrixTopTickerRef={capabilityMatrixTopTickerRef}
             content={content}
           />
-          <RadiantProjectsSection content={content} />
-          <RadiantPlansSection content={content} />
+          <RadiantProjectsSection
+            content={content}
+            projectsSectionRef={projectsSectionRef}
+          />
           <RadiantCallToActionSection content={content} />
           <RadiantFooterSection content={content} />
         </main>

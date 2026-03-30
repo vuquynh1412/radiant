@@ -86,11 +86,14 @@ function PatternTicker({
         className="flex w-max items-center gap-3 whitespace-nowrap will-change-transform md:gap-4"
       >
         {Array.from({ length: tickerRepeatCount * 2 }).map((_, index) => (
-          <div key={`${label}-${index}`} className="flex items-center gap-3 md:gap-4">
-            <span className="font-heading text-[clamp(2.15rem,3.95vw,3.75rem)] leading-none tracking-[0.03em] text-[#8C5725]/80">
+          <div
+            key={`${label}-${index}`}
+            className="flex items-center gap-3 md:gap-4"
+          >
+            <span className="font-heading text-[clamp(2.15rem,3.95vw,3.75rem)] leading-none tracking-[0.03em] text-(--matrix-ticker-color)">
               {label}
             </span>
-            <RadiantSparkIcon className="size-4 text-[#8C5725]/80 md:size-5 lg:size-[2.35rem]" />
+            <RadiantSparkIcon className="size-4 text-(--matrix-ticker-color) md:size-5 lg:size-[2.35rem]" />
           </div>
         ))}
       </div>
@@ -181,15 +184,16 @@ function MobileMatrix({
     { key: "socials", label: rows.socials, slots: ["slotD"] },
     { key: "storytelling", label: rows.storytelling, slots: ["slotE"] },
   ];
+  const mobileImageHeightClass = "h-[7.75rem]";
 
   return (
     <div className="grid gap-6 md:hidden">
       {mobileRows.map((row, rowIndex) => (
         <div
           key={row.key}
-          className="grid gap-4 border-t border-[#d4c4b5]/75 pt-5 first:border-t-0 first:pt-0"
+          className="grid gap-4 border-t border-(--matrix-divider-color) pt-5 first:border-t-0 first:pt-0"
         >
-          <p className="font-inika text-[clamp(2.4rem,9vw,3.8rem)] font-bold leading-none tracking-[0em] text-[#8C5725]/20">
+          <p className="text-center font-inika text-[clamp(2.4rem,9vw,3.8rem)] font-bold leading-none tracking-[0em] text-(--matrix-label-color)">
             {row.label}
           </p>
           <div
@@ -202,8 +206,8 @@ function MobileMatrix({
               <RotatingImageSlot
                 key={slotKey}
                 altLabel={altLabel}
-                className="aspect-[2.8/1]"
-                delayMs={(rowIndex * 240) + slotIndex * 180}
+                className={cn("w-full", mobileImageHeightClass)}
+                delayMs={rowIndex * 240 + slotIndex * 180}
                 images={imageSlots[slotKey]}
                 isActive={isActive}
                 priority={rowIndex === 0 && slotIndex === 0}
@@ -223,16 +227,7 @@ function DesktopRowFrame({
   children: ReactNode;
   className?: string;
 }) {
-  return (
-    <div
-      className={cn(
-        "min-h-0 flex-1",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn("min-h-0 flex-1", className)}>{children}</div>;
 }
 
 function DesktopMatrix({
@@ -247,16 +242,14 @@ function DesktopMatrix({
   rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
 }) {
   const labelClassName =
-    "inline-block w-max font-inika font-bold leading-[0.9] tracking-[0em] whitespace-nowrap text-[#8C5725]/28";
+    "inline-block w-max font-inika font-bold leading-[0.9] tracking-[0em] whitespace-nowrap text-[var(--matrix-label-color)]";
   const labelStyle: CSSProperties = {
     fontSize: `calc(${desktopRowHeight} * 0.66)`,
   };
 
   return (
     <div className="flex min-h-[clamp(31rem,58vh,36.5rem)] flex-1 flex-col justify-center gap-3">
-      <DesktopRowFrame
-        className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 md:gap-5 lg:gap-6"
-      >
+      <DesktopRowFrame className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 md:gap-5 lg:gap-6">
         <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
@@ -283,9 +276,7 @@ function DesktopMatrix({
         </div>
       </DesktopRowFrame>
 
-      <DesktopRowFrame
-        className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-t border-[#d7c5b4] pt-3 md:gap-5 lg:gap-6"
-      >
+      <DesktopRowFrame className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-t border-(--matrix-divider-color) pt-3 md:gap-5 lg:gap-6">
         <div className="flex items-center justify-start">
           <p className={labelClassName} style={labelStyle}>
             {rows.marketing}
@@ -307,9 +298,7 @@ function DesktopMatrix({
         </div>
       </DesktopRowFrame>
 
-      <DesktopRowFrame
-        className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 border-t border-[#d7c5b4] pt-3 md:gap-5 lg:gap-6"
-      >
+      <DesktopRowFrame className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 border-t border-(--matrix-divider-color) pt-3 md:gap-5 lg:gap-6">
         <div className="min-w-0 h-full">
           <RotatingImageSlot
             altLabel={altLabel}
@@ -346,6 +335,12 @@ export function RadiantCapabilityMatrixSection({
   capabilityMatrixBottomTickerRef,
 }: RadiantCapabilityMatrixSectionProps) {
   const matrix = content.capabilityMatrix;
+  const matrixThemeStyle = {
+    "--matrix-bg": "#e9ddd1",
+    "--matrix-divider-color": "rgba(212,196,181,0.75)",
+    "--matrix-label-color": "rgba(140,87,37,0.2)",
+    "--matrix-ticker-color": "rgba(140,87,37,0.8)",
+  } as CSSProperties;
   const isDesktop = useSyncExternalStore(
     subscribeToDesktopBreakpoint,
     getDesktopBreakpointSnapshot,
@@ -382,9 +377,10 @@ export function RadiantCapabilityMatrixSection({
   return (
     <section
       ref={capabilityMatrixSectionRef}
-      className="relative z-20 min-h-svh overflow-hidden bg-[#e9ddd1] py-6 md:py-8 lg:py-10"
+      className="relative z-20 min-h-svh overflow-hidden bg-(--matrix-bg) py-6 md:py-8 lg:py-10"
+      style={matrixThemeStyle}
     >
-      <div className="flex min-h-[calc(100svh-3rem)] flex-col justify-center gap-6">
+      <div className="relative z-10 flex min-h-[calc(100svh-3rem)] flex-col justify-center gap-6">
         <PatternTicker
           label={matrix.topTickerLabel}
           trackRef={capabilityMatrixTopTickerRef}
@@ -392,15 +388,9 @@ export function RadiantCapabilityMatrixSection({
 
         <div
           ref={capabilityMatrixContentRef}
-          className="site-gutter mx-auto flex w-full max-w-[96rem] flex-1 items-stretch"
+          className="site-gutter mx-auto flex w-full max-w-384 flex-1 items-stretch"
         >
           <div className="flex w-full flex-1 self-stretch flex-col gap-3">
-            <div className="mb-6 md:hidden">
-              <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
-                {matrix.eyebrow}
-              </p>
-            </div>
-
             {isDesktop ? (
               <DesktopMatrix
                 altLabel={matrix.slotAltLabel}

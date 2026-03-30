@@ -17,6 +17,10 @@ import {
 type RadiantShowcaseSectionProps = {
   content: RadiantExperienceContent;
   showcaseSectionRef: RadiantExperienceRefs["showcaseSectionRef"];
+  mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
+  mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
+  mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
+  mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
   heroMatteRef: RadiantExperienceRefs["heroMatteRef"];
   heroMediaRef: RadiantExperienceRefs["heroMediaRef"];
   heroTitleRef: RadiantExperienceRefs["heroTitleRef"];
@@ -29,6 +33,95 @@ type RadiantShowcaseSectionProps = {
   serviceCopyRefs: RadiantExperienceRefs["serviceCopyRefs"];
   sampleTileRef: RadiantExperienceRefs["sampleTileRef"];
 };
+
+function MobileShowcaseHero({
+  content,
+  mobileHeroMarqueeRef,
+  mobileHeroSectionRef,
+  mobileHeroTopContentRef,
+  mobileHeroTopOverlayRef,
+}: {
+  content: RadiantExperienceContent;
+  mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
+  mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
+  mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
+  mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
+}) {
+  const serviceTitles = content.services.items
+    .slice(0, 3)
+    .map((item) => item.title);
+
+  return (
+    <div ref={mobileHeroSectionRef} className="relative md:hidden">
+      <div className="sticky top-0 z-10 h-[56.5svh] overflow-hidden bg-[#f6f1eb]">
+        <div
+          ref={mobileHeroTopContentRef}
+          className="site-gutter relative z-10 flex h-full flex-col justify-between pb-7 pt-24 will-change-transform"
+        >
+          <div className="mx-auto flex max-w-[20rem] flex-1 items-center justify-center">
+            <div className="space-y-1.5 text-center text-[#4c4846]">
+              <p className="hero-title-display">{content.hero.title.premium}</p>
+              <p className="hero-title-display">
+                {content.hero.title.esthetic}
+              </p>
+              <p className="hero-title-display italic">
+                {content.hero.title.dentistry}
+              </p>
+            </div>
+          </div>
+
+          <p className="mx-auto max-w-66 text-center font-heading text-[1.15rem] leading-[0.95] tracking-[-0.045em] text-[#66615c]">
+            {content.hero.promise}
+          </p>
+        </div>
+        <div
+          ref={mobileHeroTopOverlayRef}
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(20,21,29,0)_0%,rgba(20,21,29,0.08)_36%,rgba(20,21,29,0.18)_100%)] opacity-0 backdrop-blur-md"
+        />
+      </div>
+
+      <div
+        data-mobile-hero-media=""
+        className="relative z-20 h-svh overflow-hidden bg-[#171614]"
+      >
+        <VisualSurface
+          className="size-full rounded-none"
+          innerClassName="scale-[1.08]"
+          variant="noir"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,8,8,0.06)_0%,rgba(9,8,8,0.12)_32%,rgba(9,8,8,0.28)_56%,rgba(9,8,8,0.62)_100%)]" />
+        <div className="absolute left-[-12%] top-[14%] h-40 w-40 rounded-full bg-[#8bc6ff]/12 blur-3xl" />
+        <div className="absolute bottom-[-8%] right-[-6%] h-48 w-48 rounded-full bg-[#ffe1c3]/12 blur-3xl" />
+        <div className="pointer-events-none absolute right-[-20%] top-[8%] h-72 w-56 text-white/8">
+          <RadiantHeroLogo className="size-full" />
+        </div>
+
+        <div className="site-gutter absolute inset-x-0 bottom-8 z-10">
+          <div className="mx-auto flex w-fit flex-col items-center gap-1.5 text-center text-[0.72rem] font-semibold leading-none tracking-[-0.02em] text-white/92">
+            {serviceTitles.map((title) => (
+              <p key={title}>{title}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 z-30">
+        <div className="sticky top-0 h-svh overflow-hidden">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 overflow-hidden">
+            <p
+              ref={mobileHeroMarqueeRef}
+              data-mobile-hero-marquee=""
+              className="hero-marquee-display whitespace-nowrap px-6 text-white text-shadow-soft"
+            >
+              {content.hero.marquee}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function ReducedMotionDesktopShowcase({
   content,
@@ -48,12 +141,12 @@ function ReducedMotionDesktopShowcase({
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(255,255,255,0.08),transparent_38%)]" />
         </div>
 
-        <div className="site-gutter relative mx-auto flex min-h-[42rem] max-w-[96rem] flex-col items-center justify-center py-24 text-center">
+        <div className="site-gutter relative mx-auto flex min-h-168 max-w-384 flex-col items-center justify-center py-24 text-center">
           <div className="mb-10 h-[min(18rem,24vw)] w-[min(13rem,18vw)] text-white/16">
             <RadiantHeroLogo className="size-full" />
           </div>
 
-          <div className="w-full max-w-[72rem] text-white">
+          <div className="w-full max-w-6xl text-white">
             <HeroTitleCopy
               className="h-[clamp(12rem,18vw,15.5rem)]"
               dentistry={content.hero.title.dentistry}
@@ -62,7 +155,7 @@ function ReducedMotionDesktopShowcase({
             />
           </div>
 
-          <div className="mt-10 inline-flex max-w-[38rem] items-center gap-3 rounded-full border border-white/14 bg-black/22 px-5 py-3 text-white/78 backdrop-blur-md">
+          <div className="mt-10 inline-flex max-w-152 items-center gap-3 rounded-full border border-white/14 bg-black/22 px-5 py-3 text-white/78 backdrop-blur-md">
             <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
             <span className="text-[0.72rem] font-medium tracking-[0.18em] uppercase">
               {content.hero.marquee}
@@ -77,7 +170,7 @@ function ReducedMotionDesktopShowcase({
             <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
               {content.services.eyebrow}
             </p>
-            <h2 className="title-display mt-5">
+            <h2 className="title-display-inika mt-5">
               {content.services.title}
             </h2>
             <p className="mt-5 text-[1.05rem] leading-8 text-muted-foreground">
@@ -106,6 +199,10 @@ function ReducedMotionDesktopShowcase({
 export function RadiantShowcaseSection({
   content,
   showcaseSectionRef,
+  mobileHeroSectionRef,
+  mobileHeroMarqueeRef,
+  mobileHeroTopContentRef,
+  mobileHeroTopOverlayRef,
   heroMatteRef,
   heroMediaRef,
   heroTitleRef,
@@ -120,28 +217,24 @@ export function RadiantShowcaseSection({
 }: RadiantShowcaseSectionProps) {
   return (
     <section id="showcase">
+      <MobileShowcaseHero
+        content={content}
+        mobileHeroMarqueeRef={mobileHeroMarqueeRef}
+        mobileHeroSectionRef={mobileHeroSectionRef}
+        mobileHeroTopContentRef={mobileHeroTopContentRef}
+        mobileHeroTopOverlayRef={mobileHeroTopOverlayRef}
+      />
+
       <div
         ref={showcaseSectionRef}
-        className="relative min-h-svh md:h-[660svh] md:motion-reduce:hidden"
+        className="relative hidden min-h-svh md:block md:h-[660svh] md:motion-reduce:hidden"
         style={{ "--hero-mask-x": "50vw" } as CSSProperties}
       >
         <div className="relative min-h-svh overflow-clip pt-24 md:sticky md:top-0 md:h-svh md:pt-0">
-          <div className="absolute inset-0 hidden bg-[#f6f1eb] md:block" />
-          <div className="absolute inset-0 md:hidden">
-            <VisualSurface
-              className="size-full rounded-none"
-              innerClassName="scale-[1.12]"
-              variant="noir"
-            />
-            <div className="absolute inset-0 bg-black/46" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,7,8,0.22)_0%,rgba(7,7,8,0.42)_38%,rgba(7,7,8,0.74)_100%)]" />
-            <div className="absolute left-[-12%] top-[12%] h-44 w-44 rounded-full bg-[#e6ecef]/12 blur-3xl" />
-            <div className="absolute bottom-[-4rem] right-[-8%] h-52 w-52 rounded-full bg-[#9dc9ff]/12 blur-3xl" />
-            <div className="absolute inset-x-0 bottom-0 h-[44%] bg-gradient-to-t from-black/76 via-black/42 to-transparent" />
-          </div>
+          <div className="absolute inset-0 bg-[#f6f1eb]" />
           <div
             ref={heroMatteRef}
-            className="absolute inset-y-0 left-0 hidden bg-[#f6f1eb] will-change-transform md:block"
+            className="absolute inset-y-0 left-0 bg-[#f6f1eb] will-change-transform"
           />
 
           <div
@@ -152,15 +245,9 @@ export function RadiantShowcaseSection({
             <VisualSurface className="size-full rounded-none" variant="vista" />
           </div>
 
-          <div className="pointer-events-none absolute inset-0 z-20 md:hidden">
-            <div className="absolute right-[-24%] top-[10%] h-[21rem] w-[17rem] text-white/12">
-              <RadiantHeroLogo className="size-full" />
-            </div>
-          </div>
-
           <div
             ref={heroMonogramRef}
-            className="pointer-events-none absolute inset-0 z-20 hidden will-change-transform md:block"
+            className="pointer-events-none absolute inset-0 z-20 will-change-transform"
           >
             <div
               className="absolute inset-0"
@@ -188,8 +275,11 @@ export function RadiantShowcaseSection({
           >
             <div className="relative size-full">
               <div
-                className="pointer-events-none absolute left-1/2 top-[49%] hidden -translate-x-1/2 -translate-y-1/2 px-4 md:block"
-                style={{ width: "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)" }}
+                className="pointer-events-none absolute left-1/2 top-[49%] -translate-x-1/2 -translate-y-1/2 px-4"
+                style={{
+                  width:
+                    "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)",
+                }}
               >
                 <div className="invisible">
                   <HeroTitleCopy
@@ -200,14 +290,18 @@ export function RadiantShowcaseSection({
                 </div>
               </div>
               <div
-                className="absolute inset-0 hidden text-[#4c4846] md:block"
+                className="absolute inset-0 text-[#4c4846]"
                 style={{
-                  clipPath: "inset(0 calc(100vw - var(--hero-mask-x, 50vw)) 0 0)",
+                  clipPath:
+                    "inset(0 calc(100vw - var(--hero-mask-x, 50vw)) 0 0)",
                 }}
               >
                 <div
                   className="absolute left-1/2 top-[49%] -translate-x-1/2 -translate-y-1/2 px-4"
-                  style={{ width: "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)" }}
+                  style={{
+                    width:
+                      "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)",
+                  }}
                 >
                   <HeroTitleCopy
                     dentistry={content.hero.title.dentistry}
@@ -217,12 +311,15 @@ export function RadiantShowcaseSection({
                 </div>
               </div>
               <div
-                className="absolute inset-0 hidden text-white md:block"
+                className="absolute inset-0 text-white"
                 style={{ clipPath: "inset(0 0 0 var(--hero-mask-x, 50vw))" }}
               >
                 <div
                   className="absolute left-1/2 top-[49%] -translate-x-1/2 -translate-y-1/2 px-4"
-                  style={{ width: "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)" }}
+                  style={{
+                    width:
+                      "min(calc(100vw - (var(--site-gutter, 1rem) * 2)), 76rem)",
+                  }}
                 >
                   <HeroTitleCopy
                     className="text-shadow-soft"
@@ -232,40 +329,12 @@ export function RadiantShowcaseSection({
                   />
                 </div>
               </div>
-              <div className="site-gutter absolute inset-0 flex flex-col justify-end pb-8 pt-24 text-white md:hidden">
-                <div className="flex max-w-[22rem] flex-col gap-6">
-                  <div className="inline-flex w-fit items-center gap-3 rounded-full border border-white/14 bg-white/8 px-3 py-2 backdrop-blur-md">
-                    <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
-                    <p className="text-[0.64rem] font-medium tracking-[0.24em] text-white/74 uppercase">
-                      {content.brand.name}
-                    </p>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <p className="hero-title-display text-shadow-soft">
-                      {content.hero.title.premium}
-                    </p>
-                    <p className="hero-title-display text-shadow-soft">
-                      {content.hero.title.esthetic}
-                    </p>
-                    <p className="hero-title-display italic text-shadow-soft">
-                      {content.hero.title.dentistry}
-                    </p>
-                  </div>
-
-                  <div className="inline-flex w-fit max-w-[16rem] rounded-[1.1rem] border border-white/12 bg-black/18 px-4 py-3 backdrop-blur-md">
-                    <p className="text-[0.72rem] font-medium tracking-[0.18em] text-white/68 uppercase">
-                      {content.hero.marquee}
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
           <div
             ref={heroMarqueeRef}
-            className="pointer-events-none absolute inset-0 z-40 hidden items-center opacity-0 md:flex"
+            className="pointer-events-none absolute inset-0 z-40 flex items-center opacity-0"
           >
             <div
               ref={heroMarqueeTrackRef}
@@ -277,20 +346,18 @@ export function RadiantShowcaseSection({
 
           <div
             ref={serviceHeaderRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30 opacity-0 will-change-transform"
           >
             <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-              <h2 className="title-display">
-                {content.services.title}
-              </h2>
+              <h2 className="title-display-inika">{content.services.title}</h2>
             </div>
           </div>
 
           <div
             ref={activeServiceCopyShellRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30 opacity-0 will-change-transform"
           >
-            <div className="relative mx-auto h-[16rem] w-[min(92vw,42rem)]">
+            <div className="relative mx-auto h-64 w-[min(92vw,42rem)]">
               {content.services.items.map((item, index) => (
                 <div
                   key={`${item.title}-desktop-copy`}
@@ -310,7 +377,7 @@ export function RadiantShowcaseSection({
             </div>
           </div>
 
-          <div className="pointer-events-none absolute inset-0 hidden md:block">
+          <div className="pointer-events-none absolute inset-0">
             <div
               ref={sampleTileRef}
               className="absolute left-0 top-0 z-10 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
@@ -354,12 +421,16 @@ export function RadiantShowcaseSection({
             {content.services.intro}
           </p>
         </div>
-        <div className="mt-10 grid gap-6">
+        <div className="mt-10 grid grid-cols-2 gap-4">
           {content.services.items.map((item, index) => (
             <ServiceCard
               key={`${item.title}-mobile`}
               description={item.description}
               eyebrow={item.eyebrow}
+              hideDescription
+              hideEyebrow
+              tileClassName="rounded-[10px]"
+              titleClassName="text-[1rem] font-medium leading-[1.12] text-center"
               title={item.title}
               variant={serviceVisuals[index % serviceVisuals.length]}
             />

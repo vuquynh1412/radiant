@@ -22,22 +22,16 @@ export function RadiantAboutSection({
       >
         <div
           ref={aboutContentRef}
-          className="flex min-h-[max(36rem,calc(100svh-5rem))] w-full flex-col items-center justify-center py-16 text-center md:py-20 lg:py-24"
+          className="flex min-h-[max(36rem,calc(100svh-5rem))] w-full flex-col items-center justify-center py-8 text-center md:py-20 lg:py-24"
         >
-          <p className="text-[20px] font-bold tracking-[0.14em] text-muted-foreground uppercase">
+          <p className="text-[0.9rem] md:text-[1.2rem] font-bold tracking-[0.14em] text-muted-foreground uppercase">
             {content.about.eyebrow}
           </p>
 
-          <div className="mt-8 md:hidden">
-            <p className="w-full font-inika text-[2rem] font-bold leading-[1.14] tracking-[-0.045em] text-foreground/90 sm:text-[2.35rem]">
-              {content.about.body}
-            </p>
-          </div>
-
-          <div className="mt-8 hidden md:block">
+          <div className="mt-8">
             <CharacterRevealText
               charRefs={aboutCharRefs}
-              className="w-full font-inika text-[40px] font-bold leading-[1.08] tracking-[-0.045em] lg:text-[44px]"
+              className="w-full font-inika text-[1.5rem] font-bold leading-[1.14] tracking-[-0.045em] text-foreground/90 md:text-[40px] md:leading-[1.08] lg:text-[44px]"
               text={content.about.body}
             />
           </div>

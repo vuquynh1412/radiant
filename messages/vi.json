@@ -105,7 +105,6 @@
       }
     },
     "CapabilityMatrix": {
-      "eyebrow": "Năng lực",
       "topTickerLabel": "RADIANT",
       "bottomTickerLabel": "RADIANT",
       "slotAltLabel": "Hình ảnh năng lực của Radiant",
@@ -117,9 +116,7 @@
       }
     },
     "Projects": {
-      "eyebrow": "Dự án chọn lọc",
       "title": "Our Works",
-      "intro": "Một kho dự án mẫu về hệ thống thương hiệu, launch frame, editorial study và digital direction để thể hiện cách Radiant tư duy qua hình thức và độ rõ.",
       "filterOrder": [
         "all",
         "strategy",

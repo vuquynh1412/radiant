@@ -1,8 +1,4 @@
-import {
-  useId,
-  type RefObject,
-  type ReactNode,
-} from "react";
+import { useId, type RefObject, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -162,7 +158,7 @@ export function VisualSurface({
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden bg-black/[0.03] shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]",
+        "relative isolate overflow-hidden bg-black/3 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]",
         className,
       )}
     >
@@ -179,7 +175,7 @@ export function VisualSurface({
         {variant === "portrait" ? (
           <>
             <div className="absolute inset-0 bg-[linear-gradient(135deg,#b8aea8_0%,#8a7f77_35%,#514640_72%,#28211f_100%)]" />
-            <div className="absolute right-[-10%] top-[-8%] h-[90%] w-[62%] rounded-full bg-[#d9c5ba]/35 blur-[64px]" />
+            <div className="absolute right-[-10%] top-[-8%] h-[90%] w-[62%] rounded-full bg-[#d9c5ba]/35 blur-3xl" />
             <div className="absolute left-[6%] top-[24%] h-[50%] w-[26%] rounded-full bg-[#efe1d4]/30 blur-[34px]" />
             <div className="absolute right-[8%] top-[18%] h-[54%] w-[32%] rounded-full bg-[#241f1c]/62 blur-[10px]" />
           </>
@@ -222,7 +218,7 @@ export function VisualSurface({
             <div className="absolute inset-0 bg-[linear-gradient(180deg,#e8ddd1_0%,#d4cabd_34%,#bcae9c_100%)]" />
             <div className="absolute left-[10%] top-[16%] h-[48%] w-[28%] rounded-full bg-[#fff5eb]/45 blur-[48px]" />
             <div className="absolute right-[16%] bottom-[12%] h-[38%] w-[24%] rounded-full bg-[#866c57]/34 blur-[34px]" />
-            <div className="absolute inset-x-[18%] bottom-[10%] h-[24%] rounded-[42%] bg-[#8d7866]/36 blur-[24px]" />
+            <div className="absolute inset-x-[18%] bottom-[10%] h-[24%] rounded-[42%] bg-[#8d7866]/36 blur-xl" />
           </>
         ) : null}
         {variant === "noir" ? (
@@ -256,7 +252,7 @@ export function ServiceTile({
       )}
       variant={variant}
     >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/28 via-transparent to-white/8" />
+      <div className="absolute inset-0 bg-linear-to-t from-black/28 via-transparent to-white/8" />
     </VisualSurface>
   );
 }
@@ -291,28 +287,45 @@ export function ServiceCard({
   className,
   description,
   eyebrow,
+  hideDescription = false,
+  hideEyebrow = false,
+  tileClassName,
+  titleClassName,
   title,
   variant,
 }: {
   className?: string;
   description: string;
   eyebrow: string;
+  hideDescription?: boolean;
+  hideEyebrow?: boolean;
+  tileClassName?: string;
+  titleClassName?: string;
   title: string;
   variant: VisualVariant;
 }) {
   return (
     <article className={cn("flex flex-col gap-3", className)}>
-      <ServiceTile variant={variant} />
+      <ServiceTile className={tileClassName} variant={variant} />
       <div className="flex flex-col gap-2">
-        <h3 className="font-inika text-[1.5rem] font-bold leading-[1.08] tracking-[-0.03em] text-[#27272A]">
+        <h3
+          className={cn(
+            "font-inika text-[1.5rem] font-bold leading-[1.08] tracking-[-0.03em] text-[#27272A]",
+            titleClassName,
+          )}
+        >
           {title}
         </h3>
-        <p className="text-[0.68rem] font-medium tracking-[0.22em] text-muted-foreground uppercase">
-          {eyebrow}
-        </p>
-        <p className="max-w-lg text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">
-          {description}
-        </p>
+        {hideEyebrow ? null : (
+          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-muted-foreground uppercase">
+            {eyebrow}
+          </p>
+        )}
+        {hideDescription ? null : (
+          <p className="max-w-lg text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">
+            {description}
+          </p>
+        )}
       </div>
     </article>
   );
@@ -331,21 +344,14 @@ export function HeroTitleCopy({
 }) {
   return (
     <div
-      className={cn(
-        "relative mx-auto h-[9rem] w-full md:h-[12rem] lg:h-[18.5rem]",
-        className,
-      )}
+      className={cn("relative mx-auto h-36 w-full md:h-48 lg:h-74", className)}
     >
       <p className="hero-title-display absolute left-1/2 top-[4%] -translate-x-1/2 whitespace-nowrap">
         {premium}
       </p>
       <div className="absolute inset-x-0 top-[48%] flex items-end justify-center gap-2 md:gap-3 lg:gap-5">
-        <p className="hero-title-display">
-          {esthetic}
-        </p>
-        <p className="hero-title-display italic">
-          {dentistry}
-        </p>
+        <p className="hero-title-display">{esthetic}</p>
+        <p className="hero-title-display italic">{dentistry}</p>
       </div>
     </div>
   );

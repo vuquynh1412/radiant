@@ -136,11 +136,31 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground overflow-x-hidden;
+body {
+  @apply bg-background text-foreground overflow-x-hidden;
+}
+html {
+  @apply font-sans;
+}
+
+  html.lenis {
+    height: auto;
   }
-  html {
-    @apply font-sans;
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
 }
 
