@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
 import type { RadiantExperienceRefs } from "./radiant-experience.types";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -29,9 +30,7 @@ export function useRadiantCapabilityMatrixMotion({
           return undefined;
         }
 
-        const useTouchProfile =
-          ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
-        const scrubAmount = useTouchProfile ? 0.22 : 1;
+        const { defaultScrub: scrubAmount } = getRadiantScrollProfile();
 
         gsap.set(refs.capabilityMatrixContentRef.current, {
           opacity: 0.36,

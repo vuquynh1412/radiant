@@ -30,6 +30,79 @@ type RadiantShowcaseSectionProps = {
   sampleTileRef: RadiantExperienceRefs["sampleTileRef"];
 };
 
+function ReducedMotionDesktopShowcase({
+  content,
+}: {
+  content: RadiantExperienceContent;
+}) {
+  return (
+    <div className="hidden md:motion-reduce:block">
+      <div className="relative overflow-hidden bg-[#171614] text-white">
+        <div className="absolute inset-0">
+          <VisualSurface
+            className="size-full rounded-none"
+            innerClassName="scale-[1.08]"
+            variant="vista"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,8,8,0.2)_0%,rgba(9,8,8,0.42)_42%,rgba(9,8,8,0.74)_100%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(255,255,255,0.08),transparent_38%)]" />
+        </div>
+
+        <div className="relative mx-auto flex min-h-[42rem] max-w-6xl flex-col items-center justify-center px-8 py-24 text-center">
+          <div className="mb-10 h-[min(18rem,24vw)] w-[min(13rem,18vw)] text-white/16">
+            <RadiantHeroLogo className="size-full" />
+          </div>
+
+          <div className="w-full max-w-[72rem] text-white">
+            <HeroTitleCopy
+              className="h-[clamp(12rem,18vw,15.5rem)]"
+              dentistry={content.hero.title.dentistry}
+              esthetic={content.hero.title.esthetic}
+              premium={content.hero.title.premium}
+            />
+          </div>
+
+          <div className="mt-10 inline-flex max-w-[38rem] items-center gap-3 rounded-full border border-white/14 bg-black/22 px-5 py-3 text-white/78 backdrop-blur-md">
+            <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
+            <span className="text-[0.72rem] font-medium tracking-[0.18em] uppercase">
+              {content.hero.marquee}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-background px-6 py-16 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-6xl">
+          <div className="max-w-3xl">
+            <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
+              {content.services.eyebrow}
+            </p>
+            <h2 className="mt-5 font-heading text-[clamp(3rem,5vw,4.9rem)] leading-[0.92] tracking-[-0.07em]">
+              {content.services.title}
+            </h2>
+            <p className="mt-5 text-[1.05rem] leading-8 text-muted-foreground">
+              {content.services.intro}
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {content.services.items.map((item, index) => (
+              <ServiceCard
+                key={`${item.title}-reduced-motion`}
+                className="h-full"
+                description={item.description}
+                eyebrow={item.eyebrow}
+                title={item.title}
+                variant={serviceVisuals[index % serviceVisuals.length]}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function RadiantShowcaseSection({
   content,
   showcaseSectionRef,
@@ -46,11 +119,10 @@ export function RadiantShowcaseSection({
   sampleTileRef,
 }: RadiantShowcaseSectionProps) {
   return (
-    <>
-      <section
-        id="showcase"
+    <section id="showcase">
+      <div
         ref={showcaseSectionRef}
-        className="relative min-h-svh md:h-[660svh]"
+        className="relative min-h-svh md:h-[660svh] md:motion-reduce:hidden"
         style={{ "--hero-mask-x": "50vw" } as CSSProperties}
       >
         <div className="relative min-h-svh overflow-clip pt-24 md:sticky md:top-0 md:h-svh md:pt-0">
@@ -266,9 +338,11 @@ export function RadiantShowcaseSection({
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="px-4 py-16 md:hidden">
+      <ReducedMotionDesktopShowcase content={content} />
+
+      <div className="px-4 py-16 md:hidden">
         <div className="flex flex-col gap-5">
           <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
             {content.services.eyebrow}
@@ -291,7 +365,7 @@ export function RadiantShowcaseSection({
             />
           ))}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

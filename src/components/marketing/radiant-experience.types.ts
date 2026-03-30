@@ -23,7 +23,7 @@ export type RadiantServiceItem = OrderedServiceItem;
 
 export type RadiantExperienceRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
-  showcaseSectionRef: RefObject<HTMLElement | null>;
+  showcaseSectionRef: RefObject<HTMLDivElement | null>;
   heroMatteRef: RefObject<HTMLDivElement | null>;
   heroMediaRef: RefObject<HTMLDivElement | null>;
   heroTitleRef: RefObject<HTMLDivElement | null>;

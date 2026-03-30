@@ -14,6 +14,7 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
 import type {
   RadiantExperienceContent,
   RadiantPlanItem,
@@ -174,9 +175,7 @@ export function RadiantPlansSection({
           return undefined;
         }
 
-        const useTouchProfile =
-          ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
-        const backdropScrub = useTouchProfile ? 0.22 : 1;
+        const { defaultScrub: backdropScrub } = getRadiantScrollProfile();
 
         const cards = cardRefs.current.filter(
           (card): card is HTMLElement => Boolean(card),
