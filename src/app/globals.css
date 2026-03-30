@@ -178,29 +178,21 @@
 
 @keyframes radiant-loader-orbit-outer {
   0% {
-    transform: rotate(0deg) scale(0.985);
-  }
-
-  50% {
-    transform: rotate(180deg) scale(1.02);
+    transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg) scale(0.985);
+    transform: rotate(360deg);
   }
 }
 
 @keyframes radiant-loader-orbit-inner {
   0% {
-    transform: rotate(0deg) scale(1.02);
-  }
-
-  50% {
-    transform: rotate(-180deg) scale(0.985);
+    transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(-360deg) scale(1.02);
+    transform: rotate(-360deg);
   }
 }
 

@@ -130,6 +130,7 @@ export function RadiantExperienceSplash({
         <SplashOrbit
           animationStyle={innerOrbitAnimationStyle}
           className="h-[8.6rem] w-[8.6rem] sm:h-[9.8rem] sm:w-[9.8rem]"
+          dotted
           markers={[
             {
               angle: -52,

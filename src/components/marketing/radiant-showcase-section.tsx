@@ -21,7 +21,6 @@ type RadiantShowcaseSectionProps = {
   heroMediaRef: RadiantExperienceRefs["heroMediaRef"];
   heroTitleRef: RadiantExperienceRefs["heroTitleRef"];
   heroMonogramRef: RadiantExperienceRefs["heroMonogramRef"];
-  heroLocationsRef: RadiantExperienceRefs["heroLocationsRef"];
   heroMarqueeRef: RadiantExperienceRefs["heroMarqueeRef"];
   heroMarqueeTrackRef: RadiantExperienceRefs["heroMarqueeTrackRef"];
   activeServiceCopyShellRef: RadiantExperienceRefs["activeServiceCopyShellRef"];
@@ -38,7 +37,6 @@ export function RadiantShowcaseSection({
   heroMediaRef,
   heroTitleRef,
   heroMonogramRef,
-  heroLocationsRef,
   heroMarqueeRef,
   heroMarqueeTrackRef,
   activeServiceCopyShellRef,
@@ -162,8 +160,15 @@ export function RadiantShowcaseSection({
                   />
                 </div>
               </div>
-              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-8 pt-28 text-white md:hidden sm:px-6">
-                <div className="flex max-w-[22rem] flex-col gap-5">
+              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-8 pt-24 text-white md:hidden sm:px-6">
+                <div className="flex max-w-[22rem] flex-col gap-6">
+                  <div className="inline-flex w-fit items-center gap-3 rounded-full border border-white/14 bg-white/8 px-3 py-2 backdrop-blur-md">
+                    <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
+                    <p className="text-[0.64rem] font-medium tracking-[0.24em] text-white/74 uppercase">
+                      {content.brand.name}
+                    </p>
+                  </div>
+
                   <div className="space-y-1.5">
                     <p className="font-heading text-[clamp(3.35rem,14vw,4.75rem)] leading-[0.88] tracking-[-0.065em] text-shadow-soft">
                       {content.hero.title.premium}
@@ -176,49 +181,14 @@ export function RadiantShowcaseSection({
                     </p>
                   </div>
 
-                  <p className="max-w-[21rem] text-[0.98rem] leading-7 text-white/88">
-                    {content.hero.promise}
-                  </p>
-
-                  <div className="h-px w-16 bg-white/22" />
-
-                  <div className="space-y-3">
-                    <p className="text-[0.72rem] font-medium tracking-[0.2em] text-white/58 uppercase">
-                      {content.brand.focusLabel}
+                  <div className="inline-flex w-fit max-w-[16rem] rounded-[1.1rem] border border-white/12 bg-black/18 px-4 py-3 backdrop-blur-md">
+                    <p className="text-[0.72rem] font-medium tracking-[0.18em] text-white/68 uppercase">
+                      {content.hero.marquee}
                     </p>
-                    <div className="space-y-1 text-[1rem] font-medium leading-6 text-white">
-                      {content.brand.focusItems.map((item) => (
-                        <p key={item}>{item}</p>
-                      ))}
-                    </div>
                   </div>
-
-                  <p className="max-w-[21rem] text-sm leading-6 text-white/70">
-                    {content.hero.supporting}
-                  </p>
                 </div>
               </div>
             </div>
-          </div>
-
-          <div
-            ref={heroLocationsRef}
-            className="absolute bottom-6 left-4 z-30 hidden max-w-[16rem] text-xs tracking-tight text-foreground sm:left-6 lg:left-8 md:bottom-8 md:block"
-          >
-            <p className="mb-2 text-muted-foreground">
-              {content.brand.focusLabel}
-            </p>
-            <div className="font-medium leading-4">
-              {content.brand.focusItems.map((item) => (
-                <p key={item}>{item}</p>
-              ))}
-            </div>
-            <p className="mt-4 text-sm leading-6 text-foreground/88">
-              {content.hero.promise}
-            </p>
-            <p className="mt-3 text-[0.72rem] leading-5 text-muted-foreground">
-              {content.hero.supporting}
-            </p>
           </div>
 
           <div

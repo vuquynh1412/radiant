@@ -40,7 +40,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const heroMediaRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);
   const heroMonogramRef = useRef<HTMLDivElement | null>(null);
-  const heroLocationsRef = useRef<HTMLDivElement | null>(null);
   const heroMarqueeRef = useRef<HTMLDivElement | null>(null);
   const heroMarqueeTrackRef = useRef<HTMLDivElement | null>(null);
   const activeServiceCopyShellRef = useRef<HTMLDivElement | null>(null);
@@ -63,7 +62,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     heroMediaRef,
     heroTitleRef,
     heroMonogramRef,
-    heroLocationsRef,
     heroMarqueeRef,
     heroMarqueeTrackRef,
     activeServiceCopyShellRef,
@@ -156,7 +154,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
           <RadiantShowcaseSection
             activeServiceCopyShellRef={activeServiceCopyShellRef}
             content={content}
-            heroLocationsRef={heroLocationsRef}
             heroMarqueeRef={heroMarqueeRef}
             heroMarqueeTrackRef={heroMarqueeTrackRef}
             heroMatteRef={heroMatteRef}

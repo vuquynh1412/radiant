@@ -78,7 +78,6 @@ export function useRadiantShowcaseMotion({
             !refs.heroMediaRef.current ||
             !refs.heroTitleRef.current ||
             !refs.heroMonogramRef.current ||
-            !refs.heroLocationsRef.current ||
             !refs.heroMarqueeRef.current ||
             !refs.heroMarqueeTrackRef.current ||
             !refs.activeServiceCopyShellRef.current ||
@@ -448,9 +447,6 @@ export function useRadiantShowcaseMotion({
             gsap.set(refs.heroMonogramRef.current, {
               opacity: 1 - titleFadeProgress,
               scale: 1 - titleFadeProgress * 0.08,
-            });
-            gsap.set(refs.heroLocationsRef.current, {
-              opacity: 1 - gsap.utils.clamp(0, 1, (progress - 0.42) / 0.12),
             });
 
             const marqueeOpacity =
