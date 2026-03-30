@@ -26,7 +26,7 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
-import { BrandMonogram } from "./radiant-experience-shared";
+import { RadiantBrandLogo } from "./radiant-experience-shared";
 import { radiantSocialLinks } from "./radiant-social-links";
 
 type RadiantExperienceHeaderProps = {
@@ -381,9 +381,9 @@ export function RadiantExperienceHeader({
               href="#showcase"
               className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
             >
-              <div className="flex items-center gap-3">
-                <div className="text-current">
-                  <BrandMonogram compact className="h-9 w-7 sm:h-10 sm:w-8" />
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="text-[#8c5725]">
+                  <RadiantBrandLogo className="h-8 w-auto sm:h-9" />
                 </div>
                 <div className="min-w-0 leading-[0.92]">
                   <p className="truncate text-[1.02rem] font-medium tracking-[-0.04em] sm:text-[1.08rem]">
@@ -528,9 +528,9 @@ export function RadiantExperienceHeader({
                       onClick={closeMenu}
                       className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="text-white">
-                          <BrandMonogram compact className="h-8 w-6 sm:h-9 sm:w-7" />
+                      <div className="flex items-center gap-2.5 sm:gap-3">
+                        <div className="text-[#8c5725]">
+                          <RadiantBrandLogo className="h-7 w-auto sm:h-8" />
                         </div>
                         <div className="min-w-0 leading-[0.92] text-white">
                           <p className="truncate text-[1.02rem] font-medium tracking-[-0.04em] sm:text-[1.08rem]">

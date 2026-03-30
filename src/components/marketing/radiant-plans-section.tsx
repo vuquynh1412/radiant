@@ -263,7 +263,7 @@ export function RadiantPlansSection({
           </h2>
         </div>
 
-        <div className="mx-auto mt-7 grid max-w-[69rem] gap-5 md:mt-8 lg:grid-cols-2 lg:justify-center lg:gap-x-10 lg:gap-y-7 xl:gap-x-14">
+        <div className="mx-auto mt-7 grid max-w-[69rem] gap-5 md:mt-8 md:grid-cols-2 md:justify-center md:gap-x-6 md:gap-y-6 lg:gap-x-10 lg:gap-y-7 xl:gap-x-14">
           {content.plans.items.map((item, index) => (
             <PlanCard
               key={item.key}

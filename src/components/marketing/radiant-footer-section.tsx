@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
-import { BrandMonogram } from "./radiant-experience-shared";
+import { RadiantBrandLogo } from "./radiant-experience-shared";
 import { radiantSocialLinks } from "./radiant-social-links";
 
 type RadiantFooterSectionProps = {
@@ -66,7 +66,7 @@ export function RadiantFooterSection({
       <div className="relative mx-auto flex min-h-[calc(100svh-7rem)] max-w-[88rem] flex-col">
         <div className="flex flex-col items-center text-center">
           <div className="text-[#9f682b]">
-            <BrandMonogram compact className="h-[7.4rem] w-[5.8rem]" />
+            <RadiantBrandLogo className="h-[5.65rem] w-auto sm:h-[6.25rem]" />
           </div>
 
           {socialItems.length > 0 ? (
