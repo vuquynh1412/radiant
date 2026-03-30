@@ -86,6 +86,8 @@ export function RadiantExperienceHeader({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMenuRendered, setIsMenuRendered] = useState(false);
   const [isServicesExpanded, setIsServicesExpanded] = useState(false);
+  const isAtTopRef = useRef(true);
+  const isVisibleRef = useRef(true);
   const menuCloseTimeoutRef = useRef<number | null>(null);
   const lastFocusedElementRef = useRef<HTMLElement | null>(null);
   const menuPortalRef = useRef<HTMLDivElement | null>(null);
@@ -150,16 +152,35 @@ export function RadiantExperienceHeader({
 
   useEffect(() => {
     let previousY = window.scrollY;
+    let frame = 0;
 
-    const handleScroll = () => {
+    const commitIsAtTop = (nextIsAtTop: boolean) => {
+      if (isAtTopRef.current === nextIsAtTop) {
+        return;
+      }
+
+      isAtTopRef.current = nextIsAtTop;
+      setIsAtTop(nextIsAtTop);
+    };
+
+    const commitIsVisible = (nextIsVisible: boolean) => {
+      if (isVisibleRef.current === nextIsVisible) {
+        return;
+      }
+
+      isVisibleRef.current = nextIsVisible;
+      setIsVisible(nextIsVisible);
+    };
+
+    const syncHeaderState = () => {
       const currentY = window.scrollY;
       const delta = currentY - previousY;
       const nextIsAtTop = currentY <= 12;
 
-      setIsAtTop(nextIsAtTop);
+      commitIsAtTop(nextIsAtTop);
 
       if (nextIsAtTop) {
-        setIsVisible(true);
+        commitIsVisible(true);
         previousY = currentY;
         return;
       }
@@ -170,18 +191,30 @@ export function RadiantExperienceHeader({
       }
 
       if (delta > 0 && currentY > 96) {
-        setIsVisible(false);
+        commitIsVisible(false);
       } else if (delta < 0) {
-        setIsVisible(true);
+        commitIsVisible(true);
       }
 
       previousY = currentY;
     };
 
-    handleScroll();
+    const handleScroll = () => {
+      if (frame !== 0) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        syncHeaderState();
+      });
+    };
+
+    syncHeaderState();
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
+      window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);

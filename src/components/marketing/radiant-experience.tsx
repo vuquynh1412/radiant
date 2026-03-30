@@ -149,37 +149,43 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   useEffect(() => {
     if (
       isBooting ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      !window.matchMedia("(max-width: 767px)").matches
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
       return undefined;
     }
 
+    const useTouchSync =
+      ScrollTrigger.isTouch !== 0 ||
+      window.matchMedia("(pointer: coarse)").matches;
     const lenis = new Lenis({
-      duration: 1.15,
+      anchors: true,
+      duration: useTouchSync ? 1.05 : 1.15,
       smoothWheel: true,
-      syncTouch: true,
+      syncTouch: useTouchSync,
       syncTouchLerp: 0.12,
-      touchMultiplier: 0.85,
-      wheelMultiplier: 0.85,
+      touchMultiplier: useTouchSync ? 0.85 : 1,
+      wheelMultiplier: useTouchSync ? 0.85 : 1,
     });
-
-    let frame = 0;
 
     const onScroll = () => {
       ScrollTrigger.update();
     };
 
-    const raf = (time: number) => {
-      lenis.raf(time);
-      frame = window.requestAnimationFrame(raf);
+    // Keep Lenis on the same clock as GSAP so scroll inertia and scrubbed
+    // animations stay visually aligned.
+    const advanceLenis = (time: number) => {
+      lenis.raf(time * 1000);
     };
 
     lenis.on("scroll", onScroll);
-    frame = window.requestAnimationFrame(raf);
+    // Lenis recommends disabling GSAP's lag smoothing so ScrollTrigger
+    // doesn't visually "catch up" after a dropped frame.
+    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.add(advanceLenis);
 
     return () => {
-      window.cancelAnimationFrame(frame);
+      gsap.ticker.remove(advanceLenis);
+      gsap.ticker.lagSmoothing(500, 33);
       lenis.off("scroll", onScroll);
       lenis.destroy();
     };
