@@ -35,7 +35,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const [isBooting, setIsBooting] = useState(true);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
-  const showcaseSectionRef = useRef<HTMLElement | null>(null);
+  const showcaseSectionRef = useRef<HTMLDivElement | null>(null);
   const heroMatteRef = useRef<HTMLDivElement | null>(null);
   const heroMediaRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);

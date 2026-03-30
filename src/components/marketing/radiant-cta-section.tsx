@@ -9,6 +9,7 @@ import { ArrowUpRightIcon, MailIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
 import type { RadiantExperienceContent } from "./radiant-experience.types";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -25,6 +26,19 @@ type OrbitMarker = {
   angle: number;
   className: string;
   glowClassName?: string;
+};
+
+type CallToActionBodyProps = {
+  actionsClassName?: string;
+  actionsRef?: RefObject<HTMLDivElement | null>;
+  bodyClassName?: string;
+  bodyRef?: RefObject<HTMLParagraphElement | null>;
+  containerClassName?: string;
+  content: RadiantExperienceContent;
+  eyebrowClassName?: string;
+  eyebrowRef?: RefObject<HTMLParagraphElement | null>;
+  titleClassName?: string;
+  titleRef?: RefObject<HTMLHeadingElement | null>;
 };
 
 function OrbitRing({
@@ -74,10 +88,111 @@ function OrbitRing({
   );
 }
 
+function CallToActionBody({
+  actionsClassName,
+  actionsRef,
+  bodyClassName,
+  bodyRef,
+  containerClassName,
+  content,
+  eyebrowClassName,
+  eyebrowRef,
+  titleClassName,
+  titleRef,
+}: CallToActionBodyProps) {
+  return (
+    <div className={cn("max-w-[74rem]", containerClassName)}>
+      <p
+        ref={eyebrowRef}
+        className={cn(
+          "text-[0.72rem] font-medium tracking-[0.26em] text-[#201d1a]/58 uppercase",
+          eyebrowClassName,
+        )}
+      >
+        {content.cta.eyebrow}
+      </p>
+      <h2
+        ref={titleRef}
+        className={cn(
+          "mx-auto mt-4 max-w-[13ch] font-heading text-[clamp(2.9rem,5vw,5.6rem)] leading-[0.94] tracking-[-0.04em] text-[#171614]",
+          titleClassName,
+        )}
+      >
+        {content.cta.title}
+      </h2>
+      <p
+        ref={bodyRef}
+        className={cn(
+          "mx-auto mt-5 max-w-[42rem] text-[1rem] leading-7 text-[#201d1a]/68 sm:text-[1.08rem]",
+          bodyClassName,
+        )}
+      >
+        {content.cta.body}
+      </p>
+
+      <div
+        ref={actionsRef}
+        className={cn(
+          "mt-8 flex flex-col items-center gap-4",
+          actionsClassName,
+        )}
+      >
+        <a
+          className={cn(
+            buttonVariants({
+              className:
+                "h-[3.25rem] rounded-full border-[#171614]/16 bg-[#171614] px-7 text-white hover:bg-[#171614]/92",
+              size: "lg",
+              variant: "default",
+            }),
+          )}
+          href="mailto:hello@radiant.studio?subject=Radiant%20strategy%20call"
+        >
+          {content.cta.buttonLabel}
+          <ArrowUpRightIcon data-icon="inline-end" />
+        </a>
+
+        <a
+          className="inline-flex items-center gap-2 text-sm text-[#201d1a]/72 transition-colors hover:text-[#171614]"
+          href="mailto:hello@radiant.studio?subject=Radiant%20capability%20review"
+        >
+          <MailIcon className="size-4" />
+          {content.cta.secondary}
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function ReducedMotionCallToAction({
+  content,
+}: {
+  content: RadiantExperienceContent;
+}) {
+  return (
+    <div className="hidden bg-[#1b1a18] px-4 py-16 text-white motion-reduce:block sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-[2.6rem] border border-white/10 bg-[radial-gradient(circle_at_50%_28%,rgba(255,255,255,0.07),transparent_36%),linear-gradient(180deg,#1b1a18_0%,#111111_100%)] p-3 shadow-[0_36px_120px_-56px_rgba(0,0,0,0.75)]">
+        <div className="pointer-events-none absolute left-1/2 top-[-10rem] h-[24rem] w-[24rem] -translate-x-1/2 rounded-full border border-white/10 opacity-40" />
+        <div className="pointer-events-none absolute left-1/2 top-[-3rem] h-[10rem] w-[10rem] -translate-x-1/2 rounded-full border border-white/14 opacity-60" />
+
+        <div className="relative rounded-[2rem] bg-[#E8DDD3] px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-14">
+          <CallToActionBody
+            bodyClassName="opacity-100"
+            containerClassName="mx-auto"
+            content={content}
+            eyebrowClassName="opacity-100"
+            titleClassName="opacity-100"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function RadiantCallToActionSection({
   content,
 }: RadiantCallToActionSectionProps) {
-  const sectionRef = useRef<HTMLElement | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
   const stageRef = useRef<HTMLDivElement | null>(null);
   const orbitOuterRef = useRef<HTMLDivElement | null>(null);
   const orbitInnerRef = useRef<HTMLDivElement | null>(null);
@@ -100,8 +215,7 @@ export function RadiantCallToActionSection({
           return undefined;
         }
 
-        const useTouchProfile =
-          ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
+        const { useTouchProfile } = getRadiantScrollProfile();
         const easeOut = gsap.parseEase("power3.out");
         const easeInOut = gsap.parseEase("power2.inOut");
         const copyNodes = [
@@ -250,138 +364,108 @@ export function RadiantCallToActionSection({
   );
 
   return (
-    <section
-      id="contact"
-      ref={sectionRef}
-      className="relative z-20 h-[212svh] bg-[#1b1a18] md:h-[224svh]"
-    >
-      <div ref={stageRef} className="sticky top-0 h-svh overflow-hidden bg-[#1b1a18]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(255,255,255,0.04),transparent_36%)]" />
-
-        <OrbitRing
-          dotted
-          ringRef={orbitOuterRef}
-          markers={[
-            {
-              angle: 28,
-              className: "size-2.5 bg-[#f4ece4]/88 shadow-[0_0_0_1px_rgba(255,255,255,0.24)]",
-              glowClassName: "size-8 bg-[#f4ece4]/22",
-            },
-            {
-              angle: 214,
-              className: "size-2 bg-white/54",
-              glowClassName: "size-6 bg-white/14",
-            },
-          ]}
-          className="top-1/2 size-[62rem] -translate-x-1/2 -translate-y-1/2 sm:size-[72rem]"
-        />
-        <OrbitRing
-          ringRef={orbitInnerRef}
-          markers={[
-            {
-              angle: -52,
-              className: "size-2.5 bg-[#f6efe8] shadow-[0_0_0_1px_rgba(255,255,255,0.22)]",
-              glowClassName: "size-7 bg-[#f6efe8]/18",
-            },
-          ]}
-          className="top-1/2 size-[28rem] -translate-x-1/2 -translate-y-1/2 sm:size-[36rem]"
-        />
-
+    <section id="contact" className="relative z-20">
+      <div
+        ref={sectionRef}
+        className="relative h-[212svh] bg-[#1b1a18] motion-reduce:hidden md:h-[224svh]"
+      >
         <div
-          ref={surfaceRef}
-          className="absolute inset-0 z-20 overflow-hidden will-change-transform"
+          ref={stageRef}
+          className="sticky top-0 h-svh overflow-hidden bg-[#1b1a18]"
         >
-          <div
-            ref={fullPanelRef}
-            className="absolute inset-0 z-0 bg-[#E8DDD3] opacity-0 will-change-transform"
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(255,255,255,0.04),transparent_36%)]" />
+
+          <OrbitRing
+            dotted
+            ringRef={orbitOuterRef}
+            markers={[
+              {
+                angle: 28,
+                className: "size-2.5 bg-[#f4ece4]/88 shadow-[0_0_0_1px_rgba(255,255,255,0.24)]",
+                glowClassName: "size-8 bg-[#f4ece4]/22",
+              },
+              {
+                angle: 214,
+                className: "size-2 bg-white/54",
+                glowClassName: "size-6 bg-white/14",
+              },
+            ]}
+            className="top-1/2 size-[62rem] -translate-x-1/2 -translate-y-1/2 sm:size-[72rem]"
+          />
+          <OrbitRing
+            ringRef={orbitInnerRef}
+            markers={[
+              {
+                angle: -52,
+                className: "size-2.5 bg-[#f6efe8] shadow-[0_0_0_1px_rgba(255,255,255,0.22)]",
+                glowClassName: "size-7 bg-[#f6efe8]/18",
+              },
+            ]}
+            className="top-1/2 size-[28rem] -translate-x-1/2 -translate-y-1/2 sm:size-[36rem]"
           />
 
-          <svg
-            ref={maskedRevealRef}
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 z-10 size-full [filter:drop-shadow(0_0_26px_rgba(232,221,211,0.08))]"
-            fill="none"
-            preserveAspectRatio="xMidYMid slice"
-            viewBox="0 0 1512 996"
+          <div
+            ref={surfaceRef}
+            className="absolute inset-0 z-20 overflow-hidden will-change-transform"
           >
-            <defs>
-              <mask
-                id={ctaStarMaskId}
-                maskContentUnits="userSpaceOnUse"
-                maskUnits="userSpaceOnUse"
-                x="0"
-                y="0"
+            <div
+              ref={fullPanelRef}
+              className="absolute inset-0 z-0 bg-[#E8DDD3] opacity-0 will-change-transform"
+            />
+
+            <svg
+              ref={maskedRevealRef}
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-10 size-full [filter:drop-shadow(0_0_26px_rgba(232,221,211,0.08))]"
+              fill="none"
+              preserveAspectRatio="xMidYMid slice"
+              viewBox="0 0 1512 996"
+            >
+              <defs>
+                <mask
+                  id={ctaStarMaskId}
+                  maskContentUnits="userSpaceOnUse"
+                  maskUnits="userSpaceOnUse"
+                  x="0"
+                  y="0"
+                  width="1512"
+                  height="996"
+                >
+                  <rect width="1512" height="996" fill="black" />
+                  <g ref={starMaskTranslateRef}>
+                    <g ref={starMaskTransformRef}>
+                      <path d={ctaStarPath} fill="white" />
+                    </g>
+                  </g>
+                </mask>
+              </defs>
+              <rect
                 width="1512"
                 height="996"
-              >
-                <rect width="1512" height="996" fill="black" />
-                <g ref={starMaskTranslateRef}>
-                  <g ref={starMaskTransformRef}>
-                    <path d={ctaStarPath} fill="white" />
-                  </g>
-                </g>
-              </mask>
-            </defs>
-            <rect
-              width="1512"
-              height="996"
-              fill="#E8DDD3"
-              mask={`url(#${ctaStarMaskId})`}
-            />
-          </svg>
+                fill="#E8DDD3"
+                mask={`url(#${ctaStarMaskId})`}
+              />
+            </svg>
 
-          <div className="relative z-20 flex h-full items-center justify-center px-5 pt-[5rem] text-center sm:px-8 lg:px-12">
-            <div className="max-w-[74rem]">
-              <p
-                ref={eyebrowRef}
-                className="text-[0.72rem] font-medium tracking-[0.26em] text-[#201d1a]/58 uppercase opacity-0"
-              >
-                {content.cta.eyebrow}
-              </p>
-              <h2
-                ref={titleRef}
-                className="mx-auto mt-4 max-w-[13ch] font-heading text-[clamp(2.9rem,5vw,5.6rem)] leading-[0.94] tracking-[-0.04em] text-[#171614] opacity-0"
-              >
-                {content.cta.title}
-              </h2>
-              <p
-                ref={bodyRef}
-                className="mx-auto mt-5 max-w-[42rem] text-[1rem] leading-7 text-[#201d1a]/68 opacity-0 sm:text-[1.08rem]"
-              >
-                {content.cta.body}
-              </p>
-
-              <div
-                ref={actionsRef}
-                className="mt-8 flex flex-col items-center gap-4 opacity-0"
-              >
-                <a
-                  className={cn(
-                    buttonVariants({
-                      className:
-                        "h-[3.25rem] rounded-full border-[#171614]/16 bg-[#171614] px-7 text-white hover:bg-[#171614]/92",
-                      size: "lg",
-                      variant: "default",
-                    }),
-                  )}
-                  href="mailto:hello@radiant.studio?subject=Radiant%20strategy%20call"
-                >
-                  {content.cta.buttonLabel}
-                  <ArrowUpRightIcon data-icon="inline-end" />
-                </a>
-
-                <a
-                  className="inline-flex items-center gap-2 text-sm text-[#201d1a]/72 transition-colors hover:text-[#171614]"
-                  href="mailto:hello@radiant.studio?subject=Radiant%20capability%20review"
-                >
-                  <MailIcon className="size-4" />
-                  {content.cta.secondary}
-                </a>
-              </div>
+            <div className="relative z-20 flex h-full items-center justify-center px-5 pt-[5rem] text-center sm:px-8 lg:px-12">
+              <CallToActionBody
+                actionsClassName="opacity-0"
+                actionsRef={actionsRef}
+                bodyClassName="opacity-0"
+                bodyRef={bodyRef}
+                containerClassName="mx-auto"
+                content={content}
+                eyebrowClassName="opacity-0"
+                eyebrowRef={eyebrowRef}
+                titleClassName="opacity-0"
+                titleRef={titleRef}
+              />
             </div>
           </div>
         </div>
       </div>
+
+      <ReducedMotionCallToAction content={content} />
     </section>
   );
 }
