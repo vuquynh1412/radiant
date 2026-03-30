@@ -100,10 +100,8 @@ export function getHomePageContent(
       title: home.Plans.title,
     },
     projects: {
-      eyebrow: home.Projects.eyebrow,
       filterLabels: home.Projects.filters,
       filters: projectFilters,
-      intro: home.Projects.intro,
       items: projectItems,
       title: home.Projects.title,
     },
