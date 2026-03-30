@@ -1,7 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -25,9 +30,28 @@ type RotatingImageSlotProps = {
   className?: string;
   delayMs?: number;
   images: string[];
+  isActive?: boolean;
+  priority?: boolean;
 };
 
 const tickerRepeatCount = 8;
+const desktopMediaQuery = "(min-width: 768px)";
+const supportsIntersectionObserver =
+  typeof IntersectionObserver !== "undefined";
+
+function subscribeToDesktopBreakpoint(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia(desktopMediaQuery);
+
+  mediaQuery.addEventListener("change", onStoreChange);
+
+  return () => {
+    mediaQuery.removeEventListener("change", onStoreChange);
+  };
+}
+
+function getDesktopBreakpointSnapshot() {
+  return window.matchMedia(desktopMediaQuery).matches;
+}
 
 function RadiantSparkIcon({ className }: { className?: string }) {
   return (
@@ -77,11 +101,13 @@ function RotatingImageSlot({
   className,
   delayMs = 0,
   images,
+  isActive = true,
+  priority = false,
 }: RotatingImageSlotProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (images.length <= 1) {
+    if (!isActive || images.length <= 1) {
       return undefined;
     }
 
@@ -101,7 +127,7 @@ function RotatingImageSlot({
         window.clearInterval(intervalId);
       }
     };
-  }, [delayMs, images]);
+  }, [delayMs, images, isActive]);
 
   return (
     <div
@@ -121,8 +147,8 @@ function RotatingImageSlot({
               : "scale-[1.035] opacity-0",
           )}
           fill
-          loading="eager"
-          priority={index === 0}
+          loading={priority && index === 0 ? "eager" : "lazy"}
+          priority={priority && index === 0}
           sizes="(min-width: 1280px) 272px, (min-width: 768px) 24vw, 100vw"
           src={image}
           unoptimized
@@ -135,10 +161,12 @@ function RotatingImageSlot({
 function MobileMatrix({
   altLabel,
   imageSlots,
+  isActive,
   rows,
 }: {
   altLabel: string;
   imageSlots: RadiantExperienceContent["capabilityMatrix"]["imageSlots"];
+  isActive: boolean;
   rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
 }) {
   const mobileRows: Array<{
@@ -175,6 +203,8 @@ function MobileMatrix({
                 className="aspect-[2.8/1]"
                 delayMs={(rowIndex * 240) + slotIndex * 180}
                 images={imageSlots[slotKey]}
+                isActive={isActive}
+                priority={rowIndex === 0 && slotIndex === 0}
               />
             ))}
           </div>
@@ -188,6 +218,89 @@ function DesktopRowFrame({ children }: { children: ReactNode }) {
   return <div className="flex items-center gap-8 py-5 lg:gap-12 lg:py-6">{children}</div>;
 }
 
+function DesktopMatrix({
+  altLabel,
+  imageSlots,
+  isActive,
+  rows,
+}: {
+  altLabel: string;
+  imageSlots: RadiantExperienceContent["capabilityMatrix"]["imageSlots"];
+  isActive: boolean;
+  rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
+}) {
+  return (
+    <div className="divide-y divide-[#d4c4b5]/75">
+      <DesktopRowFrame>
+        <div className="min-w-[10.5rem] flex-1 basis-0">
+          <RotatingImageSlot
+            altLabel={altLabel}
+            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            delayMs={0}
+            images={imageSlots.slotA}
+            isActive={isActive}
+            priority
+          />
+        </div>
+        <p className="shrink-0 text-center font-sans text-[clamp(3.35rem,5.8vw,5.9rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
+          {rows.branding}
+        </p>
+        <div className="min-w-[10.5rem] flex-1 basis-0">
+          <RotatingImageSlot
+            altLabel={altLabel}
+            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            delayMs={180}
+            images={imageSlots.slotB}
+            isActive={isActive}
+          />
+        </div>
+      </DesktopRowFrame>
+
+      <DesktopRowFrame>
+        <p className="shrink-0 font-sans text-[clamp(3.25rem,5.8vw,5.8rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
+          {rows.marketing}
+        </p>
+        <div className="min-w-[12rem] flex-1 basis-0">
+          <RotatingImageSlot
+            altLabel={altLabel}
+            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            delayMs={360}
+            images={imageSlots.slotC}
+            isActive={isActive}
+          />
+        </div>
+        <p className="shrink-0 text-right font-sans text-[clamp(3rem,5.1vw,4.9rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
+          {rows.socials}
+        </p>
+      </DesktopRowFrame>
+
+      <DesktopRowFrame>
+        <div className="min-w-[10.5rem] flex-1 basis-0">
+          <RotatingImageSlot
+            altLabel={altLabel}
+            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            delayMs={540}
+            images={imageSlots.slotD}
+            isActive={isActive}
+          />
+        </div>
+        <p className="shrink-0 text-center font-sans text-[clamp(3.4rem,6vw,6rem)] font-semibold leading-[0.9] tracking-[-0.078em] text-[#d1b8a0]/76 whitespace-nowrap">
+          {rows.storytelling}
+        </p>
+        <div className="min-w-[10.5rem] flex-1 basis-0">
+          <RotatingImageSlot
+            altLabel={altLabel}
+            className="h-[4.9rem] w-full lg:h-[5.3rem]"
+            delayMs={720}
+            images={imageSlots.slotE}
+            isActive={isActive}
+          />
+        </div>
+      </DesktopRowFrame>
+    </div>
+  );
+}
+
 export function RadiantCapabilityMatrixSection({
   content,
   capabilityMatrixSectionRef,
@@ -196,6 +309,38 @@ export function RadiantCapabilityMatrixSection({
   capabilityMatrixBottomTickerRef,
 }: RadiantCapabilityMatrixSectionProps) {
   const matrix = content.capabilityMatrix;
+  const isDesktop = useSyncExternalStore(
+    subscribeToDesktopBreakpoint,
+    getDesktopBreakpointSnapshot,
+    () => false,
+  );
+  const [isSectionActive, setIsSectionActive] = useState(
+    !supportsIntersectionObserver,
+  );
+
+  useEffect(() => {
+    const section = capabilityMatrixSectionRef.current;
+
+    if (!section || !supportsIntersectionObserver) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsSectionActive(entry.isIntersecting);
+      },
+      {
+        rootMargin: "20% 0px",
+        threshold: 0.1,
+      },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [capabilityMatrixSectionRef]);
 
   return (
     <section
@@ -218,74 +363,21 @@ export function RadiantCapabilityMatrixSection({
             </p>
           </div>
 
-          <MobileMatrix
-            altLabel={matrix.slotAltLabel}
-            imageSlots={matrix.imageSlots}
-            rows={matrix.rows}
-          />
-
-          <div className="hidden divide-y divide-[#d4c4b5]/75 md:block">
-            <DesktopRowFrame>
-              <div className="min-w-[10.5rem] flex-1 basis-0">
-                <RotatingImageSlot
-                  altLabel={matrix.slotAltLabel}
-                  className="h-[4.9rem] w-full lg:h-[5.3rem]"
-                  delayMs={0}
-                  images={matrix.imageSlots.slotA}
-                />
-              </div>
-              <p className="shrink-0 text-center font-sans text-[clamp(3.35rem,5.8vw,5.9rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
-                {matrix.rows.branding}
-              </p>
-              <div className="min-w-[10.5rem] flex-1 basis-0">
-                <RotatingImageSlot
-                  altLabel={matrix.slotAltLabel}
-                  className="h-[4.9rem] w-full lg:h-[5.3rem]"
-                  delayMs={180}
-                  images={matrix.imageSlots.slotB}
-                />
-              </div>
-            </DesktopRowFrame>
-
-            <DesktopRowFrame>
-              <p className="shrink-0 font-sans text-[clamp(3.25rem,5.8vw,5.8rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
-                {matrix.rows.marketing}
-              </p>
-              <div className="min-w-[12rem] flex-1 basis-0">
-                <RotatingImageSlot
-                  altLabel={matrix.slotAltLabel}
-                  className="h-[4.9rem] w-full lg:h-[5.3rem]"
-                  delayMs={360}
-                  images={matrix.imageSlots.slotC}
-                />
-              </div>
-              <p className="shrink-0 text-right font-sans text-[clamp(3rem,5.1vw,4.9rem)] font-semibold leading-[0.9] tracking-[-0.075em] text-[#d1b8a0]/76 whitespace-nowrap">
-                {matrix.rows.socials}
-              </p>
-            </DesktopRowFrame>
-
-            <DesktopRowFrame>
-              <div className="min-w-[10.5rem] flex-1 basis-0">
-                <RotatingImageSlot
-                  altLabel={matrix.slotAltLabel}
-                  className="h-[4.9rem] w-full lg:h-[5.3rem]"
-                  delayMs={540}
-                  images={matrix.imageSlots.slotD}
-                />
-              </div>
-              <p className="shrink-0 text-center font-sans text-[clamp(3.4rem,6vw,6rem)] font-semibold leading-[0.9] tracking-[-0.078em] text-[#d1b8a0]/76 whitespace-nowrap">
-                {matrix.rows.storytelling}
-              </p>
-              <div className="min-w-[10.5rem] flex-1 basis-0">
-                <RotatingImageSlot
-                  altLabel={matrix.slotAltLabel}
-                  className="h-[4.9rem] w-full lg:h-[5.3rem]"
-                  delayMs={720}
-                  images={matrix.imageSlots.slotE}
-                />
-              </div>
-            </DesktopRowFrame>
-          </div>
+          {isDesktop ? (
+            <DesktopMatrix
+              altLabel={matrix.slotAltLabel}
+              imageSlots={matrix.imageSlots}
+              isActive={isSectionActive}
+              rows={matrix.rows}
+            />
+          ) : (
+            <MobileMatrix
+              altLabel={matrix.slotAltLabel}
+              imageSlots={matrix.imageSlots}
+              isActive={isSectionActive}
+              rows={matrix.rows}
+            />
+          )}
         </div>
 
         <PatternTicker

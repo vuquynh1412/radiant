@@ -175,3 +175,47 @@
     transform: translate3d(-50%, 0, 0);
   }
 }
+
+@keyframes radiant-loader-orbit-outer {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes radiant-loader-orbit-inner {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes radiant-loader-star {
+  0%,
+  100% {
+    transform: rotate(-8deg) scale(0.94);
+  }
+
+  50% {
+    transform: rotate(6deg) scale(1.04);
+  }
+}
+
+@keyframes radiant-loader-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.84);
+  }
+
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}

@@ -28,7 +28,6 @@ export type RadiantExperienceRefs = {
   heroMediaRef: RefObject<HTMLDivElement | null>;
   heroTitleRef: RefObject<HTMLDivElement | null>;
   heroMonogramRef: RefObject<HTMLDivElement | null>;
-  heroLocationsRef: RefObject<HTMLDivElement | null>;
   heroMarqueeRef: RefObject<HTMLDivElement | null>;
   heroMarqueeTrackRef: RefObject<HTMLDivElement | null>;
   activeServiceCopyShellRef: RefObject<HTMLDivElement | null>;

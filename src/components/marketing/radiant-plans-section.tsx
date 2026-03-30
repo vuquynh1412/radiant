@@ -174,6 +174,10 @@ export function RadiantPlansSection({
           return undefined;
         }
 
+        const useTouchProfile =
+          ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
+        const backdropScrub = useTouchProfile ? 0.22 : 1;
+
         const cards = cardRefs.current.filter(
           (card): card is HTMLElement => Boolean(card),
         );
@@ -215,7 +219,7 @@ export function RadiantPlansSection({
             trigger: sectionRef.current,
             start: "top bottom",
             end: "bottom top",
-            scrub: 1,
+            scrub: backdropScrub,
             onUpdate: (self) => {
               gsap.set(backdropRef.current, {
                 rotate: gsap.utils.interpolate(-3, 3, self.progress),

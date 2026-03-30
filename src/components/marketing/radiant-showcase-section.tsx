@@ -21,7 +21,6 @@ type RadiantShowcaseSectionProps = {
   heroMediaRef: RadiantExperienceRefs["heroMediaRef"];
   heroTitleRef: RadiantExperienceRefs["heroTitleRef"];
   heroMonogramRef: RadiantExperienceRefs["heroMonogramRef"];
-  heroLocationsRef: RadiantExperienceRefs["heroLocationsRef"];
   heroMarqueeRef: RadiantExperienceRefs["heroMarqueeRef"];
   heroMarqueeTrackRef: RadiantExperienceRefs["heroMarqueeTrackRef"];
   activeServiceCopyShellRef: RadiantExperienceRefs["activeServiceCopyShellRef"];
@@ -38,7 +37,6 @@ export function RadiantShowcaseSection({
   heroMediaRef,
   heroTitleRef,
   heroMonogramRef,
-  heroLocationsRef,
   heroMarqueeRef,
   heroMarqueeTrackRef,
   activeServiceCopyShellRef,
@@ -71,12 +69,12 @@ export function RadiantShowcaseSection({
           </div>
           <div
             ref={heroMatteRef}
-            className="absolute inset-y-0 left-0 hidden bg-[#f6f1eb] md:block"
+            className="absolute inset-y-0 left-0 hidden bg-[#f6f1eb] will-change-transform md:block"
           />
 
           <div
             ref={heroMediaRef}
-            className="absolute left-0 top-0 z-10 hidden overflow-hidden md:block"
+            className="absolute left-0 top-0 z-10 hidden overflow-hidden will-change-transform md:block"
             style={{ transformOrigin: "top center" }}
           >
             <VisualSurface className="size-full rounded-none" variant="vista" />
@@ -90,7 +88,7 @@ export function RadiantShowcaseSection({
 
           <div
             ref={heroMonogramRef}
-            className="pointer-events-none absolute inset-0 z-20 hidden md:block"
+            className="pointer-events-none absolute inset-0 z-20 hidden will-change-transform md:block"
           >
             <div
               className="absolute inset-0"
@@ -112,7 +110,10 @@ export function RadiantShowcaseSection({
             </div>
           </div>
 
-          <div ref={heroTitleRef} className="absolute inset-0 z-30">
+          <div
+            ref={heroTitleRef}
+            className="absolute inset-0 z-30 will-change-transform"
+          >
             <div className="relative size-full">
               <div
                 className="pointer-events-none absolute left-1/2 top-[49%] hidden -translate-x-1/2 -translate-y-1/2 px-4 md:block"
@@ -159,8 +160,15 @@ export function RadiantShowcaseSection({
                   />
                 </div>
               </div>
-              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-8 pt-28 text-white md:hidden sm:px-6">
-                <div className="flex max-w-[22rem] flex-col gap-5">
+              <div className="absolute inset-0 flex flex-col justify-end px-5 pb-8 pt-24 text-white md:hidden sm:px-6">
+                <div className="flex max-w-[22rem] flex-col gap-6">
+                  <div className="inline-flex w-fit items-center gap-3 rounded-full border border-white/14 bg-white/8 px-3 py-2 backdrop-blur-md">
+                    <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
+                    <p className="text-[0.64rem] font-medium tracking-[0.24em] text-white/74 uppercase">
+                      {content.brand.name}
+                    </p>
+                  </div>
+
                   <div className="space-y-1.5">
                     <p className="font-heading text-[clamp(3.35rem,14vw,4.75rem)] leading-[0.88] tracking-[-0.065em] text-shadow-soft">
                       {content.hero.title.premium}
@@ -173,58 +181,23 @@ export function RadiantShowcaseSection({
                     </p>
                   </div>
 
-                  <p className="max-w-[21rem] text-[0.98rem] leading-7 text-white/88">
-                    {content.hero.promise}
-                  </p>
-
-                  <div className="h-px w-16 bg-white/22" />
-
-                  <div className="space-y-3">
-                    <p className="text-[0.72rem] font-medium tracking-[0.2em] text-white/58 uppercase">
-                      {content.brand.focusLabel}
+                  <div className="inline-flex w-fit max-w-[16rem] rounded-[1.1rem] border border-white/12 bg-black/18 px-4 py-3 backdrop-blur-md">
+                    <p className="text-[0.72rem] font-medium tracking-[0.18em] text-white/68 uppercase">
+                      {content.hero.marquee}
                     </p>
-                    <div className="space-y-1 text-[1rem] font-medium leading-6 text-white">
-                      {content.brand.focusItems.map((item) => (
-                        <p key={item}>{item}</p>
-                      ))}
-                    </div>
                   </div>
-
-                  <p className="max-w-[21rem] text-sm leading-6 text-white/70">
-                    {content.hero.supporting}
-                  </p>
                 </div>
               </div>
             </div>
           </div>
 
           <div
-            ref={heroLocationsRef}
-            className="absolute bottom-6 left-4 z-30 hidden max-w-[16rem] text-xs tracking-tight text-foreground sm:left-6 lg:left-8 md:bottom-8 md:block"
-          >
-            <p className="mb-2 text-muted-foreground">
-              {content.brand.focusLabel}
-            </p>
-            <div className="font-medium leading-4">
-              {content.brand.focusItems.map((item) => (
-                <p key={item}>{item}</p>
-              ))}
-            </div>
-            <p className="mt-4 text-sm leading-6 text-foreground/88">
-              {content.hero.promise}
-            </p>
-            <p className="mt-3 text-[0.72rem] leading-5 text-muted-foreground">
-              {content.hero.supporting}
-            </p>
-          </div>
-
-          <div
             ref={heroMarqueeRef}
-            className="pointer-events-none absolute inset-0 z-40 hidden items-center md:flex"
+            className="pointer-events-none absolute inset-0 z-40 hidden items-center opacity-0 md:flex"
           >
             <div
               ref={heroMarqueeTrackRef}
-              className="font-heading whitespace-nowrap px-[8vw] text-[clamp(6rem,10vw,10rem)] leading-none tracking-[-0.08em] text-white text-shadow-soft italic"
+              className="font-heading whitespace-nowrap px-[8vw] text-[clamp(6rem,10vw,10rem)] leading-none tracking-[-0.08em] text-white text-shadow-soft italic will-change-transform"
             >
               {content.hero.marquee}
             </div>
@@ -232,7 +205,7 @@ export function RadiantShowcaseSection({
 
           <div
             ref={serviceHeaderRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden md:block"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
           >
             <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
               <h2 className="font-heading text-[clamp(2.45rem,4vw,4.15rem)] leading-none tracking-[-0.07em]">
@@ -243,7 +216,7 @@ export function RadiantShowcaseSection({
 
           <div
             ref={activeServiceCopyShellRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden md:block"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 will-change-transform md:block"
           >
             <div className="relative mx-auto h-[16rem] w-[min(92vw,42rem)]">
               {content.services.items.map((item, index) => (
@@ -252,7 +225,7 @@ export function RadiantShowcaseSection({
                   ref={(node) => {
                     serviceCopyRefs.current[index] = node;
                   }}
-                  className="absolute inset-0 text-center"
+                  className="absolute inset-0 text-center opacity-0 will-change-transform"
                 >
                   <ServiceCopy
                     className="items-center"
@@ -268,9 +241,12 @@ export function RadiantShowcaseSection({
           <div className="pointer-events-none absolute inset-0 hidden md:block">
             <div
               ref={sampleTileRef}
-              className="absolute left-0 top-0 z-10 w-[clamp(25.5rem,32vw,31rem)] opacity-0"
+              className="absolute left-0 top-0 z-10 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
             >
-              <ServiceTile variant={serviceVisuals[1]} />
+              <ServiceTile
+                className="size-full rounded-[inherit] border-0 shadow-none"
+                variant={serviceVisuals[1]}
+              />
             </div>
 
             {content.services.items.slice(1).map((item, index) => (
@@ -279,10 +255,11 @@ export function RadiantShowcaseSection({
                 ref={(node) => {
                   serviceCardsRef.current[index] = node;
                 }}
-                className="absolute left-0 top-0 z-20 w-[clamp(25.5rem,32vw,31rem)] will-change-transform"
+                className="absolute left-0 top-0 z-20 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
                 style={{ transformOrigin: "top center" }}
               >
                 <ServiceTile
+                  className="size-full rounded-[inherit] border-0 shadow-none"
                   variant={serviceVisuals[(index + 1) % serviceVisuals.length]}
                 />
               </div>

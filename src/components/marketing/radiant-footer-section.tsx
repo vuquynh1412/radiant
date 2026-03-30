@@ -8,6 +8,7 @@ import {
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
 import { BrandMonogram } from "./radiant-experience-shared";
+import { radiantSocialLinks } from "./radiant-social-links";
 
 type RadiantFooterSectionProps = {
   content: RadiantExperienceContent;
@@ -26,30 +27,37 @@ export function RadiantFooterSection({
   const socialItems = [
     {
       key: "facebook",
+      href: radiantSocialLinks.facebook,
       label: content.footer.socials.facebook,
       icon: <span className="text-sm font-medium">f</span>,
     },
     {
       key: "instagram",
+      href: radiantSocialLinks.instagram,
       label: content.footer.socials.instagram,
       icon: <span className="text-[0.8rem] font-medium uppercase">ig</span>,
     },
     {
       key: "linkedin",
+      href: radiantSocialLinks.linkedin,
       label: content.footer.socials.linkedin,
       icon: <span className="text-[0.78rem] font-semibold lowercase">in</span>,
     },
     {
       key: "x",
+      href: radiantSocialLinks.x,
       label: content.footer.socials.x,
       icon: <span className="text-base font-medium tracking-[-0.04em]">X</span>,
     },
     {
       key: "youtube",
+      href: radiantSocialLinks.youtube,
       label: content.footer.socials.youtube,
       icon: <span className="text-[0.78rem] font-medium uppercase">yt</span>,
     },
-  ];
+  ].flatMap((item) =>
+    item.href ? [{ ...item, href: item.href }] : [],
+  );
 
   return (
     <footer className="relative z-10 -mt-[1svh] min-h-svh overflow-hidden bg-[#1b1a18] px-4 pb-24 pt-[10svh] text-white sm:px-6 sm:pt-[9svh] lg:px-8 lg:pt-[8svh]">
@@ -61,18 +69,20 @@ export function RadiantFooterSection({
             <BrandMonogram compact className="h-[7.4rem] w-[5.8rem]" />
           </div>
 
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            {socialItems.map((item) => (
-              <a
-                key={item.key}
-                aria-label={item.label}
-                className="flex size-11 items-center justify-center rounded-full border border-white/12 bg-white/4 text-white/68 transition-all hover:border-white/20 hover:bg-white/8 hover:text-white"
-                href="mailto:hello@radiant.studio"
-              >
-                {item.icon}
-              </a>
-            ))}
-          </div>
+          {socialItems.length > 0 ? (
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              {socialItems.map((item) => (
+                <a
+                  key={item.key}
+                  aria-label={item.label}
+                  className="flex size-11 items-center justify-center rounded-full border border-white/12 bg-white/4 text-white/68 transition-all hover:border-white/20 hover:bg-white/8 hover:text-white"
+                  href={item.href}
+                >
+                  {item.icon}
+                </a>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         <div className="mt-14 grid gap-10 pb-[8.5rem] md:grid-cols-[0.9fr_0.9fr_0.9fr_1.2fr] md:gap-8 lg:mt-16 lg:gap-12">

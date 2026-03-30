@@ -78,7 +78,6 @@ export function useRadiantShowcaseMotion({
             !refs.heroMediaRef.current ||
             !refs.heroTitleRef.current ||
             !refs.heroMonogramRef.current ||
-            !refs.heroLocationsRef.current ||
             !refs.heroMarqueeRef.current ||
             !refs.heroMarqueeTrackRef.current ||
             !refs.activeServiceCopyShellRef.current ||
@@ -100,10 +99,17 @@ export function useRadiantShowcaseMotion({
           const aboutCharNodes = refs.aboutCharRefs.current.filter(
             (char): char is HTMLSpanElement => char !== null,
           );
+          const useTouchProfile =
+            ScrollTrigger.isTouch !== 0 || window.matchMedia("(pointer: coarse)").matches;
+          const showcaseScrub = useTouchProfile ? 0.22 : 1;
+          const aboutScrub = useTouchProfile ? 0.3 : 1.35;
+          const animateAboutChars = !useTouchProfile;
+          const getStableViewportHeight = () =>
+            refs.heroMediaRef.current?.parentElement?.clientHeight ?? window.innerHeight;
 
           const getMetrics = () => {
             const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
+            const viewportHeight = getStableViewportHeight();
             const cardWidth =
               refs.sampleTileRef.current?.offsetWidth ??
               Math.min(Math.max(viewportWidth * 0.32, 408), 512);
@@ -315,7 +321,25 @@ export function useRadiantShowcaseMotion({
             };
           };
 
-          const initialMetrics = getMetrics();
+          let cachedMetrics = getMetrics();
+
+          const updateMetrics = () => {
+            cachedMetrics = getMetrics();
+            return cachedMetrics;
+          };
+
+          const applyMetricBoundLayout = (
+            metrics: ReturnType<typeof getMetrics>,
+          ) => {
+            gsap.set(refs.heroMatteRef.current, {
+              scaleX: 0.5,
+              transformOrigin: "left center",
+              width: metrics.viewportWidth,
+            });
+          };
+
+          const initialMetrics = updateMetrics();
+          applyMetricBoundLayout(initialMetrics);
 
           gsap.set(refs.showcaseSectionRef.current, {
             "--hero-mask-x": `${initialMetrics.viewportWidth / 2}px`,
@@ -343,12 +367,14 @@ export function useRadiantShowcaseMotion({
           gsap.set(refs.aboutContentRef.current, { opacity: 0.38, y: 72 });
 
           aboutCharNodes.forEach((char) => {
-            char.style.opacity = "0.22";
-            char.style.color = "#bdb7b0";
+            char.style.opacity = animateAboutChars ? "0.22" : "1";
+            char.style.color = animateAboutChars ? "#bdb7b0" : "var(--foreground)";
           });
 
-          const renderShowcase = (progress: number) => {
-            const metrics = getMetrics();
+          const renderShowcase = (
+            progress: number,
+            metrics: ReturnType<typeof getMetrics> = cachedMetrics,
+          ) => {
             const expandProgress = gsap.utils.clamp(0, 1, progress / 0.18);
             const titleFadeProgress = gsap.utils.clamp(
               0,
@@ -389,31 +415,42 @@ export function useRadiantShowcaseMotion({
               focusPhaseProgress,
               serviceItems.length - 1,
             );
+            const activeCopyIndex =
+              progress < 0.69 ? 0 : Math.round(focusIndex);
+            const rowStates = serviceItems.map((_, index) =>
+              getRowState(index, focusIndex, metrics),
+            );
+            const terminalRowStates = serviceItems.map((_, index) =>
+              getRowState(index, serviceItems.length - 1, metrics),
+            );
+            const gridStates = serviceItems.map((_, index) =>
+              getGridState(index, metrics),
+            );
 
             const maskX =
               progress <= 0.4
                 ? lerp(metrics.viewportWidth / 2, 0, expandProgress)
                 : 0;
+            const matteScale =
+              metrics.viewportWidth > 0 ? maskX / metrics.viewportWidth : 0;
 
-            gsap.set(refs.showcaseSectionRef.current, {
-              "--hero-mask-x": `${maskX}px`,
-            });
-            gsap.set(refs.heroMatteRef.current, { width: maskX });
+            refs.showcaseSectionRef.current?.style.setProperty(
+              "--hero-mask-x",
+              `${maskX}px`,
+            );
+            gsap.set(refs.heroMatteRef.current, { scaleX: matteScale });
             gsap.set(refs.heroTitleRef.current, {
-              filter: `blur(${titleFadeProgress * 12}px)`,
               opacity: 1 - titleFadeProgress,
+              scale: 1 - titleFadeProgress * 0.035,
               yPercent: -titleFadeProgress * 8,
             });
             gsap.set(refs.heroMonogramRef.current, {
               opacity: 1 - titleFadeProgress,
               scale: 1 - titleFadeProgress * 0.08,
             });
-            gsap.set(refs.heroLocationsRef.current, {
-              opacity: 1 - gsap.utils.clamp(0, 1, (progress - 0.42) / 0.12),
-            });
 
             const marqueeOpacity =
-              progress < 0.18 || progress > 0.4
+              useTouchProfile || progress < 0.18 || progress > 0.4
                 ? 0
                 : Math.sin(marqueeProgress * Math.PI);
 
@@ -436,11 +473,10 @@ export function useRadiantShowcaseMotion({
               x: 0,
               y: 0,
             };
-            const rowZeroState = getRowState(0, 0, metrics);
+            const rowZeroState =
+              progress < 0.69 ? getRowState(0, 0, metrics) : rowStates[0];
             const activeFocusState =
-              progress < 0.69
-                ? getRowState(0, 0, metrics)
-                : getRowState(focusIndex, focusIndex, metrics);
+              progress < 0.69 ? rowZeroState : rowStates[activeCopyIndex];
             const rowZeroRect = {
               borderRadius: 36,
               height: metrics.mediaHeight,
@@ -452,11 +488,11 @@ export function useRadiantShowcaseMotion({
             const currentHeroRowState =
               gridProgress > 0
                 ? morphState(
-                  getRowState(0, serviceItems.length - 1, metrics),
-                  getGridState(0, metrics),
-                  gridProgress,
-                )
-                : getRowState(0, focusIndex, metrics);
+                    terminalRowStates[0],
+                    gridStates[0],
+                    gridProgress,
+                  )
+                : rowStates[0];
 
             if (progress <= 0.4) {
               const heroExpandRect = {
@@ -528,8 +564,6 @@ export function useRadiantShowcaseMotion({
                 holdProgress * 8,
             });
 
-            const activeCopyIndex = progress < 0.69 ? 0 : Math.round(focusIndex);
-
             serviceCopyNodes.forEach((copyNode, index) => {
               const revealStrength =
                 progress < 0.69
@@ -566,11 +600,11 @@ export function useRadiantShowcaseMotion({
               const rowState =
                 gridProgress > 0
                   ? morphState(
-                    getRowState(itemIndex, serviceItems.length - 1, metrics),
-                    getGridState(itemIndex, metrics),
-                    gridProgress,
-                  )
-                  : getRowState(itemIndex, focusIndex, metrics);
+                      terminalRowStates[itemIndex],
+                      gridStates[itemIndex],
+                      gridProgress,
+                    )
+                  : rowStates[itemIndex];
 
               const enterState: LayoutState = {
                 opacity: 0,
@@ -597,16 +631,18 @@ export function useRadiantShowcaseMotion({
             trigger: refs.showcaseSectionRef.current,
             start: "top top",
             end: "bottom bottom",
-            scrub: 1,
+            scrub: showcaseScrub,
             onRefresh: (self) => {
-              renderShowcase(self.progress);
+              const refreshedMetrics = updateMetrics();
+              applyMetricBoundLayout(refreshedMetrics);
+              renderShowcase(self.progress, refreshedMetrics);
             },
             onUpdate: (self) => {
               renderShowcase(self.progress);
             },
           });
 
-          renderShowcase(showcaseTrigger.progress);
+          renderShowcase(showcaseTrigger.progress, cachedMetrics);
 
           const renderAbout = (progress: number) => {
             const contentProgress = gsap.utils.clamp(0, 1, progress / 0.28);
@@ -620,6 +656,10 @@ export function useRadiantShowcaseMotion({
               opacity: lerp(0.38, 1, easedContentProgress),
               y: lerp(72, 0, easedContentProgress),
             });
+
+            if (!animateAboutChars) {
+              return;
+            }
 
             aboutCharNodes.forEach((char, index) => {
               const localProgress = gsap.utils.clamp(
@@ -638,14 +678,14 @@ export function useRadiantShowcaseMotion({
             const aboutContentHeight =
               refs.aboutContentRef.current?.offsetHeight ?? 0;
 
-            return Math.max(window.innerHeight, aboutContentHeight * 0.9);
+            return Math.max(getStableViewportHeight(), aboutContentHeight * 0.9);
           };
 
           const aboutTrigger = ScrollTrigger.create({
             trigger: refs.aboutContentRef.current,
             start: "top 66%",
             end: () => `+=${getAboutRevealDistance()}`,
-            scrub: 1.35,
+            scrub: aboutScrub,
             invalidateOnRefresh: true,
             onRefresh: (self) => {
               renderAbout(self.progress);
@@ -658,11 +698,27 @@ export function useRadiantShowcaseMotion({
           renderAbout(aboutTrigger.progress);
 
           let resizeFrame = 0;
+          let lastViewportWidth = window.innerWidth;
+          let lastViewportHeight = window.innerHeight;
+
           const handleResize = () => {
             cancelAnimationFrame(resizeFrame);
             resizeFrame = requestAnimationFrame(() => {
+              const nextViewportWidth = window.innerWidth;
+              const nextViewportHeight = window.innerHeight;
+              const widthDelta = Math.abs(nextViewportWidth - lastViewportWidth);
+              const heightDelta = Math.abs(nextViewportHeight - lastViewportHeight);
+
+              lastViewportWidth = nextViewportWidth;
+              lastViewportHeight = nextViewportHeight;
+
+              // Ignore iOS browser chrome height changes so sticky scroll scenes
+              // do not refresh mid-scroll and snap backward.
+              if (useTouchProfile && widthDelta < 2 && heightDelta < 160) {
+                return;
+              }
+
               ScrollTrigger.refresh();
-              renderShowcase(showcaseTrigger.progress);
             });
           };
 
