@@ -1,4 +1,11 @@
-import { useId, type RefObject, type ReactNode } from "react";
+"use client";
+import {
+  useEffect,
+  useId,
+  useState,
+  type RefObject,
+  type ReactNode,
+} from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -14,6 +21,172 @@ export const serviceVisuals = [
 ] as const;
 
 export type VisualVariant = (typeof serviceVisuals)[number];
+const imageCycleIntervalMs = 3000;
+
+type VisualFrame = {
+  fallbackSrc: string;
+  position?: string;
+  src: string;
+};
+
+const makeUnsplashFrame = ({
+  fallbackSrc,
+  id,
+  position = "50% 50%",
+}: {
+  fallbackSrc: string;
+  id: string;
+  position?: string;
+}): VisualFrame => ({
+  fallbackSrc,
+  position,
+  src: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80`,
+});
+
+const visualFrameLibrary = {
+  brandingDesk: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/global-brand-systems.jpg",
+    id: "photo-1497366754035-f200968a6e72",
+    position: "50% 45%",
+  }),
+  cinematicStudio: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/nocturne-orbit.jpg",
+    id: "photo-1500530855697-b586d89ba3ee",
+    position: "50% 42%",
+  }),
+  socialContent: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/signal-25-launch.jpg",
+    id: "photo-1516321318423-f06f85e504b3",
+    position: "50% 48%",
+  }),
+  marketingAnalytics: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/atlas-blueprint.jpg",
+    id: "photo-1517248135467-4c7edcad34c4",
+    position: "50% 42%",
+  }),
+  packagingMockup: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/mono-curve.jpg",
+    id: "photo-1520607162513-77705c0f0d4a",
+    position: "50% 44%",
+  }),
+  editorialMoodboard: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/luma-gallery.jpg",
+    id: "photo-1515377905703-c4788e51af15",
+    position: "50% 38%",
+  }),
+  campaignPlanning: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/gradient-campaign.jpg",
+    id: "photo-1498050108023-c5249f4df085",
+    position: "50% 46%",
+  }),
+  productDisplay: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/apple-architecture.jpg",
+    id: "photo-1524758631624-e2822e304c36",
+    position: "50% 40%",
+  }),
+  visualStory: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/still-young-issue.jpg",
+    id: "photo-1519389950473-47ba0277781c",
+    position: "50% 36%",
+  }),
+  studioPortrait: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/north-south-market.jpg",
+    id: "photo-1487412720507-e7ab37603c6f",
+    position: "50% 28%",
+  }),
+  cinematicDetail: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/kinetic-type.jpg",
+    id: "photo-1504384308090-c894fdcc538d",
+    position: "50% 42%",
+  }),
+  socialBranding: makeUnsplashFrame({
+    fallbackSrc: "/project-gallery/meridian-columns.jpg",
+    id: "photo-1505373877841-8d25f7d46678",
+    position: "50% 44%",
+  }),
+} as const;
+
+const visualSurfaceImageSequences: Record<VisualVariant, VisualFrame[]> = {
+  vista: [
+    visualFrameLibrary.brandingDesk,
+    visualFrameLibrary.editorialMoodboard,
+    visualFrameLibrary.productDisplay,
+  ],
+  portrait: [
+    visualFrameLibrary.studioPortrait,
+    visualFrameLibrary.visualStory,
+    visualFrameLibrary.brandingDesk,
+  ],
+  studio: [
+    visualFrameLibrary.cinematicStudio,
+    visualFrameLibrary.cinematicDetail,
+    visualFrameLibrary.campaignPlanning,
+  ],
+  clinic: [
+    visualFrameLibrary.productDisplay,
+    visualFrameLibrary.packagingMockup,
+    visualFrameLibrary.brandingDesk,
+  ],
+  emerald: [
+    visualFrameLibrary.packagingMockup,
+    visualFrameLibrary.productDisplay,
+    visualFrameLibrary.editorialMoodboard,
+  ],
+  rose: [
+    visualFrameLibrary.socialContent,
+    visualFrameLibrary.socialBranding,
+    visualFrameLibrary.visualStory,
+  ],
+  sand: [
+    visualFrameLibrary.marketingAnalytics,
+    visualFrameLibrary.campaignPlanning,
+    visualFrameLibrary.brandingDesk,
+  ],
+  noir: [
+    visualFrameLibrary.cinematicDetail,
+    visualFrameLibrary.cinematicStudio,
+    visualFrameLibrary.socialBranding,
+  ],
+};
+
+function CyclingImageBackground({
+  frames,
+}: {
+  frames: VisualFrame[];
+}) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (frames.length <= 1) {
+      return undefined;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % frames.length);
+    }, imageCycleIntervalMs);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [frames]);
+
+  const activeFrame = frames[activeIndex];
+
+  if (!activeFrame) {
+    return null;
+  }
+
+  return (
+    <div
+      aria-hidden="true"
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `url("${activeFrame.src}"), url("${activeFrame.fallbackSrc}")`,
+        backgroundPosition: `${activeFrame.position ?? "50% 50%"}, ${activeFrame.position ?? "50% 50%"}`,
+      }}
+    />
+  );
+}
 
 export function BrandMonogram({
   className,
@@ -158,80 +331,18 @@ export function VisualSurface({
   return (
     <div
       className={cn(
-        "relative isolate overflow-hidden bg-black/3 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]",
+        "relative isolate overflow-hidden bg-transparent shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]",
         className,
       )}
     >
-      <div className={cn("absolute inset-0 ambient-pan", innerClassName)}>
-        {variant === "vista" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#afc0d0_0%,#93abc0_24%,#768f77_51%,#495e39_100%)]" />
-            <div className="absolute inset-x-[10%] bottom-[26%] h-[18%] rounded-[50%] bg-[#5f6774]/80 blur-[52px]" />
-            <div className="absolute inset-x-[2%] bottom-[6%] h-[42%] rounded-[45%] bg-[#314225]/70 blur-[20px]" />
-            <div className="absolute left-[36%] top-[44%] size-[36%] rounded-full bg-[#cfdbe4]/38 blur-[90px]" />
-            <div className="absolute left-[49%] top-[52%] h-[34%] w-[18%] rounded-[50%] bg-[#202814]/26 blur-[38px]" />
-          </>
-        ) : null}
-        {variant === "portrait" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(135deg,#b8aea8_0%,#8a7f77_35%,#514640_72%,#28211f_100%)]" />
-            <div className="absolute right-[-10%] top-[-8%] h-[90%] w-[62%] rounded-full bg-[#d9c5ba]/35 blur-3xl" />
-            <div className="absolute left-[6%] top-[24%] h-[50%] w-[26%] rounded-full bg-[#efe1d4]/30 blur-[34px]" />
-            <div className="absolute right-[8%] top-[18%] h-[54%] w-[32%] rounded-full bg-[#241f1c]/62 blur-[10px]" />
-          </>
-        ) : null}
-        {variant === "studio" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#041224_0%,#02101c_35%,#02131d_100%)]" />
-            <div className="absolute left-1/2 top-1/2 size-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#34d6ff]/80 blur-[72px]" />
-            <div className="absolute left-[18%] top-[20%] h-[54%] w-[16%] rounded-full bg-[#0d2744]/88 blur-[36px]" />
-            <div className="absolute right-[14%] top-[24%] h-[46%] w-[18%] rounded-full bg-[#6b112d]/60 blur-[28px]" />
-            <div className="absolute bottom-[10%] left-[32%] h-[34%] w-[12%] rounded-full bg-[#05141e]/90 blur-[10px]" />
-          </>
-        ) : null}
-        {variant === "clinic" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#fbfaf6_0%,#eff1f0_36%,#e0e8e9_100%)]" />
-            <div className="absolute inset-y-[10%] left-[6%] w-[22%] rounded-[1.75rem] bg-[linear-gradient(180deg,#ffd2c0_0%,rgba(255,210,192,0.08)_100%)] blur-[10px]" />
-            <div className="absolute inset-y-[10%] right-[6%] w-[22%] rounded-[1.75rem] bg-[linear-gradient(180deg,#e1ffe8_0%,rgba(225,255,232,0.08)_100%)] blur-[10px]" />
-            <div className="absolute inset-x-[23%] inset-y-[22%] rounded-[2rem] border border-white/70 bg-white/32 backdrop-blur-sm" />
-          </>
-        ) : null}
-        {variant === "emerald" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#0d1915_0%,#16302c_40%,#295147_100%)]" />
-            <div className="absolute left-[18%] top-[18%] size-[40%] rounded-full bg-[#98f6ce]/28 blur-[72px]" />
-            <div className="absolute right-[12%] bottom-[12%] size-[32%] rounded-full bg-[#b4fff6]/20 blur-[60px]" />
-            <div className="absolute left-[40%] top-[26%] h-[44%] w-[18%] rounded-full bg-[#03120e]/65 blur-[18px]" />
-          </>
-        ) : null}
-        {variant === "rose" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#f7f0ea_0%,#ede8e3_38%,#d9dce3_100%)]" />
-            <div className="absolute left-[8%] top-[14%] h-[64%] w-[30%] rounded-full bg-[#ffd3df]/35 blur-[48px]" />
-            <div className="absolute right-[12%] bottom-[14%] h-[52%] w-[32%] rounded-full bg-[#fff3c8]/30 blur-[42px]" />
-            <div className="absolute inset-x-[22%] inset-y-[18%] rounded-[1.8rem] border border-white/70 bg-white/35 backdrop-blur-sm" />
-          </>
-        ) : null}
-        {variant === "sand" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#e8ddd1_0%,#d4cabd_34%,#bcae9c_100%)]" />
-            <div className="absolute left-[10%] top-[16%] h-[48%] w-[28%] rounded-full bg-[#fff5eb]/45 blur-[48px]" />
-            <div className="absolute right-[16%] bottom-[12%] h-[38%] w-[24%] rounded-full bg-[#866c57]/34 blur-[34px]" />
-            <div className="absolute inset-x-[18%] bottom-[10%] h-[24%] rounded-[42%] bg-[#8d7866]/36 blur-xl" />
-          </>
-        ) : null}
-        {variant === "noir" ? (
-          <>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,#10141a_0%,#131c27_40%,#1c2530_100%)]" />
-            <div className="absolute left-[14%] top-[18%] h-[54%] w-[22%] rounded-full bg-[#3ec2ff]/16 blur-[54px]" />
-            <div className="absolute right-[10%] top-[14%] h-[42%] w-[26%] rounded-full bg-[#ffc0d6]/15 blur-[46px]" />
-            <div className="absolute left-[34%] bottom-[10%] h-[28%] w-[18%] rounded-full bg-[#02060a]/90 blur-[10px]" />
-          </>
-        ) : null}
+      <div
+        className={cn(
+          "absolute inset-0 bg-transparent",
+          innerClassName,
+        )}
+      >
+        <CyclingImageBackground frames={visualSurfaceImageSequences[variant]} />
       </div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_46%),linear-gradient(180deg,transparent_0%,rgba(7,6,6,0.08)_100%)]" />
-      <div className="absolute inset-0 surface-grain opacity-55" />
       <div className="relative z-10 size-full">{children}</div>
     </div>
   );
@@ -247,13 +358,11 @@ export function ServiceTile({
   return (
     <VisualSurface
       className={cn(
-        "aspect-[1.24/1] rounded-[2.2rem] border border-white/20",
+        "aspect-video rounded-[2.2rem] border border-white/20",
         className,
       )}
       variant={variant}
-    >
-      <div className="absolute inset-0 bg-linear-to-t from-black/28 via-transparent to-white/8" />
-    </VisualSurface>
+    />
   );
 }
 
@@ -261,22 +370,26 @@ export function ServiceCopy({
   className,
   description,
   eyebrow,
+  hideEyebrow = false,
   title,
 }: {
   className?: string;
   description: string;
   eyebrow: string;
+  hideEyebrow?: boolean;
   title: string;
 }) {
   return (
     <div className={cn("flex flex-col gap-2", className)}>
-      <p className="text-[0.68rem] font-medium tracking-[0.22em] text-muted-foreground uppercase">
-        {eyebrow}
-      </p>
+      {hideEyebrow ? null : (
+        <p className="text-base font-medium tracking-[0.22em] text-muted-foreground uppercase">
+          {eyebrow}
+        </p>
+      )}
       <h3 className="font-heading text-[clamp(2rem,3vw,3.75rem)] leading-none tracking-[-0.05em] text-foreground">
         {title}
       </h3>
-      <p className="max-w-lg text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">
+      <p className="max-w-lg text-base leading-7 text-muted-foreground sm:text-base">
         {description}
       </p>
     </div>
@@ -317,12 +430,12 @@ export function ServiceCard({
           {title}
         </h3>
         {hideEyebrow ? null : (
-          <p className="text-[0.68rem] font-medium tracking-[0.22em] text-muted-foreground uppercase">
+          <p className="text-base font-medium tracking-[0.22em] text-muted-foreground uppercase">
             {eyebrow}
           </p>
         )}
         {hideDescription ? null : (
-          <p className="max-w-lg text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">
+          <p className="max-w-lg text-base leading-7 text-muted-foreground sm:text-base">
             {description}
           </p>
         )}

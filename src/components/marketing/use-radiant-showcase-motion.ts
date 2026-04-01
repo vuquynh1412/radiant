@@ -32,7 +32,6 @@ function morphState(
 
 const focusEase = gsap.parseEase("power2.inOut");
 const aboutContentEase = gsap.parseEase("power2.out");
-const aboutCharEase = gsap.parseEase("power1.out");
 const marqueeStartProgress = 0.22;
 const marqueeEndProgress = 0.4;
 const marqueeStartXPercent = 100;
@@ -291,7 +290,6 @@ export function useRadiantShowcaseMotion({
             refs.aboutContentRef.current,
           );
           const aboutCharSetters = aboutCharNodes.map(createAboutCharSetters);
-          const aboutRevealSpan = aboutCharNodes.length + 10;
 
           gsap.set(refs.heroMatteRef.current, {
             transformOrigin: "left center",
@@ -304,7 +302,7 @@ export function useRadiantShowcaseMotion({
               refs.sampleTileRef.current?.offsetWidth ??
               Math.min(Math.max(viewportWidth * 0.32, 408), 512);
             const mediaHeight =
-              refs.sampleTileRef.current?.offsetHeight ?? cardWidth / 1.24;
+              refs.sampleTileRef.current?.offsetHeight ?? cardWidth * (9 / 16);
             const cardAspectRatio = cardWidth / mediaHeight;
             const focusScale =
               viewportWidth >= 1720 ? 1.04 : viewportWidth >= 1440 ? 1.07 : 1.1;
@@ -610,8 +608,8 @@ export function useRadiantShowcaseMotion({
           aboutContentSetters.y(72);
 
           aboutCharSetters.forEach((setters) => {
-            setters.opacity(animateAboutChars ? 0.22 : 1);
-            setters.color(animateAboutChars ? "#bdb7b0" : "var(--foreground)");
+            setters.opacity(1);
+            setters.color("var(--foreground)");
           });
 
           const renderShowcase = (
@@ -833,10 +831,7 @@ export function useRadiantShowcaseMotion({
 
           const renderAbout = (progress: number) => {
             const contentProgress = gsap.utils.clamp(0, 1, progress / 0.28);
-            const charProgress = gsap.utils.clamp(0, 1, (progress - 0.12) / 0.72);
             const easedContentProgress = aboutContentEase(contentProgress);
-            const easedCharProgress = aboutCharEase(charProgress);
-            const revealPosition = easedCharProgress * aboutRevealSpan;
 
             aboutContentSetters.opacity(lerp(0.38, 1, easedContentProgress));
             aboutContentSetters.y(lerp(72, 0, easedContentProgress));
@@ -845,17 +840,9 @@ export function useRadiantShowcaseMotion({
               return;
             }
 
-            aboutCharSetters.forEach((setters, index) => {
-              const localProgress = gsap.utils.clamp(
-                0,
-                1,
-                revealPosition - index,
-              );
-
-              setters.opacity(0.22 + localProgress * 0.78);
-              setters.color(
-                localProgress > 0.52 ? "var(--foreground)" : "#bdb7b0",
-              );
+            aboutCharSetters.forEach((setters) => {
+              setters.opacity(1);
+              setters.color("var(--foreground)");
             });
           };
 
@@ -966,7 +953,6 @@ export function useRadiantShowcaseMotion({
             refs.aboutContentRef.current,
           );
           const aboutCharSetters = aboutCharNodes.map(createAboutCharSetters);
-          const aboutRevealSpan = aboutCharNodes.length + 10;
 
           const getMetrics = () => {
             const viewportWidth = window.innerWidth;
@@ -985,8 +971,8 @@ export function useRadiantShowcaseMotion({
           aboutContentSetters.opacity(0.38);
           aboutContentSetters.y(48);
           aboutCharSetters.forEach((setters) => {
-            setters.opacity(animateAboutChars ? 0.18 : 1);
-            setters.color(animateAboutChars ? "#bdb7b0" : "var(--foreground)");
+            setters.opacity(1);
+            setters.color("var(--foreground)");
           });
 
           const renderMobileHero = (progress: number) => {
@@ -1011,10 +997,7 @@ export function useRadiantShowcaseMotion({
 
           const renderAbout = (progress: number) => {
             const contentProgress = gsap.utils.clamp(0, 1, progress / 0.24);
-            const charProgress = gsap.utils.clamp(0, 1, (progress - 0.08) / 0.78);
             const easedContentProgress = aboutContentEase(contentProgress);
-            const easedCharProgress = aboutCharEase(charProgress);
-            const revealPosition = easedCharProgress * aboutRevealSpan;
 
             aboutContentSetters.opacity(lerp(0.38, 1, easedContentProgress));
             aboutContentSetters.y(lerp(48, 0, easedContentProgress));
@@ -1023,17 +1006,9 @@ export function useRadiantShowcaseMotion({
               return;
             }
 
-            aboutCharSetters.forEach((setters, index) => {
-              const localProgress = gsap.utils.clamp(
-                0,
-                1,
-                revealPosition - index,
-              );
-
-              setters.opacity(0.18 + localProgress * 0.82);
-              setters.color(
-                localProgress > 0.5 ? "var(--foreground)" : "#bdb7b0",
-              );
+            aboutCharSetters.forEach((setters) => {
+              setters.opacity(1);
+              setters.color("var(--foreground)");
             });
           };
 

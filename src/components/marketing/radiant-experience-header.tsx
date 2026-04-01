@@ -140,12 +140,12 @@ export function RadiantExperienceHeader({
   const socialLinks: SocialLink[] = [
     {
       href: radiantSocialLinks.instagram,
-      icon: <span className="text-[0.82rem] font-semibold uppercase">ig</span>,
+      icon: <span className="text-base font-semibold uppercase">ig</span>,
       label: content.footer.socials.instagram,
     },
     {
       href: radiantSocialLinks.linkedin,
-      icon: <span className="text-[0.88rem] font-semibold lowercase">in</span>,
+      icon: <span className="text-base font-semibold lowercase">in</span>,
       label: content.footer.socials.linkedin,
     },
   ].flatMap((item) => (item.href ? [{ ...item, href: item.href }] : []));
@@ -397,10 +397,10 @@ export function RadiantExperienceHeader({
         <div className="px-3 pt-3 sm:px-4 sm:pt-4">
           <div
             className={cn(
-              "mx-auto flex max-w-[min(100%,96rem)] items-center justify-between gap-3 rounded-[2rem] border px-4 py-3.5 transition-all duration-300 sm:px-5",
+              "mx-auto flex max-w-[min(100%,96rem)] items-center justify-between gap-3 rounded-[2rem] border px-4 py-2 transition-all duration-300 sm:px-5 sm:py-2.5",
               isAtTop
-                ? "border-white/55 bg-[#f8f4ee]/82 text-[#1e1b1a] shadow-[0_18px_44px_-34px_rgba(15,11,9,0.26)] backdrop-blur-md"
-                : "border-[#ddd4cb]/80 bg-[#fffaf6] text-[#1e1b1a] shadow-[0_22px_54px_-36px_rgba(15,11,9,0.28)]",
+                ? "border-white/55 bg-[#f8f4ee]/82 text-[#27272A] shadow-[0_18px_44px_-34px_rgba(15,11,9,0.26)] backdrop-blur-md"
+                : "border-[#ddd4cb]/80 bg-[#fffaf6] text-[#27272A] shadow-[0_22px_54px_-36px_rgba(15,11,9,0.28)]",
             )}
           >
             <a
@@ -408,15 +408,12 @@ export function RadiantExperienceHeader({
               className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
             >
               <div className="flex items-center gap-2.5 sm:gap-3">
-                <div className="text-primary">
-                  <RadiantBrandLogo className="h-8 w-auto sm:h-9" />
+                <div className="shrink-0 text-primary">
+                  <RadiantBrandLogo className="block h-14 w-auto md:h-12" />
                 </div>
-                <div className="min-w-0 leading-[0.92]">
-                  <p className="truncate text-[1.02rem] font-medium tracking-[-0.04em] sm:text-[1.08rem]">
+                <div className="min-w-0 leading-none">
+                  <p className="truncate font-heading text-[1.45rem] leading-none tracking-[-0.06em] sm:text-[1.65rem]">
                     {content.brand.name}
-                  </p>
-                  <p className="max-w-44 truncate text-[0.68rem] text-current/58 sm:text-[0.72rem]">
-                    {content.brand.descriptor}
                   </p>
                 </div>
               </div>
@@ -425,7 +422,7 @@ export function RadiantExperienceHeader({
             <div className="flex min-w-0 items-center gap-2 sm:gap-3">
               <a
                 href={phoneHref}
-                className="flex size-14 items-center justify-center rounded-full bg-[#ece7e2] text-[#16161d] shadow-[0_16px_34px_-28px_rgba(17,15,14,0.5)] transition-transform hover:-translate-y-0.5 md:hidden"
+                className="flex size-14 items-center justify-center rounded-full bg-[#ece7e2] text-[#27272A] shadow-[0_16px_34px_-28px_rgba(17,15,14,0.5)] transition-transform hover:-translate-y-0.5 md:hidden"
                 aria-label={content.footer.contact.phone}
               >
                 <PhoneCallIcon className="size-5 stroke-[2.15]" />
@@ -433,17 +430,12 @@ export function RadiantExperienceHeader({
 
               <a
                 href="mailto:hello@radiant.studio"
-                className="hidden min-w-0 items-center gap-2 rounded-full px-3.5 py-2.5 text-right transition-colors hover:bg-muted/55 xl:flex"
+                className="hidden min-w-0 items-center gap-3 rounded-full px-3.5 py-2.5 text-right text-base transition-colors hover:bg-muted/55 xl:flex"
               >
-                <MailIcon className="size-3.5 shrink-0 text-current/55" />
-                <div className="min-w-0 leading-tight">
-                  <p className="truncate text-[0.7rem] tracking-[0.08em] text-current/52 uppercase">
-                    {content.brand.advisoryLabel}
-                  </p>
-                  <p className="truncate text-sm font-medium text-current">
-                    {content.brand.advisoryValue}
-                  </p>
-                </div>
+                <MailIcon className="size-5 shrink-0 text-current/55" />
+                <p className="truncate text-base font-medium text-current">
+                  {content.brand.advisoryValue}
+                </p>
               </a>
 
               <button
@@ -452,8 +444,8 @@ export function RadiantExperienceHeader({
                 className={cn(
                   buttonVariants({
                     className:
-                      "hidden h-11 rounded-full border-[#d5ccc2] bg-white/92 px-4 text-[#1e1b1a] hover:bg-white md:inline-flex",
-                    size: "sm",
+                      "hidden border-[#d5ccc2] bg-white/92 text-[#27272A] hover:bg-white md:inline-flex",
+                    size: "marketing",
                     variant: "outline",
                   }),
                 )}
@@ -466,17 +458,19 @@ export function RadiantExperienceHeader({
                 className={cn(
                   buttonVariants({
                     className:
-                      "hidden h-11 rounded-full bg-[#17171d] px-4 text-[#f7f2eb] hover:bg-[#17171d]/92 md:inline-flex lg:px-5",
-                    size: "sm",
+                      "hidden bg-[#17171d] text-[#f7f2eb] hover:bg-[#17171d]/92 md:inline-flex",
+                    size: "marketing",
                   }),
                 )}
                 href={bookCallHref}
                 aria-label={content.common.actions.bookCall}
               >
-                <span className="hidden lg:inline">
-                  {content.common.actions.bookCall}
+                <span className="inline-flex items-center justify-center gap-2">
+                  <span className="hidden lg:inline">
+                    {content.common.actions.bookCall}
+                  </span>
+                  <ArrowUpRightIcon data-icon="inline-end" />
                 </span>
-                <ArrowUpRightIcon data-icon="inline-end" />
               </a>
 
               <button
@@ -487,11 +481,11 @@ export function RadiantExperienceHeader({
                 aria-expanded={isMenuOpen}
                 aria-label={content.brand.menu}
                 className={cn(
-                  "flex size-14 items-center justify-center rounded-full bg-[#17171d] text-white shadow-[0_18px_36px_-28px_rgba(17,15,14,0.6)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17171d]/25 hover:-translate-y-0.5 md:h-11 md:w-auto md:min-w-28 md:gap-2 md:px-4",
+                  "flex size-14 items-center justify-center rounded-full bg-[#17171d] text-white shadow-[0_18px_36px_-28px_rgba(17,15,14,0.6)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17171d]/25 hover:-translate-y-0.5 md:h-12 md:w-auto md:min-w-[7.75rem] md:gap-2 md:px-5",
                   isMenuRendered && "bg-[#111218]",
                 )}
               >
-                <span className="hidden text-sm font-medium tracking-[-0.02em] md:inline">
+                <span className="hidden text-base font-medium tracking-[-0.02em] md:inline">
                   {content.brand.menu}
                 </span>
                 {isMenuRendered ? (
@@ -555,15 +549,12 @@ export function RadiantExperienceHeader({
                         className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
                       >
                         <div className="flex items-center gap-2.5 sm:gap-3">
-                          <div className="text-primary">
-                            <RadiantBrandLogo className="h-7 w-auto sm:h-8" />
+                          <div className="shrink-0 text-primary">
+                            <RadiantBrandLogo className="block h-14 w-auto" />
                           </div>
-                          <div className="min-w-0 leading-[0.92] text-white">
-                            <p className="truncate text-[1.02rem] font-medium tracking-[-0.04em] sm:text-[1.08rem]">
+                          <div className="min-w-0 leading-none text-white">
+                            <p className="truncate font-heading text-[1.45rem] leading-none tracking-[-0.06em] sm:text-[1.65rem]">
                               {content.brand.name}
-                            </p>
-                            <p className="max-w-44 truncate text-[0.7rem] text-white/62 sm:text-[0.72rem]">
-                              {content.brand.descriptor}
                             </p>
                           </div>
                         </div>
@@ -574,7 +565,7 @@ export function RadiantExperienceHeader({
                         ref={menuCloseButtonRef}
                         onClick={closeMenu}
                         aria-label="Close navigation menu"
-                        className="flex size-14 items-center justify-center rounded-full bg-[#f1ece8] text-[#15161d] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5"
+                        className="flex size-14 items-center justify-center rounded-full bg-[#f1ece8] text-[#27272A] shadow-[0_18px_34px_-28px_rgba(0,0,0,0.7)] transition-transform hover:-translate-y-0.5"
                       >
                         <XIcon className="size-5" />
                       </button>
@@ -583,7 +574,7 @@ export function RadiantExperienceHeader({
                     <div className="mt-12 flex flex-1 flex-col gap-10 lg:mt-16 lg:grid lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-16">
                       <div className="hidden lg:flex lg:flex-col lg:justify-between lg:pb-3">
                         <div className="max-w-[18rem]">
-                          <p className="text-[0.72rem] font-medium tracking-[0.24em] text-white/42 uppercase">
+                          <p className="text-base font-medium tracking-[0.24em] text-white/42 uppercase">
                             {content.services.title}
                           </p>
                           <div className="mt-6 grid gap-3">
@@ -594,7 +585,7 @@ export function RadiantExperienceHeader({
                                 onClick={closeMenu}
                                 className="rounded-[1.5rem] border border-white/8 bg-white/3 px-4 py-3 transition-colors hover:border-white/16 hover:bg-white/6"
                               >
-                                <p className="text-[0.68rem] tracking-[0.2em] text-white/42 uppercase">
+                                <p className="text-base tracking-[0.2em] text-white/42 uppercase">
                                   {item.eyebrow}
                                 </p>
                                 <p className="mt-2 text-[1.05rem] leading-6 text-white/92">
@@ -621,7 +612,7 @@ export function RadiantExperienceHeader({
                             </div>
                           ) : null}
 
-                          <div className="flex items-center justify-between gap-8 border-t border-white/10 pt-5 text-sm">
+                          <div className="flex items-center justify-between gap-8 border-t border-white/10 pt-5 text-base">
                             {utilityLinks.map((item) => (
                               <a
                                 key={item.label}
@@ -640,8 +631,8 @@ export function RadiantExperienceHeader({
                             className={cn(
                               buttonVariants({
                                 className:
-                                  "h-11 rounded-full border-white/14 bg-transparent px-4 text-white hover:bg-white/8",
-                                size: "sm",
+                                  "border-white/14 bg-transparent text-white hover:bg-white/8",
+                                size: "marketing",
                                 variant: "outline",
                               }),
                             )}
@@ -698,10 +689,10 @@ export function RadiantExperienceHeader({
                                     onClick={closeMenu}
                                     className="rounded-[1.15rem] border border-white/10 px-3 py-2.5"
                                   >
-                                    <p className="text-[0.64rem] tracking-[0.18em] text-white/42 uppercase">
+                                    <p className="text-base tracking-[0.18em] text-white/42 uppercase">
                                       {item.eyebrow}
                                     </p>
-                                    <p className="mt-1.5 text-[0.94rem] leading-5 text-white/84">
+                                    <p className="mt-1.5 text-base leading-6 text-white/84">
                                       {item.label}
                                     </p>
                                   </a>
@@ -739,7 +730,7 @@ export function RadiantExperienceHeader({
                           <a
                             href={bookCallHref}
                             onClick={closeMenu}
-                            className="mt-8 inline-flex w-full max-w-67 items-center justify-between gap-4 rounded-full bg-[#f1ece8] px-6 py-4 text-[1rem] font-semibold tracking-[-0.02em] text-[#1b1c22] shadow-[0_24px_56px_-36px_rgba(0,0,0,0.8)] transition-transform hover:-translate-y-0.5 lg:mt-10"
+                            className="mt-8 inline-flex h-12 w-full max-w-67 items-center justify-center gap-2 rounded-full bg-[#f1ece8] px-5 text-center text-base font-medium tracking-[-0.02em] text-[#27272A] shadow-[0_24px_56px_-36px_rgba(0,0,0,0.8)] transition-transform hover:-translate-y-0.5 lg:mt-10"
                           >
                             <span>{content.common.actions.bookCall}</span>
                             <ArrowUpRightIcon className="size-4.5" />
@@ -747,7 +738,7 @@ export function RadiantExperienceHeader({
                         </div>
 
                         <div className="mt-auto pt-12 lg:hidden">
-                          <div className="flex items-center justify-between gap-4 text-[0.95rem]">
+                          <div className="flex items-center justify-between gap-4 text-base">
                             {utilityLinks.map((item, index) => (
                               <a
                                 key={item.label}
@@ -785,8 +776,8 @@ export function RadiantExperienceHeader({
                               className={cn(
                                 buttonVariants({
                                   className:
-                                    "h-11 rounded-full border-white/14 bg-transparent px-4 text-white hover:bg-white/8",
-                                  size: "sm",
+                                    "border-white/14 bg-transparent text-white hover:bg-white/8",
+                                  size: "marketing",
                                   variant: "outline",
                                 }),
                               )}

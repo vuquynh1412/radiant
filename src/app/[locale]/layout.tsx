@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import localFont from "next/font/local";
-import { Geist_Mono, Inika } from "next/font/google";
+import { Afacad_Flux, Geist_Mono, Literata } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import "@/app/globals.css";
@@ -15,21 +14,10 @@ import { routing } from "@/i18n/routing";
 import { getLanguageAlternates, getLocalizedUrl } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
-const montserrat = localFont({
-  src: [
-    {
-      path: "../fonts/Montserrat-VariableFont_wght.ttf",
-      style: "normal",
-      weight: "100 900",
-    },
-    {
-      path: "../fonts/Montserrat-Italic-VariableFont_wght.ttf",
-      style: "italic",
-      weight: "100 900",
-    },
-  ],
+const afacadFlux = Afacad_Flux({
   display: "swap",
-  variable: "--font-montserrat",
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-afacad-flux",
 });
 
 const geistMono = Geist_Mono({
@@ -37,23 +25,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin", "latin-ext"],
 });
 
-const eleanor = localFont({
-  src: [
-    {
-      path: "../fonts/1FTV-VIP-Eleanor-Goenka.otf",
-      style: "normal",
-      weight: "400",
-    },
-  ],
+const literata = Literata({
   display: "swap",
-  variable: "--font-eleanor",
-});
-
-const inika = Inika({
-  display: "swap",
+  axes: ["opsz"],
   subsets: ["latin", "latin-ext"],
-  variable: "--font-inika",
-  weight: ["400", "700"],
+  variable: "--font-literata",
 });
 
 type LocaleLayoutProps = Readonly<{
@@ -130,7 +106,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${montserrat.variable} ${geistMono.variable} ${eleanor.variable} ${inika.variable} h-full antialiased`}
+      className={`${afacadFlux.variable} ${geistMono.variable} ${literata.variable} h-full antialiased`}
     >
       <body className="min-h-screen bg-background font-sans text-foreground">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

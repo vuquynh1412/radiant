@@ -23,19 +23,19 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
       key: "facebook",
       href: radiantSocialLinks.facebook,
       label: content.footer.socials.facebook,
-      icon: <span className="text-sm font-medium">f</span>,
+      icon: <span className="text-base font-medium">f</span>,
     },
     {
       key: "instagram",
       href: radiantSocialLinks.instagram,
       label: content.footer.socials.instagram,
-      icon: <span className="text-[0.8rem] font-medium uppercase">ig</span>,
+      icon: <span className="text-base font-medium uppercase">ig</span>,
     },
     {
       key: "linkedin",
       href: radiantSocialLinks.linkedin,
       label: content.footer.socials.linkedin,
-      icon: <span className="text-[0.78rem] font-semibold lowercase">in</span>,
+      icon: <span className="text-base font-semibold lowercase">in</span>,
     },
     {
       key: "x",
@@ -47,7 +47,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
       key: "youtube",
       href: radiantSocialLinks.youtube,
       label: content.footer.socials.youtube,
-      icon: <span className="text-[0.78rem] font-medium uppercase">yt</span>,
+      icon: <span className="text-base font-medium uppercase">yt</span>,
     },
   ].flatMap((item) => (item.href ? [{ ...item, href: item.href }] : []));
 
@@ -136,7 +136,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
               {Array.from({ length: footerTickerRepeats }).map((_, index) => (
                 <span
                   key={`footer-track-a-${index}`}
-                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(5rem,14vw,13rem)] leading-none tracking-[0.02em] text-white/13"
+                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(7.5rem,21vw,19.5rem)] leading-none tracking-[0.02em] text-white/13"
                 >
                   <span>{content.footer.patternLabel}</span>
                   <span className="text-[0.44em]">✦</span>
@@ -150,7 +150,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
               {Array.from({ length: footerTickerRepeats }).map((_, index) => (
                 <span
                   key={`footer-track-b-${index}`}
-                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(5rem,14vw,13rem)] leading-none tracking-[0.02em] text-white/13"
+                  className="mr-10 inline-flex items-center gap-10 font-heading text-[clamp(7.5rem,21vw,19.5rem)] leading-none tracking-[0.02em] text-white/13"
                 >
                   <span>{content.footer.patternLabel}</span>
                   <span className="text-[0.44em]">✦</span>

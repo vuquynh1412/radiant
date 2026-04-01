@@ -52,7 +52,7 @@ function CallToActionBody({
       <p
         ref={eyebrowRef}
         className={cn(
-          "text-[0.72rem] font-medium tracking-[0.26em] text-[#201d1a]/58 uppercase",
+          "text-base font-medium tracking-[0.26em] text-[#27272A] uppercase",
           eyebrowClassName,
         )}
       >
@@ -61,7 +61,7 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "title-display-inika mx-auto mt-4 max-w-[13ch] text-[#171614]",
+          "title-display-inika mx-auto mt-4 max-w-[13ch] text-[#27272A]",
           titleClassName,
         )}
       >
@@ -70,7 +70,7 @@ function CallToActionBody({
       <p
         ref={bodyRef}
         className={cn(
-          "mx-auto mt-5 max-w-2xl text-[1rem] leading-7 text-[#201d1a]/68 sm:text-[1.08rem]",
+          "mx-auto mt-5 max-w-2xl text-[1rem] leading-7 text-[#27272A] sm:text-[1.08rem]",
           bodyClassName,
         )}
       >
@@ -88,19 +88,21 @@ function CallToActionBody({
           className={cn(
             buttonVariants({
               className:
-                "h-13 rounded-full border-[#171614]/16 bg-[#171614] px-7 text-white hover:bg-[#171614]/92",
-              size: "lg",
+                "border-[#171614]/16 bg-[#171614] text-white hover:bg-[#171614]/92",
+              size: "marketing",
               variant: "default",
             }),
           )}
           href="mailto:hello@radiant.studio?subject=Radiant%20strategy%20call"
         >
-          {content.cta.buttonLabel}
-          <ArrowUpRightIcon data-icon="inline-end" />
+          <span className="inline-flex items-center justify-center gap-2">
+            <span>{content.cta.buttonLabel}</span>
+            <ArrowUpRightIcon data-icon="inline-end" />
+          </span>
         </a>
 
         <a
-          className="inline-flex items-center gap-2 text-sm text-[#201d1a]/72 transition-colors hover:text-[#171614]"
+          className="inline-flex items-center gap-2 text-base text-[#27272A] transition-colors hover:text-[#27272A]"
           href="mailto:hello@radiant.studio?subject=Radiant%20capability%20review"
         >
           <MailIcon className="size-4" />

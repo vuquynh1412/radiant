@@ -7,9 +7,9 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat);
+  --font-sans: var(--font-afacad-flux);
   --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-eleanor);
+  --font-heading: var(--font-literata);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -53,19 +53,19 @@
   --brand-secondary: #e2b649;
   --site-gutter: 16px;
   --background: oklch(0.985 0.01 82.71);
-  --foreground: oklch(0.24 0.013 38.28);
+  --foreground: #27272A;
   --card: oklch(0.995 0.004 84.35);
-  --card-foreground: oklch(0.24 0.013 38.28);
+  --card-foreground: #27272A;
   --popover: oklch(0.995 0.004 84.35);
-  --popover-foreground: oklch(0.24 0.013 38.28);
+  --popover-foreground: #27272A;
   --primary: var(--brand-primary);
   --primary-foreground: #fff9f2;
   --secondary: var(--brand-secondary);
-  --secondary-foreground: #3f2609;
+  --secondary-foreground: #27272A;
   --muted: oklch(0.955 0.008 78.67);
-  --muted-foreground: oklch(0.53 0.012 39.41);
+  --muted-foreground: #27272A;
   --accent: #f2ddb0;
-  --accent-foreground: #3f2609;
+  --accent-foreground: #27272A;
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.88 0.008 73.74);
   --input: oklch(0.88 0.008 73.74);
@@ -77,7 +77,7 @@
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-foreground: #27272A;
   --sidebar-primary: var(--brand-primary);
   --sidebar-primary-foreground: #fff9f2;
   --sidebar-accent: oklch(0.97 0 0);
@@ -92,7 +92,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   :root {
     --site-gutter: 40px;
   }
@@ -166,11 +166,13 @@ html {
 
 @layer utilities {
   .font-heading {
-    font-family: var(--font-eleanor);
+    font-family: var(--font-literata);
+    font-variation-settings: "opsz" 60;
   }
 
   .font-inika {
-    font-family: var(--font-inika);
+    font-family: var(--font-literata);
+    font-variation-settings: "opsz" 60;
   }
 
   .site-gutter {
@@ -178,31 +180,35 @@ html {
   }
 
   .title-display {
-    font-family: var(--font-eleanor);
+    font-family: var(--font-literata);
+    font-variation-settings: "opsz" 60;
     font-size: 24px;
     line-height: 1;
     letter-spacing: -0.055em;
   }
 
   .title-display-inika {
-    font-family: var(--font-inika);
+    font-family: var(--font-literata);
+    font-variation-settings: "opsz" 60;
     font-size: 24px;
     line-height: 1;
     letter-spacing: -0.055em;
   }
 
   .hero-title-display {
-    font-family: var(--font-inika);
+    font-family: var(--font-literata);
+    font-variation-settings: "opsz" 60;
     font-size: 56px;
     line-height: 0.9;
     letter-spacing: -0.07em;
   }
 
   .hero-marquee-display {
-    font-family: var(--font-inika);
+    font-family: var(--font-literata);
+    font-variation-settings: "opsz" 60;
     font-size: 40px;
     line-height: 0.92;
-    letter-spacing: -0.07em;
+    letter-spacing: -0.035em;
   }
 
   @media (min-width: 768px) {

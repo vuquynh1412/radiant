@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import { projectGalleryImages } from "@/content/project-gallery-images";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
@@ -60,7 +61,7 @@ export function RadiantProjectsSection({
           </h2>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-sm sm:mt-10 sm:justify-start">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-base sm:mt-10 sm:justify-start">
           {projects.filters.map((filter) => {
             const isActive = filter.key === activeFilter;
 
@@ -107,7 +108,7 @@ export function RadiantProjectsSection({
                     src={image.src}
                   />
                 </div>
-                <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-[0.875rem] font-medium leading-[1.12] tracking-[-0.02em] text-(--projects-card-title-color) md:text-[1.125rem]">
+                <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium leading-[1.12] tracking-[-0.02em] text-(--projects-card-title-color) md:text-[1.125rem]">
                   {item.title}
                 </h3>
               </article>
@@ -123,7 +124,12 @@ export function RadiantProjectsSection({
                 setActiveFilter("all");
               });
             }}
-            className="inline-flex h-12 items-center gap-2 rounded-full border border-(--projects-button-border-color) px-5 text-[0.96rem] font-medium text-(--projects-button-text-color) transition-colors duration-200 hover:bg-(--projects-button-hover-bg)"
+            className={buttonVariants({
+              className:
+                "border-(--projects-button-border-color) bg-transparent text-(--projects-button-text-color) hover:bg-(--projects-button-hover-bg)",
+              size: "marketing",
+              variant: "outline",
+            })}
           >
             <span>{viewAllLabel}</span>
             <ArrowRightIcon className="size-4" />

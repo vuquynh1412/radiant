@@ -47,19 +47,15 @@ function MobileShowcaseHero({
   mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
   mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
 }) {
-  const serviceTitles = content.services.items
-    .slice(0, 3)
-    .map((item) => item.title);
-
   return (
     <div ref={mobileHeroSectionRef} className="relative md:hidden">
       <div className="sticky top-0 z-10 h-[56.5svh] overflow-hidden bg-[#f6f1eb]">
         <div
           ref={mobileHeroTopContentRef}
-          className="site-gutter relative z-10 flex h-full flex-col justify-between pb-7 pt-24 will-change-transform"
+          className="site-gutter relative z-10 flex h-full items-center justify-center pt-24 will-change-transform"
         >
-          <div className="mx-auto flex max-w-[20rem] flex-1 items-center justify-center">
-            <div className="space-y-1.5 text-center text-[#4c4846]">
+          <div className="mx-auto flex max-w-[20rem] items-center justify-center">
+            <div className="space-y-1.5 text-center text-[#27272A]">
               <p className="hero-title-display">{content.hero.title.premium}</p>
               <p className="hero-title-display">
                 {content.hero.title.esthetic}
@@ -69,10 +65,6 @@ function MobileShowcaseHero({
               </p>
             </div>
           </div>
-
-          <p className="mx-auto max-w-66 text-center font-heading text-[1.15rem] leading-[0.95] tracking-[-0.045em] text-[#66615c]">
-            {content.hero.promise}
-          </p>
         </div>
         <div
           ref={mobileHeroTopOverlayRef}
@@ -95,14 +87,6 @@ function MobileShowcaseHero({
         <div className="absolute bottom-[-8%] right-[-6%] h-48 w-48 rounded-full bg-[#ffe1c3]/12 blur-3xl" />
         <div className="pointer-events-none absolute right-[-20%] top-[8%] h-72 w-56 text-white/8">
           <RadiantHeroLogo className="size-full" />
-        </div>
-
-        <div className="site-gutter absolute inset-x-0 bottom-8 z-10">
-          <div className="mx-auto flex w-fit flex-col items-center gap-1.5 text-center text-[0.72rem] font-semibold leading-none tracking-[-0.02em] text-white/92">
-            {serviceTitles.map((title) => (
-              <p key={title}>{title}</p>
-            ))}
-          </div>
         </div>
       </div>
 
@@ -157,7 +141,7 @@ function ReducedMotionDesktopShowcase({
 
           <div className="mt-10 inline-flex max-w-152 items-center gap-3 rounded-full border border-white/14 bg-black/22 px-5 py-3 text-white/78 backdrop-blur-md">
             <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
-            <span className="text-[0.72rem] font-medium tracking-[0.18em] uppercase">
+            <span className="text-base font-medium tracking-[0.18em] uppercase">
               {content.hero.marquee}
             </span>
           </div>
@@ -166,25 +150,15 @@ function ReducedMotionDesktopShowcase({
 
       <div className="site-gutter bg-background py-16 lg:py-20">
         <div className="mx-auto max-w-6xl">
-          <div className="max-w-3xl">
-            <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
-              {content.services.eyebrow}
-            </p>
-            <h2 className="title-display-inika mt-5">
-              {content.services.title}
-            </h2>
-            <p className="mt-5 text-[1.05rem] leading-8 text-muted-foreground">
-              {content.services.intro}
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {content.services.items.map((item, index) => (
               <ServiceCard
                 key={`${item.title}-reduced-motion`}
-                className="h-full"
+                className="h-full gap-4"
                 description={item.description}
                 eyebrow={item.eyebrow}
+                hideEyebrow
+                tileClassName="h-full min-h-56"
                 title={item.title}
                 variant={serviceVisuals[index % serviceVisuals.length]}
               />
@@ -290,7 +264,7 @@ export function RadiantShowcaseSection({
                 </div>
               </div>
               <div
-                className="absolute inset-0 text-[#4c4846]"
+                className="absolute inset-0 text-[#27272A]"
                 style={{
                   clipPath:
                     "inset(0 calc(100vw - var(--hero-mask-x, 50vw)) 0 0)",
@@ -348,8 +322,18 @@ export function RadiantShowcaseSection({
             ref={serviceHeaderRef}
             className="pointer-events-none absolute inset-x-0 top-0 z-30 opacity-0 will-change-transform"
           >
-            <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
-              <h2 className="title-display-inika">{content.services.title}</h2>
+            <div className="site-gutter mx-auto max-w-384 pt-20">
+              <div className="max-w-[34rem]">
+                <p className="text-base font-medium tracking-[0.24em] text-[#27272A] uppercase">
+                  {content.services.eyebrow}
+                </p>
+                <h2 className="mt-4 font-heading text-[clamp(3rem,5vw,4.75rem)] leading-[0.94] tracking-[-0.06em] text-[#27272A]">
+                  {content.services.title}
+                </h2>
+                <p className="mt-5 max-w-[33rem] text-[1rem] leading-7 text-[#27272A]">
+                  {content.services.intro}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -357,30 +341,33 @@ export function RadiantShowcaseSection({
             ref={activeServiceCopyShellRef}
             className="pointer-events-none absolute inset-x-0 top-0 z-30 opacity-0 will-change-transform"
           >
-            <div className="relative mx-auto h-64 w-[min(92vw,42rem)]">
-              {content.services.items.map((item, index) => (
-                <div
-                  key={`${item.title}-desktop-copy`}
-                  ref={(node) => {
-                    serviceCopyRefs.current[index] = node;
-                  }}
-                  className="absolute inset-0 text-center opacity-0 will-change-transform"
-                >
-                  <ServiceCopy
-                    className="items-center"
-                    description={item.description}
-                    eyebrow={item.eyebrow}
-                    title={item.title}
-                  />
-                </div>
-              ))}
+            <div className="site-gutter mx-auto max-w-384">
+              <div className="relative mx-auto w-[clamp(25.5rem,32vw,31rem)]">
+                {content.services.items.map((item, index) => (
+                  <div
+                    key={`${item.title}-copy`}
+                    ref={(node) => {
+                      serviceCopyRefs.current[index] = node;
+                    }}
+                    className="absolute left-0 top-0 w-full opacity-0"
+                  >
+                    <ServiceCopy
+                      className="max-w-[26rem] gap-3"
+                      description={item.description}
+                      eyebrow={item.eyebrow}
+                      hideEyebrow
+                      title={item.title}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           <div className="pointer-events-none absolute inset-0">
             <div
               ref={sampleTileRef}
-              className="absolute left-0 top-0 z-10 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
+              className="absolute left-0 top-0 z-10 aspect-video w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
             >
               <ServiceTile
                 className="size-full rounded-[inherit] border-0 shadow-none"
@@ -394,7 +381,7 @@ export function RadiantShowcaseSection({
                 ref={(node) => {
                   serviceCardsRef.current[index] = node;
                 }}
-                className="absolute left-0 top-0 z-20 aspect-[1.24/1] w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
+                className="absolute left-0 top-0 z-20 aspect-video w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
                 style={{ transformOrigin: "top center" }}
               >
                 <ServiceTile
@@ -410,28 +397,17 @@ export function RadiantShowcaseSection({
       <ReducedMotionDesktopShowcase content={content} />
 
       <div className="site-gutter py-16 md:hidden">
-        <div className="flex flex-col gap-5">
-          <p className="text-[0.72rem] font-medium tracking-[0.18em] text-muted-foreground uppercase">
-            {content.services.eyebrow}
-          </p>
-          <h2 className="font-heading text-[3rem] leading-none tracking-[-0.07em]">
-            {content.services.title}
-          </h2>
-          <p className="text-sm leading-7 text-muted-foreground">
-            {content.services.intro}
-          </p>
-        </div>
-        <div className="mt-10 grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {content.services.items.map((item, index) => (
             <ServiceCard
               key={`${item.title}-mobile`}
+              className="gap-3"
               description={item.description}
               eyebrow={item.eyebrow}
-              hideDescription
               hideEyebrow
               tileClassName="rounded-[10px]"
-              titleClassName="text-[1rem] font-medium leading-[1.12] text-center"
               title={item.title}
+              titleClassName="text-[1.2rem] leading-[1.06]"
               variant={serviceVisuals[index % serviceVisuals.length]}
             />
           ))}
