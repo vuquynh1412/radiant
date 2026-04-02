@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import {
+  useCallback,
   useEffect,
+  useRef,
   useState,
   useSyncExternalStore,
   type CSSProperties,
-  type ReactNode,
 } from "react";
 
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ import type {
 } from "./radiant-experience.types";
 
 type RadiantCapabilityMatrixSectionProps = {
+  bubblesEnabled: boolean;
   content: RadiantExperienceContent;
   capabilityMatrixSectionRef: RadiantExperienceRefs["capabilityMatrixSectionRef"];
   capabilityMatrixContentRef: RadiantExperienceRefs["capabilityMatrixContentRef"];
@@ -30,6 +32,7 @@ type RotatingImageSlotProps = {
   altLabel: string;
   className?: string;
   delayMs?: number;
+  imagePosition?: "left" | "center" | "right";
   images: string[];
   isActive?: boolean;
   priority?: boolean;
@@ -39,13 +42,17 @@ const tickerRepeatCount = 8;
 const desktopMediaQuery = "(min-width: 768px)";
 const supportsIntersectionObserver =
   typeof IntersectionObserver !== "undefined";
-const desktopRowHeight = "clamp(9.5rem, 16.5vh, 12rem)";
+
+const bubbleColors = [
+  "rgb(239, 188, 174)", // orange/peach
+  "rgb(250, 218, 209)", // pink
+  "rgb(241, 231, 209)", // warm cream
+  "rgb(255, 255, 255)", // white
+];
 
 function subscribeToDesktopBreakpoint(onStoreChange: () => void) {
   const mediaQuery = window.matchMedia(desktopMediaQuery);
-
   mediaQuery.addEventListener("change", onStoreChange);
-
   return () => {
     mediaQuery.removeEventListener("change", onStoreChange);
   };
@@ -90,10 +97,10 @@ function PatternTicker({
             key={`${label}-${index}`}
             className="flex items-center gap-3 md:gap-4"
           >
-            <span className="font-heading text-[clamp(2.15rem,3.95vw,3.75rem)] leading-none tracking-[0.03em] text-(--matrix-ticker-color)">
+            <span className="font-heading text-[clamp(2.5rem,5vw,4.8rem)] leading-none tracking-[0.03em] text-(--matrix-ticker-color)">
               {label}
             </span>
-            <RadiantSparkIcon className="size-4 text-(--matrix-ticker-color) md:size-5 lg:size-[2.35rem]" />
+            <RadiantSparkIcon className="size-5 text-(--matrix-ticker-color) md:size-6 lg:size-[2.8rem]" />
           </div>
         ))}
       </div>
@@ -105,6 +112,7 @@ function RotatingImageSlot({
   altLabel,
   className,
   delayMs = 0,
+  imagePosition,
   images,
   isActive = true,
   priority = false,
@@ -136,8 +144,9 @@ function RotatingImageSlot({
 
   return (
     <div
+      data-matrix-image={imagePosition || "center"}
       className={cn(
-        "relative overflow-hidden rounded-[0.95rem] bg-[#d4ccc2] shadow-[0_18px_48px_-34px_rgba(20,15,11,0.35)]",
+        "relative overflow-hidden rounded-[1rem]",
         className,
       )}
     >
@@ -163,6 +172,283 @@ function RotatingImageSlot({
   );
 }
 
+// --- Bubble System ---
+
+function useBubbleSystem(
+  pills: string[],
+  wordRefs: React.RefObject<Array<HTMLDivElement | null>>,
+  isActive: boolean,
+) {
+  const contentIndexRef = useRef(0);
+  const colorIndexRef = useRef(0);
+  const parentIndexRef = useRef(0);
+
+  const createBubble = useCallback(() => {
+    const words = wordRefs.current;
+    if (!words || !pills.length) return;
+
+    const validParents = words.filter(Boolean);
+    if (!validParents.length) return;
+
+    // Cycle through parents
+    const parentIndex = parentIndexRef.current % validParents.length;
+    parentIndexRef.current = parentIndex + 1;
+    const parent = validParents[parentIndex];
+    if (!parent) return;
+
+    // Find the bubbles container inside this word
+    const bubblesContainer = parent.querySelector(
+      "[data-bubbles]",
+    ) as HTMLDivElement | null;
+    if (!bubblesContainer) return;
+
+    // Cycle through content
+    const text = pills[contentIndexRef.current % pills.length];
+    contentIndexRef.current += 1;
+
+    // Cycle through colors (advance by 1 or 2 randomly)
+    const colorAdvance = Math.random() > 0.5 ? 1 : 2;
+    colorIndexRef.current =
+      (colorIndexRef.current + colorAdvance) % bubbleColors.length;
+    const bgColor = bubbleColors[colorIndexRef.current];
+
+    // Create DOM element
+    const bubble = document.createElement("div");
+    bubble.className = "matrix-bubble";
+    bubble.textContent = text;
+    bubble.style.top = `${15 + 70 * Math.random()}%`;
+    bubble.style.left = `${30 + 40 * Math.random()}%`;
+    bubble.style.backgroundColor = bgColor;
+    bubble.style.fontSize = "clamp(0.75rem, 1vw, 0.875rem)";
+    bubble.style.letterSpacing = "0.03em";
+    bubble.style.padding = "0.5rem 1rem";
+    bubble.style.color = "rgb(0, 0, 0)";
+    bubble.style.zIndex = "10";
+
+    bubblesContainer.appendChild(bubble);
+
+    // Appear after 100ms
+    const appearTimeout = window.setTimeout(() => {
+      bubble.classList.add("matrix-bubble-visible");
+    }, 100);
+
+    // Disappear after 5-10s
+    const lifetime = 5000 + 5000 * Math.random();
+    const disappearTimeout = window.setTimeout(() => {
+      bubble.classList.remove("matrix-bubble-visible");
+
+      // Remove from DOM after transition
+      const removeTimeout = window.setTimeout(() => {
+        if (bubble.parentNode) {
+          bubble.parentNode.removeChild(bubble);
+        }
+      }, 1000);
+
+      bubble.setAttribute("data-remove-timeout", String(removeTimeout));
+    }, lifetime);
+
+    bubble.setAttribute("data-appear-timeout", String(appearTimeout));
+    bubble.setAttribute("data-disappear-timeout", String(disappearTimeout));
+  }, [pills, wordRefs]);
+
+  useEffect(() => {
+    if (!isActive) return undefined;
+
+    let timeoutId: number | undefined;
+
+    const scheduleNext = () => {
+      const delay = 500 + 1200 * Math.random();
+      timeoutId = window.setTimeout(() => {
+        createBubble();
+        scheduleNext();
+      }, delay);
+    };
+
+    scheduleNext();
+
+    return () => {
+      if (timeoutId) {
+        window.clearTimeout(timeoutId);
+      }
+      // Clean up all bubbles
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      const words = wordRefs.current;
+      if (words) {
+        for (const word of words) {
+          if (!word) continue;
+          const container = word.querySelector("[data-bubbles]");
+          if (container) {
+            const bubbles = container.querySelectorAll(".matrix-bubble");
+            for (const b of bubbles) {
+              const at = b.getAttribute("data-appear-timeout");
+              const dt = b.getAttribute("data-disappear-timeout");
+              const rt = b.getAttribute("data-remove-timeout");
+              if (at) window.clearTimeout(Number(at));
+              if (dt) window.clearTimeout(Number(dt));
+              if (rt) window.clearTimeout(Number(rt));
+              b.remove();
+            }
+          }
+        }
+      }
+    };
+  }, [isActive, createBubble, wordRefs]);
+}
+
+// --- BackgroundWord ---
+
+const matrixFontSize = "clamp(4.5rem,9.5vw,9.2rem)";
+
+function BackgroundWord({
+  text,
+  wordRef,
+  className,
+}: {
+  text: string;
+  wordRef: (el: HTMLDivElement | null) => void;
+  className?: string;
+}) {
+  return (
+    <div ref={wordRef} className={cn("relative z-[2]", className)}>
+      <span
+        className="font-anton inline-block uppercase leading-[0.85] tracking-[0.02em] text-(--matrix-word-color) whitespace-nowrap"
+        style={{ fontSize: matrixFontSize }}
+      >
+        {Array.from(text).map((char, i) => (
+          <span
+            key={`${char}-${i}`}
+            data-matrix-letter=""
+            className="inline-block"
+          >
+            {char}
+          </span>
+        ))}
+      </span>
+      <div data-bubbles className="absolute inset-0 overflow-visible" />
+    </div>
+  );
+}
+
+// --- Desktop Matrix ---
+
+function DesktopMatrix({
+  altLabel,
+  bubblesEnabled,
+  imageSlots,
+  isActive,
+  pills,
+  rows,
+}: {
+  altLabel: string;
+  bubblesEnabled: boolean;
+  imageSlots: RadiantExperienceContent["capabilityMatrix"]["imageSlots"];
+  isActive: boolean;
+  pills: string[];
+  rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
+}) {
+  const wordRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const setWordRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      wordRefs.current[index] = el;
+    },
+    [],
+  );
+
+  useBubbleSystem(pills, wordRefs, isActive && bubblesEnabled);
+
+  const rowClassName =
+    "relative grid items-center gap-6 pt-[2.2rem] pb-[3.4rem] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-black/10";
+  const imageClassName = "h-[clamp(5.5rem,11vw,10.7rem)] min-w-0";
+
+  return (
+    <div data-matrix-layout="desktop" className="hidden md:flex md:flex-col">
+      {/* Row 1: [image] [BRANDING] [image] */}
+      <div
+        data-matrix-row=""
+        className={rowClassName}
+        style={{ gridTemplateColumns: "1fr auto 1fr" }}
+      >
+        <RotatingImageSlot
+          altLabel={altLabel}
+          className={imageClassName}
+          delayMs={0}
+          imagePosition="left"
+          images={imageSlots.slotA}
+          isActive={isActive}
+          priority
+        />
+        <BackgroundWord
+          text={rows.branding}
+          wordRef={setWordRef(0)}
+        />
+        <RotatingImageSlot
+          altLabel={altLabel}
+          className={imageClassName}
+          delayMs={180}
+          imagePosition="right"
+          images={imageSlots.slotB}
+          isActive={isActive}
+        />
+      </div>
+
+      {/* Row 2: [MARKETING] [image] [SOCIALS] */}
+      <div
+        data-matrix-row=""
+        className={rowClassName}
+        style={{ gridTemplateColumns: "auto 1fr auto" }}
+      >
+        <BackgroundWord
+          text={rows.marketing}
+          wordRef={setWordRef(1)}
+        />
+        <RotatingImageSlot
+          altLabel={altLabel}
+          className={imageClassName}
+          delayMs={360}
+          imagePosition="center"
+          images={imageSlots.slotC}
+          isActive={isActive}
+        />
+        <BackgroundWord
+          text={rows.socials}
+          wordRef={setWordRef(2)}
+        />
+      </div>
+
+      {/* Row 3: [image] [STORYTELLING] [image] */}
+      <div
+        data-matrix-row=""
+        className={rowClassName}
+        style={{ gridTemplateColumns: "1fr auto 1fr" }}
+      >
+        <RotatingImageSlot
+          altLabel={altLabel}
+          className={imageClassName}
+          delayMs={540}
+          imagePosition="left"
+          images={imageSlots.slotD}
+          isActive={isActive}
+        />
+        <BackgroundWord
+          text={rows.storytelling}
+          wordRef={setWordRef(3)}
+        />
+        <RotatingImageSlot
+          altLabel={altLabel}
+          className={imageClassName}
+          delayMs={720}
+          imagePosition="right"
+          images={imageSlots.slotE}
+          isActive={isActive}
+        />
+      </div>
+    </div>
+  );
+}
+
+// --- Mobile Matrix ---
+
 function MobileMatrix({
   altLabel,
   imageSlots,
@@ -174,39 +460,46 @@ function MobileMatrix({
   isActive: boolean;
   rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
 }) {
+  const wordRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  const setWordRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      wordRefs.current[index] = el;
+    },
+    [],
+  );
+
   const mobileRows: Array<{
     key: string;
     label: string;
     slots: CapabilityMatrixSlotKey[];
   }> = [
     { key: "branding", label: rows.branding, slots: ["slotA", "slotB"] },
-    { key: "marketing", label: rows.marketing, slots: ["slotC"] },
-    { key: "socials", label: rows.socials, slots: ["slotD"] },
-    { key: "storytelling", label: rows.storytelling, slots: ["slotE"] },
+    { key: "digital", label: rows.marketing, slots: ["slotC"] },
+    { key: "socials", label: rows.socials, slots: ["slotC"] },
+    { key: "storytelling", label: rows.storytelling, slots: ["slotD", "slotE"] },
   ];
-  const mobileImageHeightClass = "h-[7.75rem]";
 
   return (
-    <div className="grid gap-6 md:hidden">
+    <div data-matrix-layout="mobile" className="grid gap-6 md:hidden">
       {mobileRows.map((row, rowIndex) => (
         <div
           key={row.key}
-          className="grid gap-4 border-t border-(--matrix-divider-color) pt-5 first:border-t-0 first:pt-0"
+          data-matrix-row=""
+          className="relative border-t border-black/10 pt-5 first:border-t-0 first:pt-0"
         >
-          <p className="text-center font-inika text-[clamp(2.4rem,9vw,3.8rem)] font-bold leading-none tracking-[0em] text-(--matrix-label-color)">
-            {row.label}
-          </p>
+          <BackgroundWord text={row.label} wordRef={setWordRef(rowIndex)} />
           <div
             className={cn(
-              "grid gap-3",
+              "mt-3 grid gap-3",
               row.slots.length > 1 ? "grid-cols-2" : "grid-cols-1",
             )}
           >
             {row.slots.map((slotKey, slotIndex) => (
               <RotatingImageSlot
-                key={slotKey}
+                key={slotKey + slotIndex}
                 altLabel={altLabel}
-                className={cn("w-full", mobileImageHeightClass)}
+                className="h-[7.75rem] w-full"
                 delayMs={rowIndex * 240 + slotIndex * 180}
                 images={imageSlots[slotKey]}
                 isActive={isActive}
@@ -220,114 +513,10 @@ function MobileMatrix({
   );
 }
 
-function DesktopRowFrame({
-  children,
-  className,
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
-  return <div className={cn("min-h-0 flex-1", className)}>{children}</div>;
-}
-
-function DesktopMatrix({
-  altLabel,
-  imageSlots,
-  isActive,
-  rows,
-}: {
-  altLabel: string;
-  imageSlots: RadiantExperienceContent["capabilityMatrix"]["imageSlots"];
-  isActive: boolean;
-  rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
-}) {
-  const labelClassName =
-    "inline-block w-max font-inika font-bold leading-[0.9] tracking-[0em] whitespace-nowrap text-[var(--matrix-label-color)]";
-  const labelStyle: CSSProperties = {
-    fontSize: `calc(${desktopRowHeight} * 0.66)`,
-  };
-
-  return (
-    <div className="flex min-h-[clamp(31rem,58vh,36.5rem)] flex-1 flex-col justify-center gap-3">
-      <DesktopRowFrame className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 md:gap-5 lg:gap-6">
-        <div className="min-w-0 h-full">
-          <RotatingImageSlot
-            altLabel={altLabel}
-            className="h-full w-full"
-            delayMs={0}
-            images={imageSlots.slotA}
-            isActive={isActive}
-            priority
-          />
-        </div>
-        <div className="flex items-center justify-center">
-          <p className={labelClassName} style={labelStyle}>
-            {rows.branding}
-          </p>
-        </div>
-        <div className="min-w-0 h-full">
-          <RotatingImageSlot
-            altLabel={altLabel}
-            className="h-full w-full"
-            delayMs={180}
-            images={imageSlots.slotB}
-            isActive={isActive}
-          />
-        </div>
-      </DesktopRowFrame>
-
-      <DesktopRowFrame className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 border-t border-(--matrix-divider-color) pt-3 md:gap-5 lg:gap-6">
-        <div className="flex items-center justify-start">
-          <p className={labelClassName} style={labelStyle}>
-            {rows.marketing}
-          </p>
-        </div>
-        <div className="min-w-0 h-full">
-          <RotatingImageSlot
-            altLabel={altLabel}
-            className="h-full w-full"
-            delayMs={360}
-            images={imageSlots.slotC}
-            isActive={isActive}
-          />
-        </div>
-        <div className="flex items-center justify-end">
-          <p className={labelClassName} style={labelStyle}>
-            {rows.socials}
-          </p>
-        </div>
-      </DesktopRowFrame>
-
-      <DesktopRowFrame className="grid h-[clamp(9.5rem,16.5vh,12rem)] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 border-t border-(--matrix-divider-color) pt-3 md:gap-5 lg:gap-6">
-        <div className="min-w-0 h-full">
-          <RotatingImageSlot
-            altLabel={altLabel}
-            className="h-full w-full"
-            delayMs={540}
-            images={imageSlots.slotD}
-            isActive={isActive}
-          />
-        </div>
-        <div className="flex items-center justify-center">
-          <p className={labelClassName} style={labelStyle}>
-            {rows.storytelling}
-          </p>
-        </div>
-        <div className="min-w-0 h-full">
-          <RotatingImageSlot
-            altLabel={altLabel}
-            className="h-full w-full"
-            delayMs={720}
-            images={imageSlots.slotE}
-            isActive={isActive}
-          />
-        </div>
-      </DesktopRowFrame>
-    </div>
-  );
-}
+// --- Main Section ---
 
 export function RadiantCapabilityMatrixSection({
+  bubblesEnabled,
   content,
   capabilityMatrixSectionRef,
   capabilityMatrixContentRef,
@@ -335,17 +524,20 @@ export function RadiantCapabilityMatrixSection({
   capabilityMatrixBottomTickerRef,
 }: RadiantCapabilityMatrixSectionProps) {
   const matrix = content.capabilityMatrix;
+  const pills = matrix.pills ?? [];
   const matrixThemeStyle = {
-    "--matrix-bg": "#e9ddd1",
-    "--matrix-divider-color": "rgba(212,196,181,0.75)",
-    "--matrix-label-color": "rgba(140,87,37,0.2)",
+    "--matrix-bg": "#e9e4d9",
+    "--matrix-divider-color": "rgba(0,0,0,0.1)",
+    "--matrix-word-color": "rgba(180, 168, 143, 0.7)",
     "--matrix-ticker-color": "rgba(140,87,37,0.8)",
   } as CSSProperties;
+
   const isDesktop = useSyncExternalStore(
     subscribeToDesktopBreakpoint,
     getDesktopBreakpointSnapshot,
     () => false,
   );
+
   const [isSectionActive, setIsSectionActive] = useState(
     !supportsIntersectionObserver,
   );
@@ -377,10 +569,10 @@ export function RadiantCapabilityMatrixSection({
   return (
     <section
       ref={capabilityMatrixSectionRef}
-      className="relative z-20 min-h-svh overflow-hidden bg-(--matrix-bg) py-6 md:py-8 lg:py-10"
+      className="relative z-20 min-h-svh overflow-hidden bg-background py-6 md:py-8 lg:py-10"
       style={matrixThemeStyle}
     >
-      <div className="relative z-10 flex min-h-[calc(100svh-3rem)] flex-col justify-center gap-6">
+      <div className="relative z-10 flex min-h-[calc(100svh-3rem)] flex-col items-stretch justify-center gap-8">
         <PatternTicker
           label={matrix.topTickerLabel}
           trackRef={capabilityMatrixTopTickerRef}
@@ -388,24 +580,23 @@ export function RadiantCapabilityMatrixSection({
 
         <div
           ref={capabilityMatrixContentRef}
-          className="site-gutter mx-auto flex w-full max-w-384 flex-1 items-stretch"
+          className="site-gutter mx-auto flex w-full max-w-384 items-center"
         >
-          <div className="flex w-full flex-1 self-stretch flex-col gap-3">
-            {isDesktop ? (
-              <DesktopMatrix
-                altLabel={matrix.slotAltLabel}
-                imageSlots={matrix.imageSlots}
-                isActive={isSectionActive}
-                rows={matrix.rows}
-              />
-            ) : (
-              <MobileMatrix
-                altLabel={matrix.slotAltLabel}
-                imageSlots={matrix.imageSlots}
-                isActive={isSectionActive}
-                rows={matrix.rows}
-              />
-            )}
+          <div className="flex w-full flex-col gap-3">
+            <DesktopMatrix
+              altLabel={matrix.slotAltLabel}
+              bubblesEnabled={bubblesEnabled}
+              imageSlots={matrix.imageSlots}
+              isActive={isSectionActive && isDesktop}
+              pills={pills}
+              rows={matrix.rows}
+            />
+            <MobileMatrix
+              altLabel={matrix.slotAltLabel}
+              imageSlots={matrix.imageSlots}
+              isActive={isSectionActive && !isDesktop}
+              rows={matrix.rows}
+            />
           </div>
         </div>
 

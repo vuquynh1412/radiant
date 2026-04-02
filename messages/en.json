@@ -113,7 +113,17 @@
         "marketing": "MARKETING",
         "socials": "SOCIALS",
         "storytelling": "STORYTELLING"
-      }
+      },
+      "pills": [
+        "Impactful Design",
+        "Look & Feel Your Best",
+        "Award Winning Experiences",
+        "Transformative Branding",
+        "Wow Worthy Websites",
+        "Crazy Ideas Made Real",
+        "Find Your Audience",
+        "Design That's Noticed"
+      ]
     },
     "Projects": {
       "title": "Our Works",

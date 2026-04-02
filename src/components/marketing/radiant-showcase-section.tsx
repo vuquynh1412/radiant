@@ -1,4 +1,7 @@
+import { ArrowRightIcon } from "lucide-react";
 import type { CSSProperties } from "react";
+
+import { buttonVariants } from "@/components/ui/button";
 
 import type {
   RadiantExperienceContent,
@@ -28,11 +31,43 @@ type RadiantShowcaseSectionProps = {
   heroMarqueeRef: RadiantExperienceRefs["heroMarqueeRef"];
   heroMarqueeTrackRef: RadiantExperienceRefs["heroMarqueeTrackRef"];
   activeServiceCopyShellRef: RadiantExperienceRefs["activeServiceCopyShellRef"];
+  serviceGridShellRef: RadiantExperienceRefs["serviceGridShellRef"];
   serviceHeaderRef: RadiantExperienceRefs["serviceHeaderRef"];
+  serviceGridFooterRef: RadiantExperienceRefs["serviceGridFooterRef"];
+  serviceGridItemRefs: RadiantExperienceRefs["serviceGridItemRefs"];
   serviceCardsRef: RadiantExperienceRefs["serviceCardsRef"];
   serviceCopyRefs: RadiantExperienceRefs["serviceCopyRefs"];
   sampleTileRef: RadiantExperienceRefs["sampleTileRef"];
 };
+
+const desktopShowcaseGridStyle = {
+  "--showcase-grid-columns": "4",
+  "--showcase-grid-column-gap": "24px",
+  "--showcase-grid-footer-margin-top": "32px",
+  "--showcase-grid-header-gap": "20px",
+  "--showcase-grid-content-height": "32rem",
+  "--showcase-grid-item-gap": "10px",
+  "--showcase-grid-row-gap": "24px",
+  "--showcase-grid-slot-width": "15rem",
+  "--showcase-grid-title-height": "3.75rem",
+} as CSSProperties;
+
+function ShowcaseViewAllButton({ label }: { label: string }) {
+  return (
+    <button
+      type="button"
+      className={buttonVariants({
+        className:
+          "border-[#27272A]/38 bg-transparent text-[#27272A] hover:bg-white hover:text-[#27272A] active:bg-white",
+        size: "marketing",
+        variant: "outline",
+      })}
+    >
+      <span>{label}</span>
+      <ArrowRightIcon className="size-4" />
+    </button>
+  );
+}
 
 function MobileShowcaseHero({
   content,
@@ -112,6 +147,8 @@ function ReducedMotionDesktopShowcase({
 }: {
   content: RadiantExperienceContent;
 }) {
+  const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
+
   return (
     <div className="hidden md:motion-reduce:block">
       <div className="relative overflow-hidden bg-[#171614] text-white">
@@ -158,11 +195,15 @@ function ReducedMotionDesktopShowcase({
                 description={item.description}
                 eyebrow={item.eyebrow}
                 hideEyebrow
-                tileClassName="h-full min-h-56"
+                tileClassName="h-full min-h-56 rounded-[24px]"
                 title={item.title}
                 variant={serviceVisuals[index % serviceVisuals.length]}
               />
             ))}
+          </div>
+
+          <div className="mt-8 flex justify-center">
+            <ShowcaseViewAllButton label={viewAllLabel} />
           </div>
         </div>
       </div>
@@ -184,11 +225,16 @@ export function RadiantShowcaseSection({
   heroMarqueeRef,
   heroMarqueeTrackRef,
   activeServiceCopyShellRef,
+  serviceGridShellRef,
   serviceHeaderRef,
+  serviceGridFooterRef,
+  serviceGridItemRefs,
   serviceCardsRef,
   serviceCopyRefs,
   sampleTileRef,
 }: RadiantShowcaseSectionProps) {
+  const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
+
   return (
     <section id="showcase">
       <MobileShowcaseHero
@@ -202,7 +248,12 @@ export function RadiantShowcaseSection({
       <div
         ref={showcaseSectionRef}
         className="relative hidden min-h-svh md:block md:h-[660svh] md:motion-reduce:hidden"
-        style={{ "--hero-mask-x": "50vw" } as CSSProperties}
+        style={
+          {
+            "--hero-mask-x": "50vw",
+            "--showcase-focus-copy-width": "46rem",
+          } as CSSProperties
+        }
       >
         <div className="relative min-h-svh overflow-clip pt-24 md:sticky md:top-0 md:h-svh md:pt-0">
           <div className="absolute inset-0 bg-[#f6f1eb]" />
@@ -319,30 +370,84 @@ export function RadiantShowcaseSection({
           </div>
 
           <div
-            ref={serviceHeaderRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 opacity-0 will-change-transform"
+            className="pointer-events-none absolute inset-x-0 top-0 z-30"
           >
-            <div className="site-gutter mx-auto max-w-384 pt-20">
-              <div className="max-w-[34rem]">
-                <p className="text-base font-medium tracking-[0.24em] text-[#27272A] uppercase">
-                  {content.services.eyebrow}
-                </p>
-                <h2 className="mt-4 font-heading text-[clamp(3rem,5vw,4.75rem)] leading-[0.94] tracking-[-0.06em] text-[#27272A]">
-                  {content.services.title}
-                </h2>
-                <p className="mt-5 max-w-[33rem] text-[1rem] leading-7 text-[#27272A]">
-                  {content.services.intro}
-                </p>
+            <div className="site-gutter">
+              <div
+                ref={serviceGridShellRef}
+                className="mx-auto max-w-384 opacity-0 will-change-transform"
+                style={desktopShowcaseGridStyle}
+              >
+                <div ref={serviceHeaderRef} className="max-w-[34rem] pt-8 xl:pt-10">
+                  <p className="text-base font-medium tracking-[0.24em] text-[#27272A] uppercase">
+                    {content.services.eyebrow}
+                  </p>
+                  <h2 className="mt-4 font-heading text-[clamp(3rem,5vw,4.75rem)] leading-[0.94] tracking-[-0.06em] text-[#27272A]">
+                    {content.services.title}
+                  </h2>
+                  <p className="mt-5 max-w-[33rem] text-[1rem] leading-7 text-[#27272A]">
+                    {content.services.intro}
+                  </p>
+                </div>
+
+                <div
+                  className="relative"
+                  style={{
+                    height: "var(--showcase-grid-content-height)",
+                    marginTop: "var(--showcase-grid-header-gap)",
+                  }}
+                >
+                  {content.services.items.map((item, index) => (
+                    <article
+                      key={`${item.title}-grid-shell`}
+                      ref={(node) => {
+                        serviceGridItemRefs.current[index] = node;
+                      }}
+                      className="absolute left-0 top-0 flex flex-col"
+                      style={{
+                        gap: "var(--showcase-grid-item-gap)",
+                        width: "var(--showcase-grid-slot-width)",
+                      }}
+                    >
+                      <div
+                        aria-hidden="true"
+                        className="aspect-video w-full rounded-[24px] opacity-0"
+                      />
+                      <h3
+                        className="w-full text-center font-inika text-[20px] font-bold leading-[1.05] tracking-[-0.03em] text-[#27272A]"
+                        style={{ minHeight: "var(--showcase-grid-title-height)" }}
+                      >
+                        {item.title}
+                      </h3>
+                    </article>
+                  ))}
+                </div>
+
+                <div
+                  ref={serviceGridFooterRef}
+                  className="flex justify-center"
+                  style={{
+                    marginTop: "var(--showcase-grid-footer-margin-top)",
+                  }}
+                >
+                  <ShowcaseViewAllButton label={viewAllLabel} />
+                </div>
               </div>
             </div>
           </div>
 
           <div
             ref={activeServiceCopyShellRef}
-            className="pointer-events-none absolute inset-x-0 top-0 z-30 opacity-0 will-change-transform"
+            className="pointer-events-none absolute inset-x-0 top-0 z-40 opacity-0 will-change-transform"
           >
             <div className="site-gutter mx-auto max-w-384">
-              <div className="relative mx-auto w-[clamp(25.5rem,32vw,31rem)]">
+              <div
+                className="relative mx-auto max-w-full"
+                style={{
+                  width:
+                    "min(100%, var(--showcase-focus-copy-width, clamp(38rem,48vw,46rem)))",
+                }}
+              >
                 {content.services.items.map((item, index) => (
                   <div
                     key={`${item.title}-copy`}
@@ -352,7 +457,8 @@ export function RadiantShowcaseSection({
                     className="absolute left-0 top-0 w-full opacity-0"
                   >
                     <ServiceCopy
-                      className="max-w-[26rem] gap-3"
+                      centered
+                      className="mx-auto w-full gap-3"
                       description={item.description}
                       eyebrow={item.eyebrow}
                       hideEyebrow
@@ -367,7 +473,7 @@ export function RadiantShowcaseSection({
           <div className="pointer-events-none absolute inset-0">
             <div
               ref={sampleTileRef}
-              className="absolute left-0 top-0 z-10 aspect-video w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
+              className="absolute left-0 top-0 z-10 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
             >
               <ServiceTile
                 className="size-full rounded-[inherit] border-0 shadow-none"
@@ -381,7 +487,7 @@ export function RadiantShowcaseSection({
                 ref={(node) => {
                   serviceCardsRef.current[index] = node;
                 }}
-                className="absolute left-0 top-0 z-20 aspect-video w-[clamp(25.5rem,32vw,31rem)] overflow-hidden rounded-[2.2rem] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
+                className="absolute left-0 top-0 z-20 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
                 style={{ transformOrigin: "top center" }}
               >
                 <ServiceTile

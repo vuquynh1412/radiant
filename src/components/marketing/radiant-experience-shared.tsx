@@ -367,12 +367,14 @@ export function ServiceTile({
 }
 
 export function ServiceCopy({
+  centered = false,
   className,
   description,
   eyebrow,
   hideEyebrow = false,
   title,
 }: {
+  centered?: boolean;
   className?: string;
   description: string;
   eyebrow: string;
@@ -380,7 +382,13 @@ export function ServiceCopy({
   title: string;
 }) {
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-2",
+        centered && "items-center text-center",
+        className,
+      )}
+    >
       {hideEyebrow ? null : (
         <p className="text-base font-medium tracking-[0.22em] text-muted-foreground uppercase">
           {eyebrow}
@@ -389,7 +397,12 @@ export function ServiceCopy({
       <h3 className="font-heading text-[clamp(2rem,3vw,3.75rem)] leading-none tracking-[-0.05em] text-foreground">
         {title}
       </h3>
-      <p className="max-w-lg text-base leading-7 text-muted-foreground sm:text-base">
+      <p
+        className={cn(
+          "max-w-lg text-base leading-7 text-muted-foreground sm:text-base",
+          centered && "mx-auto",
+        )}
+      >
         {description}
       </p>
     </div>

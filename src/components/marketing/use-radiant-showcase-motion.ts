@@ -32,6 +32,7 @@ function morphState(
 
 const focusEase = gsap.parseEase("power2.inOut");
 const aboutContentEase = gsap.parseEase("power2.out");
+const aboutCharEase = gsap.parseEase("power1.out");
 const marqueeStartProgress = 0.22;
 const marqueeEndProgress = 0.4;
 const marqueeStartXPercent = 100;
@@ -68,10 +69,19 @@ type ShowcaseMetrics = {
   focusLeftX: number;
   gridCellWidth: number;
   gridColumns: number;
-  gridGap: number;
-  gridRowHeight: number;
+  gridColumnGap: number;
+  gridContentHeight: number;
+  gridFooterMarginTop: number;
+  gridHeaderGap: number;
+  gridImageHeight: number;
+  gridItemGap: number;
+  gridItemHeight: number;
+  gridRowGap: number;
+  gridShellLeft: number;
+  gridShellTop: number;
+  gridShellWidth: number;
   gridTop: number;
-  headerY: number;
+  gridTitleHeight: number;
   mediaHeight: number;
   previewGap: number;
   previewScale: number;
@@ -108,6 +118,13 @@ type HeroMediaSetters = LayoutSetters & {
 type OpacityYSetters = {
   opacity: NumericSetter;
   y: NumericSetter;
+};
+
+type XYSetters = {
+  opacity: NumericSetter;
+  x: NumericSetter;
+  y: NumericSetter;
+  yPercent: NumericSetter;
 };
 
 type AboutCharSetters = {
@@ -160,6 +177,15 @@ function createOpacityYSetters(node: HTMLElement): OpacityYSetters {
   };
 }
 
+function createXYSetters(node: HTMLElement): XYSetters {
+  return {
+    opacity: gsap.quickSetter(node, "opacity") as NumericSetter,
+    x: gsap.quickSetter(node, "x", "px") as NumericSetter,
+    y: gsap.quickSetter(node, "y", "px") as NumericSetter,
+    yPercent: gsap.quickSetter(node, "yPercent") as NumericSetter,
+  };
+}
+
 function createAboutCharSetters(node: HTMLElement): AboutCharSetters {
   return {
     color: gsap.quickSetter(node, "color") as StringSetter,
@@ -208,7 +234,9 @@ export function useRadiantShowcaseMotion({
             !refs.heroMarqueeRef.current ||
             !refs.heroMarqueeTrackRef.current ||
             !refs.activeServiceCopyShellRef.current ||
+            !refs.serviceGridShellRef.current ||
             !refs.serviceHeaderRef.current ||
+            !refs.serviceGridFooterRef.current ||
             !refs.sampleTileRef.current ||
             !refs.aboutSectionRef.current ||
             !refs.aboutContentRef.current
@@ -222,6 +250,9 @@ export function useRadiantShowcaseMotion({
           );
           const serviceCopyNodes = refs.serviceCopyRefs.current.filter(
             (copy): copy is HTMLDivElement => copy !== null,
+          );
+          const serviceGridItemNodes = refs.serviceGridItemRefs.current.filter(
+            (item): item is HTMLElement => item !== null,
           );
           const aboutCharNodes = refs.aboutCharRefs.current.filter(
             (char): char is HTMLSpanElement => char !== null,
@@ -271,25 +302,18 @@ export function useRadiantShowcaseMotion({
           const activeServiceCopyShellSetters = createOpacityYSetters(
             refs.activeServiceCopyShellRef.current,
           );
-          const serviceHeaderOpacity = gsap.quickSetter(
-            refs.serviceHeaderRef.current,
-            "opacity",
-          ) as NumericSetter;
-          const serviceHeaderScale = createUniformScaleSetter(
-            refs.serviceHeaderRef.current,
+          const serviceGridShellSetters = createOpacityYSetters(
+            refs.serviceGridShellRef.current,
           );
-          const serviceHeaderY = gsap.quickSetter(
-            refs.serviceHeaderRef.current,
-            "y",
-            "px",
-          ) as NumericSetter;
           const heroMediaSetters = createHeroMediaSetters(refs.heroMediaRef.current);
+          const serviceGridItemSetters = serviceGridItemNodes.map(createXYSetters);
           const serviceCopySetters = serviceCopyNodes.map(createOpacityYSetters);
           const serviceCardSetters = serviceCardNodes.map(createLayoutSetters);
           const aboutContentSetters = createOpacityYSetters(
             refs.aboutContentRef.current,
           );
           const aboutCharSetters = aboutCharNodes.map(createAboutCharSetters);
+          const aboutRevealSpan = aboutCharNodes.length + 10;
 
           gsap.set(refs.heroMatteRef.current, {
             transformOrigin: "left center",
@@ -300,44 +324,62 @@ export function useRadiantShowcaseMotion({
             const viewportHeight = getStableViewportHeight();
             const cardWidth =
               refs.sampleTileRef.current?.offsetWidth ??
-              Math.min(Math.max(viewportWidth * 0.32, 408), 512);
+              Math.min(Math.max(viewportWidth * 0.48, 608), 736);
             const mediaHeight =
               refs.sampleTileRef.current?.offsetHeight ?? cardWidth * (9 / 16);
             const cardAspectRatio = cardWidth / mediaHeight;
             const focusScale =
-              viewportWidth >= 1720 ? 1.04 : viewportWidth >= 1440 ? 1.07 : 1.1;
+              viewportWidth >= 1720 ? 1.02 : viewportWidth >= 1440 ? 1.05 : 1.08;
             const previewScale =
-              viewportWidth >= 1720 ? 0.64 : viewportWidth >= 1320 ? 0.58 : 0.54;
-            const farScale = viewportWidth >= 1320 ? 0.28 : 0.24;
+              viewportWidth >= 1720 ? 0.52 : viewportWidth >= 1440 ? 0.48 : 0.44;
+            const farScale = viewportWidth >= 1440 ? 0.2 : 0.18;
             const focusLeftX =
               viewportWidth / 2 - (cardWidth * focusScale) / 2;
             const previewGap =
-              viewportWidth >= 1720 ? 56 : viewportWidth >= 1320 ? 44 : 34;
-            const rowTop = Math.max(viewportHeight * 0.205, 154);
-            const gridGap =
+              viewportWidth >= 1720 ? 36 : viewportWidth >= 1440 ? 24 : 20;
+            const rowTop = Math.max(viewportHeight * 0.17, 132);
+            const gridColumnGap =
               viewportWidth >= 1600 ? 24 : viewportWidth >= 1200 ? 20 : 16;
-            const gridHorizontalPadding = Math.max(34, viewportWidth * 0.04);
-            const gridHeaderHeight =
-              viewportWidth >= 1400 ? 90 : viewportWidth >= 1024 ? 80 : 70;
+            const gridRowGap =
+              viewportWidth >= 1400 ? 24 : viewportWidth >= 1024 ? 20 : 18;
+            const gridItemGap =
+              viewportWidth >= 1400 ? 12 : viewportWidth >= 1024 ? 10 : 8;
+            const gridTitleHeight =
+              viewportWidth >= 1400 ? 60 : viewportWidth >= 1024 ? 56 : 52;
+            const gridFooterMarginTop =
+              viewportWidth >= 1400 ? 24 : viewportWidth >= 1024 ? 22 : 20;
             const gridHeaderGap =
-              viewportWidth >= 1400 ? 40 : viewportWidth >= 1024 ? 32 : 24;
+              viewportWidth >= 1400 ? 24 : viewportWidth >= 1024 ? 20 : 18;
             const gridTopPadding =
-              viewportWidth >= 1400 ? 96 : viewportWidth >= 1024 ? 82 : 70;
+              viewportWidth >= 1400 ? 42 : viewportWidth >= 1024 ? 38 : 34;
             const gridBottomPadding =
-              viewportWidth >= 1400 ? 72 : viewportWidth >= 1024 ? 60 : 48;
+              viewportWidth >= 1400 ? 30 : viewportWidth >= 1024 ? 26 : 22;
+            const gridShellRect =
+              refs.serviceGridShellRef.current?.getBoundingClientRect();
+            const gridShellWidth = Math.max(gridShellRect?.width ?? 0, 220);
+            const gridShellLeft =
+              gridShellRect?.left ?? (viewportWidth - gridShellWidth) / 2;
+            const gridHeaderHeight =
+              refs.serviceHeaderRef.current?.offsetHeight ??
+              (viewportWidth >= 1400 ? 188 : viewportWidth >= 1024 ? 176 : 164);
+            const gridFooterHeight =
+              refs.serviceGridFooterRef.current?.offsetHeight ?? 48;
             const gridMaxColumns = Math.min(4, serviceItemCount);
             const minimumCellWidth =
-              viewportWidth >= 1600 ? 248 : viewportWidth >= 1280 ? 220 : 186;
-            const availableGridWidth = Math.max(
-              viewportWidth - gridHorizontalPadding * 2,
-              220,
-            );
-            const availableGridTileHeight = Math.max(
+              viewportWidth >= 1600 ? 248 : viewportWidth >= 1280 ? 220 : 192;
+            const availableGridWidth = Math.max(gridShellWidth, 220);
+            const availableGridContentHeight = Math.max(
               viewportHeight -
               gridTopPadding -
               gridBottomPadding -
               gridHeaderHeight -
               gridHeaderGap,
+              220,
+            ) -
+              gridFooterHeight -
+              gridFooterMarginTop;
+            const clampedGridContentHeight = Math.max(
+              availableGridContentHeight,
               220,
             );
             let gridColumns = Math.min(
@@ -350,12 +392,16 @@ export function useRadiantShowcaseMotion({
             for (let columns = gridMaxColumns; columns >= 1; columns -= 1) {
               const rows = Math.ceil(serviceItemCount / columns);
               const widthBasedCellWidth =
-                (availableGridWidth - gridGap * (columns - 1)) / columns;
-              const rowHeight =
-                (availableGridTileHeight - gridGap * (rows - 1)) / rows;
+                (availableGridWidth - gridColumnGap * (columns - 1)) / columns;
+              const maxImageHeight = Math.max(
+                120,
+                (clampedGridContentHeight - gridRowGap * (rows - 1)) / rows -
+                gridItemGap -
+                gridTitleHeight,
+              );
               const cellWidth = Math.min(
                 widthBasedCellWidth,
-                rowHeight * cardAspectRatio,
+                maxImageHeight * cardAspectRatio,
               );
 
               if (cellWidth >= minimumCellWidth) {
@@ -372,11 +418,17 @@ export function useRadiantShowcaseMotion({
               }
             }
 
-            const gridRowHeight = gridCellWidth / cardAspectRatio;
+            const gridImageHeight = gridCellWidth / cardAspectRatio;
+            const gridItemHeight =
+              gridImageHeight + gridItemGap + gridTitleHeight;
             const gridContentHeight =
-              gridRows * gridRowHeight + gridGap * (gridRows - 1);
+              gridRows * gridItemHeight + gridRowGap * (gridRows - 1);
             const gridClusterHeight =
-              gridHeaderHeight + gridHeaderGap + gridContentHeight;
+              gridHeaderHeight +
+              gridHeaderGap +
+              gridContentHeight +
+              gridFooterMarginTop +
+              gridFooterHeight;
             const maxClusterTop = Math.max(
               gridTopPadding,
               viewportHeight - gridBottomPadding - gridClusterHeight,
@@ -386,7 +438,7 @@ export function useRadiantShowcaseMotion({
               maxClusterTop,
               (viewportHeight - gridClusterHeight) / 2,
             );
-            const copyOffset = Math.max(18, viewportHeight * 0.022);
+            const copyOffset = Math.max(24, viewportHeight * 0.028);
 
             return {
               cardWidth,
@@ -396,10 +448,19 @@ export function useRadiantShowcaseMotion({
               focusLeftX,
               gridCellWidth,
               gridColumns,
-              gridGap,
-              gridRowHeight,
+              gridColumnGap,
+              gridContentHeight,
+              gridFooterMarginTop,
+              gridHeaderGap,
+              gridImageHeight,
+              gridItemGap,
+              gridItemHeight,
+              gridRowGap,
+              gridShellLeft,
+              gridShellTop: gridClusterTop,
+              gridShellWidth,
               gridTop: gridClusterTop + gridHeaderHeight + gridHeaderGap,
-              headerY: gridClusterTop,
+              gridTitleHeight,
               mediaHeight,
               previewGap,
               previewScale,
@@ -494,18 +555,42 @@ export function useRadiantShowcaseMotion({
             );
             const rowWidth =
               itemsInRow * metrics.gridCellWidth +
-              Math.max(0, itemsInRow - 1) * metrics.gridGap;
-            const visualX =
-              (metrics.viewportWidth - rowWidth) / 2 +
-              column * (metrics.gridCellWidth + metrics.gridGap);
-            const y =
-              metrics.gridTop + row * (metrics.gridRowHeight + metrics.gridGap);
+              Math.max(0, itemsInRow - 1) * metrics.gridColumnGap;
+            const relativeX =
+              (metrics.gridShellWidth - rowWidth) / 2 +
+              column * (metrics.gridCellWidth + metrics.gridColumnGap);
+            const relativeY =
+              row * (metrics.gridItemHeight + metrics.gridRowGap);
+            const visualX = metrics.gridShellLeft + relativeX;
+            const y = metrics.gridTop + relativeY;
 
             return {
               opacity: 1,
               scale,
               x: visualLeftToTransformX(visualX, metrics.cardWidth, scale),
               y,
+            };
+          };
+
+          const getGridShellItemPosition = (
+            index: number,
+            metrics: ShowcaseMetrics,
+          ) => {
+            const column = index % metrics.gridColumns;
+            const row = Math.floor(index / metrics.gridColumns);
+            const itemsInRow = Math.min(
+              metrics.gridColumns,
+              serviceItemCount - row * metrics.gridColumns,
+            );
+            const rowWidth =
+              itemsInRow * metrics.gridCellWidth +
+              Math.max(0, itemsInRow - 1) * metrics.gridColumnGap;
+
+            return {
+              x:
+                (metrics.gridShellWidth - rowWidth) / 2 +
+                column * (metrics.gridCellWidth + metrics.gridColumnGap),
+              y: row * (metrics.gridItemHeight + metrics.gridRowGap),
             };
           };
 
@@ -530,7 +615,7 @@ export function useRadiantShowcaseMotion({
             };
             const rowZeroState = getRowState(0, 0, metrics);
             const rowZeroRect: HeroRect = {
-              borderRadius: 36,
+              borderRadius: 24,
               height: metrics.mediaHeight,
               scale: rowZeroState.scale,
               width: metrics.cardWidth,
@@ -575,6 +660,52 @@ export function useRadiantShowcaseMotion({
           const applyMetricBoundLayout = (metrics: ShowcaseMetrics) => {
             heroMatteScaleX(0.5);
             heroMatteWidth(metrics.viewportWidth);
+            refs.showcaseSectionRef.current?.style.setProperty(
+              "--showcase-focus-copy-width",
+              `${metrics.cardWidth * metrics.focusScale}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-columns",
+              `${metrics.gridColumns}`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-column-gap",
+              `${metrics.gridColumnGap}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-footer-margin-top",
+              `${metrics.gridFooterMarginTop}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-header-gap",
+              `${metrics.gridHeaderGap}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-content-height",
+              `${metrics.gridContentHeight}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-item-gap",
+              `${metrics.gridItemGap}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-row-gap",
+              `${metrics.gridRowGap}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-slot-width",
+              `${metrics.gridCellWidth}px`,
+            );
+            refs.serviceGridShellRef.current?.style.setProperty(
+              "--showcase-grid-title-height",
+              `${metrics.gridTitleHeight}px`,
+            );
+            serviceGridItemSetters.forEach((setters, index) => {
+              const position = getGridShellItemPosition(index, metrics);
+
+              setters.x(position.x);
+              setters.y(position.y);
+            });
           };
 
           const initialMetrics = updateMetrics();
@@ -594,13 +725,16 @@ export function useRadiantShowcaseMotion({
           heroMarqueeTrackXPercent(marqueeStartXPercent);
           activeServiceCopyShellSetters.opacity(0);
           activeServiceCopyShellSetters.y(0);
+          serviceGridShellSetters.opacity(0);
+          serviceGridShellSetters.y(initialMetrics.gridShellTop + 28);
+          serviceGridItemSetters.forEach((setters) => {
+            setters.opacity(0);
+            setters.yPercent(18);
+          });
           serviceCopySetters.forEach((setters) => {
             setters.opacity(0);
             setters.y(0);
           });
-          serviceHeaderOpacity(0);
-          serviceHeaderScale(0.96);
-          serviceHeaderY(initialMetrics.headerY + 28);
           serviceCardSetters.forEach((setters) => {
             setters.opacity(0);
           });
@@ -608,8 +742,8 @@ export function useRadiantShowcaseMotion({
           aboutContentSetters.y(72);
 
           aboutCharSetters.forEach((setters) => {
-            setters.opacity(1);
-            setters.color("var(--foreground)");
+            setters.opacity(animateAboutChars ? 0.22 : 1);
+            setters.color(animateAboutChars ? "#bdb7b0" : "var(--foreground)");
           });
 
           const renderShowcase = (
@@ -741,7 +875,7 @@ export function useRadiantShowcaseMotion({
               heroMediaSetters.y(lerp(fullRect.y, rowZeroRect.y, shrinkProgress));
             } else {
               applyHeroRect(heroMediaSetters, {
-                borderRadius: 36,
+                borderRadius: 24,
                 height: metrics.mediaHeight,
                 scale: currentHeroRowState.scale,
                 width: metrics.cardWidth,
@@ -783,14 +917,21 @@ export function useRadiantShowcaseMotion({
               setters.y(18 - clampedRevealStrength * 18);
             });
 
-            const headerReveal = gsap.utils.clamp(
+            const gridShellReveal = aboutContentEase(gridProgress);
+            const gridTitleReveal = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.89) / 0.06,
+              (gridProgress - 0.56) / 0.22,
             );
-            serviceHeaderOpacity(headerReveal);
-            serviceHeaderScale(0.96 + headerReveal * 0.04);
-            serviceHeaderY(metrics.headerY + 28 - headerReveal * 28);
+            const easedGridTitleReveal = aboutContentEase(gridTitleReveal);
+            serviceGridShellSetters.opacity(gridShellReveal);
+            serviceGridShellSetters.y(
+              metrics.gridShellTop + 28 - gridShellReveal * 28,
+            );
+            serviceGridItemSetters.forEach((setters) => {
+              setters.opacity(easedGridTitleReveal);
+              setters.yPercent(18 - easedGridTitleReveal * 18);
+            });
 
             serviceCardSetters.forEach((setters, nodeIndex) => {
               const itemIndex = nodeIndex + 1;
@@ -831,7 +972,10 @@ export function useRadiantShowcaseMotion({
 
           const renderAbout = (progress: number) => {
             const contentProgress = gsap.utils.clamp(0, 1, progress / 0.28);
+            const charProgress = gsap.utils.clamp(0, 1, (progress - 0.12) / 0.72);
             const easedContentProgress = aboutContentEase(contentProgress);
+            const easedCharProgress = aboutCharEase(charProgress);
+            const revealPosition = easedCharProgress * aboutRevealSpan;
 
             aboutContentSetters.opacity(lerp(0.38, 1, easedContentProgress));
             aboutContentSetters.y(lerp(72, 0, easedContentProgress));
@@ -840,9 +984,17 @@ export function useRadiantShowcaseMotion({
               return;
             }
 
-            aboutCharSetters.forEach((setters) => {
-              setters.opacity(1);
-              setters.color("var(--foreground)");
+            aboutCharSetters.forEach((setters, index) => {
+              const localProgress = gsap.utils.clamp(
+                0,
+                1,
+                revealPosition - index,
+              );
+
+              setters.opacity(0.22 + localProgress * 0.78);
+              setters.color(
+                localProgress > 0.52 ? "var(--foreground)" : "#bdb7b0",
+              );
             });
           };
 
@@ -953,6 +1105,7 @@ export function useRadiantShowcaseMotion({
             refs.aboutContentRef.current,
           );
           const aboutCharSetters = aboutCharNodes.map(createAboutCharSetters);
+          const aboutRevealSpan = aboutCharNodes.length + 10;
 
           const getMetrics = () => {
             const viewportWidth = window.innerWidth;
@@ -971,8 +1124,8 @@ export function useRadiantShowcaseMotion({
           aboutContentSetters.opacity(0.38);
           aboutContentSetters.y(48);
           aboutCharSetters.forEach((setters) => {
-            setters.opacity(1);
-            setters.color("var(--foreground)");
+            setters.opacity(animateAboutChars ? 0.18 : 1);
+            setters.color(animateAboutChars ? "#bdb7b0" : "var(--foreground)");
           });
 
           const renderMobileHero = (progress: number) => {
@@ -997,7 +1150,10 @@ export function useRadiantShowcaseMotion({
 
           const renderAbout = (progress: number) => {
             const contentProgress = gsap.utils.clamp(0, 1, progress / 0.24);
+            const charProgress = gsap.utils.clamp(0, 1, (progress - 0.08) / 0.78);
             const easedContentProgress = aboutContentEase(contentProgress);
+            const easedCharProgress = aboutCharEase(charProgress);
+            const revealPosition = easedCharProgress * aboutRevealSpan;
 
             aboutContentSetters.opacity(lerp(0.38, 1, easedContentProgress));
             aboutContentSetters.y(lerp(48, 0, easedContentProgress));
@@ -1006,9 +1162,17 @@ export function useRadiantShowcaseMotion({
               return;
             }
 
-            aboutCharSetters.forEach((setters) => {
-              setters.opacity(1);
-              setters.color("var(--foreground)");
+            aboutCharSetters.forEach((setters, index) => {
+              const localProgress = gsap.utils.clamp(
+                0,
+                1,
+                revealPosition - index,
+              );
+
+              setters.opacity(0.18 + localProgress * 0.82);
+              setters.color(
+                localProgress > 0.5 ? "var(--foreground)" : "#bdb7b0",
+              );
             });
           };
 

@@ -113,7 +113,17 @@
         "marketing": "MARKETING",
         "socials": "SOCIALS",
         "storytelling": "STORYTELLING"
-      }
+      },
+      "pills": [
+        "Thiết Kế Ấn Tượng",
+        "Diện Mạo Tốt Nhất",
+        "Trải Nghiệm Đẳng Cấp",
+        "Thương Hiệu Chuyển Đổi",
+        "Website Ấn Tượng",
+        "Ý Tưởng Điên Rồ Thành Thật",
+        "Tìm Kiếm Khán Giả",
+        "Thiết Kế Được Chú Ý"
+      ]
     },
     "Projects": {
       "title": "Our Works",

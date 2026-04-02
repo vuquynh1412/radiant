@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Afacad_Flux, Geist_Mono, Literata } from "next/font/google";
+import {
+  Afacad_Flux,
+  Anton,
+  Geist_Mono,
+  Literata,
+  Oswald,
+} from "next/font/google";
 import { notFound } from "next/navigation";
 
 import "@/app/globals.css";
@@ -30,6 +36,20 @@ const literata = Literata({
   axes: ["opsz"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-literata",
+});
+
+const anton = Anton({
+  display: "swap",
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  variable: "--font-anton",
+  weight: "400",
+});
+
+const oswald = Oswald({
+  display: "swap",
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  variable: "--font-oswald",
+  weight: ["700"],
 });
 
 type LocaleLayoutProps = Readonly<{
@@ -106,7 +126,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      className={`${afacadFlux.variable} ${geistMono.variable} ${literata.variable} h-full antialiased`}
+      className={`${afacadFlux.variable} ${geistMono.variable} ${literata.variable} ${anton.variable} ${oswald.variable} h-full antialiased`}
     >
       <body className="min-h-screen bg-background font-sans text-foreground">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>

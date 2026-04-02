@@ -4,7 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { useLocale, useMessages } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { Locale } from "@/i18n/config";
 import { getHomePageContent } from "@/i18n/get-homepage-content";
@@ -33,6 +33,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const messages = useMessages() as AppMessages;
   const content = getHomePageContent(locale, messages);
   const [isBooting, setIsBooting] = useState(true);
+  const [matrixRevealComplete, setMatrixRevealComplete] = useState(false);
+  const onMatrixRevealComplete = useCallback(() => {
+    setMatrixRevealComplete(true);
+  }, []);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
   const showcaseSectionRef = useRef<HTMLDivElement | null>(null);
@@ -47,7 +51,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const heroMarqueeRef = useRef<HTMLDivElement | null>(null);
   const heroMarqueeTrackRef = useRef<HTMLDivElement | null>(null);
   const activeServiceCopyShellRef = useRef<HTMLDivElement | null>(null);
+  const serviceGridShellRef = useRef<HTMLDivElement | null>(null);
   const serviceHeaderRef = useRef<HTMLDivElement | null>(null);
+  const serviceGridFooterRef = useRef<HTMLDivElement | null>(null);
+  const serviceGridItemRefs = useRef<Array<HTMLElement | null>>([]);
   const serviceCardsRef = useRef<Array<HTMLDivElement | null>>([]);
   const serviceCopyRefs = useRef<Array<HTMLDivElement | null>>([]);
   const sampleTileRef = useRef<HTMLDivElement | null>(null);
@@ -74,7 +81,10 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     heroMarqueeRef,
     heroMarqueeTrackRef,
     activeServiceCopyShellRef,
+    serviceGridShellRef,
     serviceHeaderRef,
+    serviceGridFooterRef,
+    serviceGridItemRefs,
     serviceCardsRef,
     serviceCopyRefs,
     sampleTileRef,
@@ -192,7 +202,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   }, [isBooting]);
 
   useRadiantShowcaseMotion({ content, refs: motionRefs });
-  useRadiantCapabilityMatrixMotion({ refs: motionRefs });
+  useRadiantCapabilityMatrixMotion({ refs: motionRefs, onRevealComplete: onMatrixRevealComplete });
 
   return (
     <div ref={rootRef} className="bg-background text-foreground">
@@ -222,6 +232,9 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
             sampleTileRef={sampleTileRef}
             serviceCardsRef={serviceCardsRef}
             serviceCopyRefs={serviceCopyRefs}
+            serviceGridFooterRef={serviceGridFooterRef}
+            serviceGridItemRefs={serviceGridItemRefs}
+            serviceGridShellRef={serviceGridShellRef}
             serviceHeaderRef={serviceHeaderRef}
             showcaseSectionRef={showcaseSectionRef}
           />
@@ -232,6 +245,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
             content={content}
           />
           <RadiantCapabilityMatrixSection
+            bubblesEnabled={matrixRevealComplete}
             capabilityMatrixBottomTickerRef={capabilityMatrixBottomTickerRef}
             capabilityMatrixContentRef={capabilityMatrixContentRef}
             capabilityMatrixSectionRef={capabilityMatrixSectionRef}

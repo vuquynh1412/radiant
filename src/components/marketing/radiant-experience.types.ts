@@ -35,7 +35,10 @@ export type RadiantExperienceRefs = {
   heroMarqueeRef: RefObject<HTMLDivElement | null>;
   heroMarqueeTrackRef: RefObject<HTMLDivElement | null>;
   activeServiceCopyShellRef: RefObject<HTMLDivElement | null>;
+  serviceGridShellRef: RefObject<HTMLDivElement | null>;
   serviceHeaderRef: RefObject<HTMLDivElement | null>;
+  serviceGridFooterRef: RefObject<HTMLDivElement | null>;
+  serviceGridItemRefs: RefObject<Array<HTMLElement | null>>;
   serviceCardsRef: RefObject<Array<HTMLDivElement | null>>;
   serviceCopyRefs: RefObject<Array<HTMLDivElement | null>>;
   sampleTileRef: RefObject<HTMLDivElement | null>;
