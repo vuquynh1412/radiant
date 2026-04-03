@@ -192,7 +192,7 @@ html {
     font-variation-settings: "opsz" 60;
     font-size: 24px;
     line-height: 1;
-    letter-spacing: -0.055em;
+    letter-spacing: normal;
   }
 
   .title-display-inika {
@@ -200,7 +200,7 @@ html {
     font-variation-settings: "opsz" 60;
     font-size: 24px;
     line-height: 1;
-    letter-spacing: -0.055em;
+    letter-spacing: normal;
   }
 
   .hero-title-display {
@@ -208,7 +208,7 @@ html {
     font-variation-settings: "opsz" 60;
     font-size: 56px;
     line-height: 0.9;
-    letter-spacing: -0.07em;
+    letter-spacing: normal;
   }
 
   .hero-marquee-display {
@@ -216,7 +216,7 @@ html {
     font-variation-settings: "opsz" 60;
     font-size: 40px;
     line-height: 0.92;
-    letter-spacing: -0.035em;
+    letter-spacing: normal;
   }
 
   @media (min-width: 768px) {

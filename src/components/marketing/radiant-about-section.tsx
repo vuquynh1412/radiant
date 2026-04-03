@@ -28,7 +28,7 @@ export function RadiantAboutSection({
         >
           <CharacterRevealText
             charRefs={aboutCharRefs}
-            className="w-full text-[1.5rem] font-bold leading-[1.14] tracking-[-0.045em] text-[#27272A] md:text-[40px] md:leading-[1.08] lg:text-[44px]"
+            className="w-full text-[1.5rem] font-bold leading-[1.14] text-[#27272A] md:text-[40px] md:leading-[1.08] lg:text-[44px]"
             text={aboutBodyText}
           />
         </div>

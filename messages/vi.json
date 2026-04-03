@@ -49,7 +49,7 @@
     },
     "Services": {
       "eyebrow": "Chuỗi năng lực",
-      "title": "Dịch Vụ Trọng Tâm",
+      "title": "Dịch vụ cốt lõi",
       "intro": "Tám nhóm năng lực cốt lõi đi từ làm rõ chiến lược đến sẵn sàng triển khai thương hiệu.",
       "order": [
         "strategy",
@@ -126,7 +126,7 @@
       ]
     },
     "Projects": {
-      "title": "Our Works",
+      "title": "Các dự án nổi bật",
       "filterOrder": [
         "all",
         "strategy",
@@ -304,6 +304,7 @@
       "socials": {
         "facebook": "Facebook",
         "instagram": "Instagram",
+        "tiktok": "TikTok",
         "linkedin": "LinkedIn",
         "x": "X",
         "youtube": "YouTube"
@@ -317,16 +318,16 @@
               "href": "#about"
             },
             {
-              "label": "Năng lực",
-              "href": "#showcase"
-            },
-            {
               "label": "Dự án",
               "href": "#projects"
             },
             {
-              "label": "Gói làm việc",
-              "href": "#plans"
+              "label": "Tin tức",
+              "href": "#projects"
+            },
+            {
+              "label": "FAQs",
+              "href": "#contact"
             },
             {
               "label": "Liên hệ",
@@ -346,7 +347,7 @@
               "href": "#showcase"
             },
             {
-              "label": "Hệ nhận diện",
+              "label": "Bộ nhận diện",
               "href": "#showcase"
             },
             {
@@ -359,37 +360,26 @@
             }
           ]
         },
-        "industries": {
-          "title": "Ngành phù hợp",
+        "legal": {
+          "title": "Thông tin pháp lý",
           "items": [
             {
-              "label": "Khách sạn & phong cách sống",
-              "href": "#projects"
+              "label": "Chính Sách Bảo Mật",
+              "href": "#contact"
             },
             {
-              "label": "Dịch vụ chuyên môn",
-              "href": "#projects"
-            },
-            {
-              "label": "Wellness & làm đẹp",
-              "href": "#projects"
-            },
-            {
-              "label": "Bất động sản & không gian",
-              "href": "#projects"
-            },
-            {
-              "label": "Ra mắt văn hóa & cộng đồng",
-              "href": "#projects"
+              "label": "Điều khoản",
+              "href": "#contact"
             }
           ]
         }
       },
       "contact": {
-        "phone": "+84 28 7300 1144",
-        "email": "hello@radiant.studio",
-        "address": "Quận 1, TP. Hồ Chí Minh, Việt Nam"
+        "phone": "0318818213",
+        "email": "hello@radiant.com",
+        "address": "M4 - 21, Đường M4, Manhattan Glory, Vinhomes Grand Park, Phường Long Bình, Thành phố Hồ Chí Minh, Việt Nam"
       },
+      "copyright": "Copyright © 2026 Radiant",
       "patternLabel": "RADIANT"
     }
   }

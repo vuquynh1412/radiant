@@ -178,7 +178,7 @@ function ReducedMotionDesktopShowcase({
 
           <div className="mt-10 inline-flex max-w-152 items-center gap-3 rounded-full border border-white/14 bg-black/22 px-5 py-3 text-white/78 backdrop-blur-md">
             <span className="size-2 rounded-full bg-[#f4ece4]/88 shadow-[0_0_18px_rgba(244,236,228,0.45)]" />
-            <span className="text-base font-medium tracking-[0.18em] uppercase">
+            <span className="text-base font-medium uppercase">
               {content.hero.marquee}
             </span>
           </div>
@@ -194,6 +194,7 @@ function ReducedMotionDesktopShowcase({
                 className="h-full gap-4"
                 description={item.description}
                 eyebrow={item.eyebrow}
+                hideDescription
                 hideEyebrow
                 tileClassName="h-full min-h-56 rounded-[24px]"
                 title={item.title}
@@ -375,17 +376,17 @@ export function RadiantShowcaseSection({
             <div className="site-gutter">
               <div
                 ref={serviceGridShellRef}
-                className="mx-auto max-w-384 opacity-0 will-change-transform"
+                className="mx-auto opacity-0 will-change-transform"
                 style={desktopShowcaseGridStyle}
               >
-                <div ref={serviceHeaderRef} className="max-w-[34rem] pt-8 xl:pt-10">
-                  <p className="text-base font-medium tracking-[0.24em] text-[#27272A] uppercase">
+                <div ref={serviceHeaderRef} className="pt-8 xl:pt-10">
+                  <p className="text-base font-medium text-[#27272A] uppercase">
                     {content.services.eyebrow}
                   </p>
-                  <h2 className="mt-4 font-heading text-[clamp(3rem,5vw,4.75rem)] leading-[0.94] tracking-[-0.06em] text-[#27272A]">
+                  <h2 className="mt-4 font-heading text-[clamp(3rem,5vw,4.75rem)] leading-[0.94] text-[#27272A]">
                     {content.services.title}
                   </h2>
-                  <p className="mt-5 max-w-[33rem] text-[1rem] leading-7 text-[#27272A]">
+                  <p className="mt-5 text-[1rem] leading-7 text-[#27272A]">
                     {content.services.intro}
                   </p>
                 </div>
@@ -414,7 +415,7 @@ export function RadiantShowcaseSection({
                         className="aspect-video w-full rounded-[24px] opacity-0"
                       />
                       <h3
-                        className="w-full text-center font-inika text-[20px] font-bold leading-[1.05] tracking-[-0.03em] text-[#27272A]"
+                        className="w-full text-center font-inika text-[20px] font-bold leading-[1.05] text-[#27272A]"
                         style={{ minHeight: "var(--showcase-grid-title-height)" }}
                       >
                         {item.title}
@@ -502,14 +503,27 @@ export function RadiantShowcaseSection({
 
       <ReducedMotionDesktopShowcase content={content} />
 
-      <div className="site-gutter py-16 md:hidden">
-        <div className="grid grid-cols-2 gap-4">
+      <div className="site-gutter pb-16 pt-14 md:hidden">
+        <div className="mx-auto max-w-[22rem] text-center">
+          <p className="text-base font-medium text-[#27272A] uppercase">
+            {content.services.eyebrow}
+          </p>
+          <h2 className="mt-3 font-heading text-[2.5rem] leading-[0.96] text-[#27272A]">
+            {content.services.title}
+          </h2>
+          <p className="mt-4 text-[1rem] leading-7 text-[#27272A]">
+            {content.services.intro}
+          </p>
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 gap-4">
           {content.services.items.map((item, index) => (
             <ServiceCard
               key={`${item.title}-mobile`}
               className="gap-3"
               description={item.description}
               eyebrow={item.eyebrow}
+              hideDescription
               hideEyebrow
               tileClassName="rounded-[10px]"
               title={item.title}

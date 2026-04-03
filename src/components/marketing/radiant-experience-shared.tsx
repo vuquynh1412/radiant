@@ -371,6 +371,7 @@ export function ServiceCopy({
   className,
   description,
   eyebrow,
+  hideDescription = false,
   hideEyebrow = false,
   title,
 }: {
@@ -378,6 +379,7 @@ export function ServiceCopy({
   className?: string;
   description: string;
   eyebrow: string;
+  hideDescription?: boolean;
   hideEyebrow?: boolean;
   title: string;
 }) {
@@ -390,21 +392,23 @@ export function ServiceCopy({
       )}
     >
       {hideEyebrow ? null : (
-        <p className="text-base font-medium tracking-[0.22em] text-muted-foreground uppercase">
+        <p className="text-base font-medium text-muted-foreground uppercase">
           {eyebrow}
         </p>
       )}
-      <h3 className="font-heading text-[clamp(2rem,3vw,3.75rem)] leading-none tracking-[-0.05em] text-foreground">
+      <h3 className="font-heading text-[clamp(2rem,3vw,3.75rem)] leading-none text-foreground">
         {title}
       </h3>
-      <p
-        className={cn(
-          "max-w-lg text-base leading-7 text-muted-foreground sm:text-base",
-          centered && "mx-auto",
-        )}
-      >
-        {description}
-      </p>
+      {hideDescription ? null : (
+        <p
+          className={cn(
+            "max-w-lg text-base leading-7 text-muted-foreground sm:text-base",
+            centered && "mx-auto",
+          )}
+        >
+          {description}
+        </p>
+      )}
     </div>
   );
 }
@@ -436,14 +440,14 @@ export function ServiceCard({
       <div className="flex flex-col gap-2">
         <h3
           className={cn(
-            "font-inika text-[1.5rem] font-bold leading-[1.08] tracking-[-0.03em] text-[#27272A]",
+            "font-inika text-[1.5rem] font-bold leading-[1.08] text-[#27272A] text-center",
             titleClassName,
           )}
         >
           {title}
         </h3>
         {hideEyebrow ? null : (
-          <p className="text-base font-medium tracking-[0.22em] text-muted-foreground uppercase">
+          <p className="text-base font-medium text-muted-foreground uppercase">
             {eyebrow}
           </p>
         )}

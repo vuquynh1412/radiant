@@ -108,7 +108,7 @@ export function RadiantProjectsSection({
                     src={image.src}
                   />
                 </div>
-                <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium leading-[1.12] tracking-[-0.02em] text-(--projects-card-title-color) md:text-[1.125rem]">
+                <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium leading-[1.12] text-(--projects-card-title-color) md:text-[1.125rem]">
                   {item.title}
                 </h3>
               </article>

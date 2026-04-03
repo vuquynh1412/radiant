@@ -97,7 +97,7 @@ function PatternTicker({
             key={`${label}-${index}`}
             className="flex items-center gap-3 md:gap-4"
           >
-            <span className="font-heading text-[clamp(2.5rem,5vw,4.8rem)] leading-none tracking-[0.03em] text-(--matrix-ticker-color)">
+            <span className="font-heading text-[clamp(2.5rem,5vw,4.8rem)] leading-none text-(--matrix-ticker-color)">
               {label}
             </span>
             <RadiantSparkIcon className="size-5 text-(--matrix-ticker-color) md:size-6 lg:size-[2.8rem]" />
@@ -145,10 +145,7 @@ function RotatingImageSlot({
   return (
     <div
       data-matrix-image={imagePosition || "center"}
-      className={cn(
-        "relative overflow-hidden rounded-[1rem]",
-        className,
-      )}
+      className={cn("relative overflow-hidden rounded-[1rem]", className)}
     >
       {images.map((image, index) => (
         <Image
@@ -220,7 +217,6 @@ function useBubbleSystem(
     bubble.style.left = `${30 + 40 * Math.random()}%`;
     bubble.style.backgroundColor = bgColor;
     bubble.style.fontSize = "clamp(0.75rem, 1vw, 0.875rem)";
-    bubble.style.letterSpacing = "0.03em";
     bubble.style.padding = "0.5rem 1rem";
     bubble.style.color = "rgb(0, 0, 0)";
     bubble.style.zIndex = "10";
@@ -296,8 +292,7 @@ function useBubbleSystem(
 }
 
 // --- BackgroundWord ---
-
-const matrixFontSize = "clamp(4.5rem,9.5vw,9.2rem)";
+const matrixFontSize = "clamp(3.5rem,9.5vw,9.2rem)";
 
 function BackgroundWord({
   text,
@@ -378,10 +373,7 @@ function DesktopMatrix({
           isActive={isActive}
           priority
         />
-        <BackgroundWord
-          text={rows.branding}
-          wordRef={setWordRef(0)}
-        />
+        <BackgroundWord text={rows.branding} wordRef={setWordRef(0)} />
         <RotatingImageSlot
           altLabel={altLabel}
           className={imageClassName}
@@ -398,10 +390,7 @@ function DesktopMatrix({
         className={rowClassName}
         style={{ gridTemplateColumns: "auto 1fr auto" }}
       >
-        <BackgroundWord
-          text={rows.marketing}
-          wordRef={setWordRef(1)}
-        />
+        <BackgroundWord text={rows.marketing} wordRef={setWordRef(1)} />
         <RotatingImageSlot
           altLabel={altLabel}
           className={imageClassName}
@@ -410,10 +399,7 @@ function DesktopMatrix({
           images={imageSlots.slotC}
           isActive={isActive}
         />
-        <BackgroundWord
-          text={rows.socials}
-          wordRef={setWordRef(2)}
-        />
+        <BackgroundWord text={rows.socials} wordRef={setWordRef(2)} />
       </div>
 
       {/* Row 3: [image] [STORYTELLING] [image] */}
@@ -430,10 +416,7 @@ function DesktopMatrix({
           images={imageSlots.slotD}
           isActive={isActive}
         />
-        <BackgroundWord
-          text={rows.storytelling}
-          wordRef={setWordRef(3)}
-        />
+        <BackgroundWord text={rows.storytelling} wordRef={setWordRef(3)} />{" "}
         <RotatingImageSlot
           altLabel={altLabel}
           className={imageClassName}
@@ -477,7 +460,11 @@ function MobileMatrix({
     { key: "branding", label: rows.branding, slots: ["slotA", "slotB"] },
     { key: "digital", label: rows.marketing, slots: ["slotC"] },
     { key: "socials", label: rows.socials, slots: ["slotC"] },
-    { key: "storytelling", label: rows.storytelling, slots: ["slotD", "slotE"] },
+    {
+      key: "storytelling",
+      label: rows.storytelling,
+      slots: ["slotD", "slotE"],
+    },
   ];
 
   return (
@@ -499,7 +486,7 @@ function MobileMatrix({
               <RotatingImageSlot
                 key={slotKey + slotIndex}
                 altLabel={altLabel}
-                className="h-[7.75rem] w-full"
+                className="h-[7.75rem] min-w-0 w-full max-w-full"
                 delayMs={rowIndex * 240 + slotIndex * 180}
                 images={imageSlots[slotKey]}
                 isActive={isActive}

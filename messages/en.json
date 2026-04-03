@@ -304,6 +304,7 @@
       "socials": {
         "facebook": "Facebook",
         "instagram": "Instagram",
+        "tiktok": "TikTok",
         "linkedin": "LinkedIn",
         "x": "X",
         "youtube": "YouTube"
@@ -317,16 +318,16 @@
               "href": "#about"
             },
             {
-              "label": "Capabilities",
-              "href": "#showcase"
-            },
-            {
-              "label": "Our works",
+              "label": "Projects",
               "href": "#projects"
             },
             {
-              "label": "Plans",
-              "href": "#plans"
+              "label": "News",
+              "href": "#projects"
+            },
+            {
+              "label": "FAQs",
+              "href": "#contact"
             },
             {
               "label": "Contact",
@@ -359,37 +360,26 @@
             }
           ]
         },
-        "industries": {
-          "title": "Industries",
+        "legal": {
+          "title": "Legal Information",
           "items": [
             {
-              "label": "Hospitality & lifestyle",
-              "href": "#projects"
+              "label": "Privacy Policy",
+              "href": "#contact"
             },
             {
-              "label": "Professional services",
-              "href": "#projects"
-            },
-            {
-              "label": "Wellness & beauty",
-              "href": "#projects"
-            },
-            {
-              "label": "Real estate & places",
-              "href": "#projects"
-            },
-            {
-              "label": "Cultural launches",
-              "href": "#projects"
+              "label": "Terms & Conditions",
+              "href": "#contact"
             }
           ]
         }
       },
       "contact": {
-        "phone": "+84 28 7300 1144",
-        "email": "hello@radiant.studio",
-        "address": "District 1, Ho Chi Minh City, Vietnam"
+        "phone": "0318818213",
+        "email": "hello@radiant.com",
+        "address": "M4 - 21, Duong M4, Manhattan Glory, Vinhomes Grand Park, Phuong Long Binh, Thanh pho Ho Chi Minh, Viet Nam"
       },
+      "copyright": "Copyright © 2026 Radiant",
       "patternLabel": "RADIANT"
     }
   }

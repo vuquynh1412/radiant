@@ -1,6 +1,7 @@
 export type RadiantSocialKey =
   | "facebook"
   | "instagram"
+  | "tiktok"
   | "linkedin"
   | "x"
   | "youtube";

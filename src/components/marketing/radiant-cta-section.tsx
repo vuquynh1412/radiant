@@ -31,6 +31,7 @@ type CallToActionBodyProps = {
   content: RadiantExperienceContent;
   eyebrowClassName?: string;
   eyebrowRef?: RefObject<HTMLParagraphElement | null>;
+  hideBody?: boolean;
   titleClassName?: string;
   titleRef?: RefObject<HTMLHeadingElement | null>;
 };
@@ -44,6 +45,7 @@ function CallToActionBody({
   content,
   eyebrowClassName,
   eyebrowRef,
+  hideBody = false,
   titleClassName,
   titleRef,
 }: CallToActionBodyProps) {
@@ -52,7 +54,7 @@ function CallToActionBody({
       <p
         ref={eyebrowRef}
         className={cn(
-          "text-base font-medium tracking-[0.26em] text-[#27272A] uppercase",
+          "text-base font-medium text-[#27272A] uppercase",
           eyebrowClassName,
         )}
       >
@@ -61,21 +63,23 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "title-display-inika mx-auto mt-4 max-w-[13ch] text-[#27272A]",
+          "title-display-inika mx-auto mt-4 max-w-[13ch] text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.96] text-[#27272A]",
           titleClassName,
         )}
       >
         {content.cta.title}
       </h2>
-      <p
-        ref={bodyRef}
-        className={cn(
-          "mx-auto mt-5 max-w-2xl text-[1rem] leading-7 text-[#27272A] sm:text-[1.08rem]",
-          bodyClassName,
-        )}
-      >
-        {content.cta.body}
-      </p>
+      {hideBody ? null : (
+        <p
+          ref={bodyRef}
+          className={cn(
+            "mx-auto mt-5 max-w-2xl text-[1rem] leading-7 text-[#27272A] sm:text-[1.08rem]",
+            bodyClassName,
+          )}
+        >
+          {content.cta.body}
+        </p>
+      )}
 
       <div
         ref={actionsRef}
@@ -130,6 +134,7 @@ function ReducedMotionCallToAction({
             containerClassName="mx-auto"
             content={content}
             eyebrowClassName="opacity-100"
+            hideBody
             titleClassName="opacity-100"
           />
         </div>
@@ -357,6 +362,7 @@ export function RadiantCallToActionSection({
                 content={content}
                 eyebrowClassName="opacity-0"
                 eyebrowRef={eyebrowRef}
+                hideBody
                 titleClassName="opacity-0"
                 titleRef={titleRef}
               />
