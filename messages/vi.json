@@ -1,7 +1,7 @@
 {
   "Common": {
     "actions": {
-      "bookCall": "Đặt lịch chiến lược",
+      "bookCall": "Đặt lịch ngay",
       "requestDeck": "Nhận hồ sơ năng lực"
     }
   },
@@ -294,8 +294,8 @@
       "body": "Chúng tôi xây dựng thương hiệu như một “hệ điều hành” cho tăng trưởng — giúp doanh nghiệp rõ định vị, thống nhất cách thể hiện và vận hành hiệu quả hơn trong mọi điểm chạm, từ đó ra quyết định nhanh, phối hợp tốt và tự tin triển khai."
     },
     "CTA": {
-      "eyebrow": "Xây giai đoạn tiếp theo",
-      "title": "Nơi khác biệt trở thành chuẩn mực.",
+      "eyebrow": "Trở thành đối tác của chúng tôi",
+      "title": "Nơi khác biệt\ntrở thành chuẩn mực",
       "body": "Chọn Radiant khi giai đoạn tiếp theo đòi hỏi định vị sắc hơn, hệ nhận diện kỷ luật hơn và những quyết định thương hiệu đã sẵn sàng để triển khai.",
       "buttonLabel": "Liên hệ",
       "secondary": "Hoặc bắt đầu bằng một email ngắn để xem nhanh mức độ phù hợp."

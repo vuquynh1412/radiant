@@ -43,8 +43,8 @@ type RadiantShowcaseSectionProps = {
 const desktopShowcaseGridStyle = {
   "--showcase-grid-columns": "4",
   "--showcase-grid-column-gap": "24px",
-  "--showcase-grid-footer-margin-top": "32px",
-  "--showcase-grid-header-gap": "20px",
+  "--showcase-grid-footer-margin-top": "20px",
+  "--showcase-grid-header-gap": "36px",
   "--showcase-grid-content-height": "32rem",
   "--showcase-grid-item-gap": "10px",
   "--showcase-grid-row-gap": "24px",
@@ -56,9 +56,10 @@ function ShowcaseViewAllButton({ label }: { label: string }) {
   return (
     <button
       type="button"
+      onClick={() => {}}
       className={buttonVariants({
         className:
-          "border-[#27272A]/38 bg-transparent text-[#27272A] hover:bg-white hover:text-[#27272A] active:bg-white",
+          "border-[#27272A]/38 cursor-pointer bg-transparent text-[#27272A] hover:bg-white hover:text-blue-900",
         size: "marketing",
         variant: "outline",
       })}
@@ -185,7 +186,7 @@ function ReducedMotionDesktopShowcase({
         </div>
       </div>
 
-      <div className="site-gutter bg-background py-16 lg:py-20">
+      <div className="site-gutter bg-[#F9F0E8] py-16 lg:py-20">
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {content.services.items.map((item, index) => (
@@ -257,10 +258,10 @@ export function RadiantShowcaseSection({
         }
       >
         <div className="relative min-h-svh overflow-clip pt-24 md:sticky md:top-0 md:h-svh md:pt-0">
-          <div className="absolute inset-0 bg-[#f6f1eb]" />
+          <div className="absolute inset-0 bg-[#F9F0E8]" />
           <div
             ref={heroMatteRef}
-            className="absolute inset-y-0 left-0 bg-[#f6f1eb] will-change-transform"
+            className="absolute inset-y-0 left-0 bg-[#F9F0E8] will-change-transform"
           />
 
           <div
@@ -370,25 +371,20 @@ export function RadiantShowcaseSection({
             </div>
           </div>
 
-          <div
-            className="pointer-events-none absolute inset-x-0 top-0 z-30"
-          >
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-30">
             <div className="site-gutter">
               <div
                 ref={serviceGridShellRef}
                 className="mx-auto opacity-0 will-change-transform"
                 style={desktopShowcaseGridStyle}
               >
-                <div ref={serviceHeaderRef} className="pt-8 xl:pt-10">
-                  <p className="text-base font-medium text-[#27272A] uppercase">
-                    {content.services.eyebrow}
-                  </p>
-                  <h2 className="mt-4 font-heading text-[clamp(3rem,5vw,4.75rem)] leading-[0.94] text-[#27272A]">
+                <div
+                  ref={serviceHeaderRef}
+                  className="pt-8 text-center xl:pt-10"
+                >
+                  <h2 className="font-heading text-[clamp(3rem,5vw,4.75rem)] leading-none text-[#27272A]">
                     {content.services.title}
                   </h2>
-                  <p className="mt-5 text-[1rem] leading-7 text-[#27272A]">
-                    {content.services.intro}
-                  </p>
                 </div>
 
                 <div
@@ -416,7 +412,9 @@ export function RadiantShowcaseSection({
                       />
                       <h3
                         className="w-full text-center font-inika text-[20px] font-bold leading-[1.05] text-[#27272A]"
-                        style={{ minHeight: "var(--showcase-grid-title-height)" }}
+                        style={{
+                          minHeight: "var(--showcase-grid-title-height)",
+                        }}
                       >
                         {item.title}
                       </h3>
@@ -424,13 +422,7 @@ export function RadiantShowcaseSection({
                   ))}
                 </div>
 
-                <div
-                  ref={serviceGridFooterRef}
-                  className="flex justify-center"
-                  style={{
-                    marginTop: "var(--showcase-grid-footer-margin-top)",
-                  }}
-                >
+                <div ref={serviceGridFooterRef} className="flex justify-center">
                   <ShowcaseViewAllButton label={viewAllLabel} />
                 </div>
               </div>
@@ -504,16 +496,10 @@ export function RadiantShowcaseSection({
       <ReducedMotionDesktopShowcase content={content} />
 
       <div className="site-gutter pb-16 pt-14 md:hidden">
-        <div className="mx-auto max-w-[22rem] text-center">
-          <p className="text-base font-medium text-[#27272A] uppercase">
-            {content.services.eyebrow}
-          </p>
-          <h2 className="mt-3 font-heading text-[2.5rem] leading-[0.96] text-[#27272A]">
+        <div className="mx-auto max-w-88 text-center">
+          <h2 className="font-heading text-[2.5rem] leading-[0.96] text-[#27272A]">
             {content.services.title}
           </h2>
-          <p className="mt-4 text-[1rem] leading-7 text-[#27272A]">
-            {content.services.intro}
-          </p>
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-4">
@@ -531,6 +517,9 @@ export function RadiantShowcaseSection({
               variant={serviceVisuals[index % serviceVisuals.length]}
             />
           ))}
+        </div>
+        <div className="flex justify-center mt-4">
+          <ShowcaseViewAllButton label={viewAllLabel} />
         </div>
       </div>
     </section>

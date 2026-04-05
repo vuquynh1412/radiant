@@ -286,6 +286,24 @@ html {
       transform 0.3s cubic-bezier(0.075, 0.82, 0.165, 1),
       opacity 50ms linear;
   }
+
+  .partner-logos-track {
+    display: flex;
+    width: max-content;
+    min-width: 100%;
+    align-items: center;
+    gap: var(--partner-logos-gap);
+    animation: partner-logos-marquee var(--partner-logos-speed) linear infinite;
+    will-change: transform;
+  }
+
+  .partner-logos-group {
+    display: flex;
+    min-width: max-content;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--partner-logos-gap);
+  }
 }
 
 @keyframes radiant-pan {
@@ -353,5 +371,21 @@ html {
   50% {
     opacity: 0.85;
     transform: scale(1.08);
+  }
+}
+
+@keyframes partner-logos-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-50% - (var(--partner-logos-gap) / 2)), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-logos-track {
+    animation: none;
   }
 }

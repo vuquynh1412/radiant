@@ -21,6 +21,7 @@ import type {
   RadiantExperienceRefs,
 } from "./radiant-experience.types";
 import { RadiantFooterSection } from "./radiant-footer-section";
+import { RadiantPartnerLogosSection } from "./radiant-partner-logos-section";
 import { RadiantProjectsSection } from "./radiant-projects-section";
 import { RadiantShowcaseSection } from "./radiant-showcase-section";
 import { useRadiantCapabilityMatrixMotion } from "./use-radiant-capability-matrix-motion";
@@ -256,6 +257,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
             content={content}
             projectsSectionRef={projectsSectionRef}
           />
+          <RadiantPartnerLogosSection />
           <RadiantCallToActionSection content={content} />
           <RadiantFooterSection content={content} />
         </main>

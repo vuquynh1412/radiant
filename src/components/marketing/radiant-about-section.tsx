@@ -17,7 +17,7 @@ export function RadiantAboutSection({
   const aboutBodyText = content.about.body.replace(/\s*[—–-]\s*/g, ", ");
 
   return (
-    <section id="about" className="relative isolate z-40 bg-background">
+    <section id="about" className="relative isolate z-40 bg-[#F9F0E8]">
       <div
         ref={aboutSectionRef}
         className="site-gutter flex w-full justify-center"

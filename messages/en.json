@@ -1,7 +1,7 @@
 {
   "Common": {
     "actions": {
-      "bookCall": "Book Strategy Call",
+      "bookCall": "Book now",
       "requestDeck": "Request Capability Deck"
     }
   },
@@ -294,8 +294,8 @@
       "body": "We approach brand development as an operating system for growth, not a cosmetic exercise. Every engagement is built to clarify what the business stands for, how it should be understood, and how that understanding should carry into language, design, digital expression, and internal adoption. The result is a brand that helps people decide faster, align better, and launch with more confidence."
     },
     "CTA": {
-      "eyebrow": "Build The Next Stage",
-      "title": "Where Different Becomes The Standard.",
+      "eyebrow": "Become our partner",
+      "title": "Where Different\nBecomes The Standard.",
       "body": "Choose Radiant when the next stage demands sharper positioning, more disciplined identity systems, and rollout-ready brand decisions.",
       "buttonLabel": "Get in touch",
       "secondary": "Or start with a short capability review over email."

@@ -4,7 +4,7 @@ import { useRef, type RefObject } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowUpRightIcon, MailIcon } from "lucide-react";
+import { ArrowUpRightIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -49,8 +49,13 @@ function CallToActionBody({
   titleClassName,
   titleRef,
 }: CallToActionBodyProps) {
+  const titleLines = content.cta.title
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
   return (
-    <div className={cn("max-w-296", containerClassName)}>
+    <div className={cn("w-full", containerClassName)}>
       <p
         ref={eyebrowRef}
         className={cn(
@@ -63,11 +68,15 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "title-display-inika mx-auto mt-4 max-w-[13ch] text-[clamp(2.5rem,6vw,4.5rem)] leading-[0.96] text-[#27272A]",
+          "title-display-inika mx-auto mt-4 flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
           titleClassName,
         )}
       >
-        {content.cta.title}
+        {titleLines.map((line, index) => (
+          <span key={`${line}-${index}`} className="block whitespace-nowrap">
+            {line}
+          </span>
+        ))}
       </h2>
       {hideBody ? null : (
         <p
@@ -103,14 +112,6 @@ function CallToActionBody({
             <span>{content.cta.buttonLabel}</span>
             <ArrowUpRightIcon data-icon="inline-end" />
           </span>
-        </a>
-
-        <a
-          className="inline-flex items-center gap-2 text-base text-[#27272A] transition-colors hover:text-[#27272A]"
-          href="mailto:hello@radiant.studio?subject=Radiant%20capability%20review"
-        >
-          <MailIcon className="size-4" />
-          {content.cta.secondary}
         </a>
       </div>
     </div>

@@ -410,12 +410,12 @@ export function RadiantExperienceHeader({
               href="#showcase"
               className="min-w-0 shrink-0 transition-opacity hover:opacity-85"
             >
-              <div className="flex items-center gap-2 sm:gap-3">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <div className="shrink-0 text-primary">
-                  <RadiantBrandLogo className="block h-6 w-auto sm:h-9 md:h-12" />
+                  <RadiantBrandLogo className="block h-7 w-auto sm:h-7 md:h-8" />
                 </div>
                 <div className="min-w-0 leading-none">
-                  <p className="truncate font-heading text-[1.15rem] leading-none sm:text-[1.65rem]">
+                  <p className="truncate font-heading font-semibold text-[1.15rem] leading-none sm:text-[1.50rem] text-[#27272A]">
                     {content.brand.name}
                   </p>
                 </div>
@@ -433,7 +433,7 @@ export function RadiantExperienceHeader({
 
               <a
                 href="mailto:hello@radiant.studio"
-                className="hidden min-w-0 items-center gap-3 rounded-full px-3.5 py-2.5 text-right text-base transition-colors hover:bg-muted/55 xl:flex"
+                className="hidden min-w-0 items-center gap-2 rounded-full px-3.5 py-2.5 text-right text-base transition-colors hover:transparent hover:text-primary xl:flex"
               >
                 <MailIcon className="size-5 shrink-0 text-current/55" />
                 <p className="truncate text-base font-medium text-current">
@@ -495,7 +495,7 @@ export function RadiantExperienceHeader({
                 aria-expanded={isMenuOpen}
                 aria-label={content.brand.menu}
                 className={cn(
-                  "flex size-10 items-center justify-center rounded-full bg-[#17171d] text-white shadow-[0_18px_36px_-28px_rgba(17,15,14,0.6)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17171d]/25 hover:-translate-y-0.5 md:h-12 md:w-auto md:min-w-[7.75rem] md:gap-2 md:px-5",
+                  "flex size-10 items-center justify-center rounded-full bg-[#17171d] text-white shadow-[0_18px_36px_-28px_rgba(17,15,14,0.6)] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#17171d]/25 hover:bg-primary/80 md:h-12 md:w-auto md:min-w-[7.75rem] md:gap-2 md:px-5",
                   isMenuRendered && "bg-[#111218]",
                 )}
               >
