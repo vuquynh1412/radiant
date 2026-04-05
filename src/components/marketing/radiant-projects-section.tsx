@@ -87,30 +87,44 @@ export function RadiantProjectsSection({
           })}
         </div>
 
-        <div className="mt-8 columns-2 gap-1 md:mt-10 md:gap-4 xl:columns-3">
+        <div className="mt-8 columns-2 gap-4 md:mt-10 xl:columns-3">
           {visibleItems.map((item) => {
             const image = projectGalleryImages[item.key];
+            const titleWords = item.title.split(" ");
 
             return (
               <article
                 key={item.key}
-                className="mb-1 break-inside-avoid md:mb-4"
+                className="group mb-4 break-inside-avoid"
               >
                 <div
-                  className="relative w-full overflow-hidden rounded-[1rem] md:rounded-[1.4rem]"
+                  className="relative w-full overflow-hidden rounded-[10px]"
                   style={{ aspectRatio: `${image.width} / ${image.height}` }}
                 >
                   <Image
                     alt={item.title}
-                    className="object-cover"
+                    className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
                     fill
                     sizes="(min-width: 1280px) 28vw, (min-width: 768px) 46vw, 48vw"
                     src={image.src}
                   />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-black/58 via-black/18 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 p-4 sm:p-5">
+                    <h3 className="max-w-[80%] overflow-hidden text-pretty text-base font-medium leading-[1.16] text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.32)] md:text-[1.125rem]">
+                      {titleWords.map((word, index) => (
+                        <span
+                          key={`${item.key}-${word}-${index}`}
+                          className="mr-[0.28em] inline-block translate-y-5 opacity-0 transition-all duration-500 ease-out motion-reduce:translate-y-0 motion-reduce:transition-none group-hover:translate-y-0 group-hover:opacity-100"
+                          style={{
+                            transitionDelay: `${index * 55}ms`,
+                          }}
+                        >
+                          {word}
+                        </span>
+                      ))}
+                    </h3>
+                  </div>
                 </div>
-                <h3 className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-base font-medium leading-[1.12] text-(--projects-card-title-color) md:text-[1.125rem]">
-                  {item.title}
-                </h3>
               </article>
             );
           })}

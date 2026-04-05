@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
-  LanguagesIcon,
   MailIcon,
   MenuIcon,
   PhoneCallIcon,
@@ -81,6 +81,9 @@ export function RadiantExperienceHeader({
   const pathname = usePathname();
   const router = useRouter();
   const nextLocale = locale === "vi" ? "en" : "vi";
+  const nextLocaleFlag = nextLocale === "vi" ? "VN" : "EN";
+  const nextLocaleFlagSrc =
+    nextLocale === "vi" ? "/locale/vi.svg" : "/locale/en.svg";
   const [isAtTop, setIsAtTop] = useState(true);
   const [isVisible, setIsVisible] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -441,17 +444,28 @@ export function RadiantExperienceHeader({
               <button
                 type="button"
                 onClick={handleLocaleSwitch}
+                aria-label={`Switch language to ${nextLocaleFlag}`}
                 className={cn(
                   buttonVariants({
                     className:
-                      "hidden border-[#d5ccc2] bg-white/92 text-[#27272A] hover:bg-white md:inline-flex",
+                      "hidden min-w-12 border-none bg-transparent px-0 text-xl text-[#27272A] hover:bg-transparent hover:opacity-50 md:inline-flex",
                     size: "marketing",
                     variant: "outline",
                   }),
                 )}
               >
-                <LanguagesIcon data-icon="inline-start" />
-                {nextLocale.toUpperCase()}
+                <span
+                  aria-hidden="true"
+                  className="flex items-center justify-center leading-none"
+                >
+                  <Image
+                    src={nextLocaleFlagSrc}
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="size-5 rounded-xs object-cover"
+                  />
+                </span>
               </button>
 
               <a
@@ -628,17 +642,28 @@ export function RadiantExperienceHeader({
                           <button
                             type="button"
                             onClick={handleLocaleSwitch}
+                            aria-label={`Switch language to ${nextLocaleFlag}`}
                             className={cn(
                               buttonVariants({
                                 className:
-                                  "border-white/14 bg-transparent text-white hover:bg-white/8",
+                                  "min-w-12 border-white/14 bg-transparent px-0 text-xl text-white hover:bg-white/8",
                                 size: "marketing",
                                 variant: "outline",
                               }),
                             )}
                           >
-                            <LanguagesIcon data-icon="inline-start" />
-                            {nextLocale.toUpperCase()}
+                            <span
+                              aria-hidden="true"
+                              className="flex items-center justify-center leading-none"
+                            >
+                              <Image
+                                src={nextLocaleFlagSrc}
+                                alt=""
+                                width={20}
+                                height={20}
+                                className="size-5 rounded-full object-cover"
+                              />
+                            </span>
                           </button>
                         </div>
                       </div>
@@ -773,17 +798,28 @@ export function RadiantExperienceHeader({
                             <button
                               type="button"
                               onClick={handleLocaleSwitch}
+                              aria-label={`Switch language to ${nextLocaleFlag}`}
                               className={cn(
                                 buttonVariants({
                                   className:
-                                    "border-white/14 bg-transparent text-white hover:bg-white/8",
+                                    "min-w-12 border-white/14 bg-transparent px-0 text-xl text-white hover:bg-white/8",
                                   size: "marketing",
                                   variant: "outline",
                                 }),
                               )}
                             >
-                              <LanguagesIcon data-icon="inline-start" />
-                              {nextLocale.toUpperCase()}
+                              <span
+                                aria-hidden="true"
+                                className="flex items-center justify-center leading-none"
+                              >
+                                <Image
+                                  src={nextLocaleFlagSrc}
+                                  alt=""
+                                  width={20}
+                                  height={20}
+                                  className="size-5 rounded-full object-cover"
+                                />
+                              </span>
                             </button>
                           </div>
                         </div>
