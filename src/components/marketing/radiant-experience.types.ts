@@ -2,6 +2,7 @@ import type { RefObject } from "react";
 
 import type {
   HomePageContent,
+  OrderedNewsItem,
   OrderedPlanItem,
   OrderedProjectItem,
   OrderedServiceItem,
@@ -20,6 +21,7 @@ export type RadiantExperienceContent = HomePageContent;
 export type RadiantPlanItem = OrderedPlanItem;
 export type RadiantProjectItem = OrderedProjectItem;
 export type RadiantServiceItem = OrderedServiceItem;
+export type RadiantNewsItem = OrderedNewsItem;
 
 export type RadiantExperienceRefs = {
   rootRef: RefObject<HTMLDivElement | null>;

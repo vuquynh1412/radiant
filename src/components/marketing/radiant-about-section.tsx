@@ -1,5 +1,6 @@
 import type { RadiantExperienceContent, RadiantExperienceRefs } from "./radiant-experience.types";
 import { CharacterRevealText } from "./radiant-experience-shared";
+import { SectionAccent } from "./radiant-experience-shared";
 
 type RadiantAboutSectionProps = {
   content: RadiantExperienceContent;
@@ -26,6 +27,10 @@ export function RadiantAboutSection({
           ref={aboutContentRef}
           className="flex min-h-[max(36rem,calc(100svh-5rem))] w-full max-w-[1200px] flex-col items-center justify-center py-8 text-center md:py-20 lg:py-24"
         >
+          <SectionAccent
+            className="mb-8"
+            label={content.about.eyebrow}
+          />
           <CharacterRevealText
             charRefs={aboutCharRefs}
             className="w-full text-[1.5rem] font-bold leading-[1.14] text-[#27272A] md:text-[40px] md:leading-[1.08] lg:text-[44px]"

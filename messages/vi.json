@@ -48,9 +48,9 @@
       "marquee": "Làm rõ hướng đi tiếp theo cho thương hiệu của bạn"
     },
     "Services": {
-      "eyebrow": "Chuỗi năng lực",
+      "eyebrow": "Năng lực cốt lõi",
       "title": "Dịch vụ cốt lõi",
-      "intro": "Tám nhóm năng lực cốt lõi đi từ làm rõ chiến lược đến sẵn sàng triển khai thương hiệu.",
+      "intro": "Tám dịch vụ cốt lõi giúp thương hiệu đi từ tư vấn chiến lược đến triển khai sáng tạo, truyền thông và tăng trưởng số.",
       "order": [
         "strategy",
         "positioning",
@@ -63,44 +63,100 @@
       ],
       "items": {
         "strategy": {
-          "eyebrow": "Chiến lược thương hiệu",
-          "title": "Nền Tảng Chiến Lược",
-          "description": "Làm rõ tham vọng tăng trưởng, áp lực thị trường, nhu cầu của khách hàng và những quyết định kinh doanh mà thương hiệu cần hỗ trợ tiếp theo."
+          "eyebrow": "Tư vấn chiến lược",
+          "title": "Tư vấn thương hiệu",
+          "description": "Đồng hành cùng doanh nghiệp để làm rõ mục tiêu, bài toán tăng trưởng, chân dung khách hàng và hướng đi thương hiệu phù hợp cho giai đoạn tiếp theo.",
+          "highlights": [
+            "Khảo sát thương hiệu",
+            "Phân tích khách hàng",
+            "Workshop chiến lược",
+            "Định hướng tăng trưởng",
+            "Tư vấn tái định vị"
+          ]
         },
         "positioning": {
-          "eyebrow": "Định vị thị trường",
-          "title": "Định Vị Cho Giai Đoạn Tăng Trưởng",
-          "description": "Xác lập một vị thế sắc nét hơn để doanh nghiệp trở nên khác biệt, đáng tin và dễ được lựa chọn hơn trên thị trường."
+          "eyebrow": "Brand systems",
+          "title": "Xây hệ thống thương hiệu",
+          "description": "Thiết lập logic thương hiệu xuyên suốt từ cấu trúc danh mục, hệ thông điệp, nguyên tắc vận hành đến các nền tảng giúp đội ngũ triển khai nhất quán.",
+          "highlights": [
+            "Kiến trúc thương hiệu",
+            "Hệ thống thông điệp",
+            "Chuẩn hóa touchpoint",
+            "Khung vận hành nội bộ",
+            "Nguyên tắc triển khai"
+          ]
         },
         "naming": {
-          "eyebrow": "Naming & kiến trúc",
-          "title": "Naming Và Kiến Trúc Thương Hiệu",
-          "description": "Sắp xếp danh mục, offer và hệ naming để doanh nghiệp có thể mở rộng qua sản phẩm, sub-brand và thị trường mới một cách nhất quán."
+          "eyebrow": "Sáng tạo & thẩm mỹ",
+          "title": "Thiết kế thương hiệu",
+          "description": "Phát triển concept sáng tạo, ngôn ngữ thị giác và trải nghiệm thẩm mỹ để thương hiệu có cảm giác riêng, nổi bật và đáng nhớ.",
+          "highlights": [
+            "Concept thị giác",
+            "Moodboard sáng tạo",
+            "Key visual thương hiệu",
+            "Art direction",
+            "Ngôn ngữ hình ảnh"
+          ]
         },
         "messaging": {
-          "eyebrow": "Hệ thống ngôn ngữ",
-          "title": "Thông Điệp Và Verbal System",
-          "description": "Xây dựng ngôn ngữ cốt lõi để thương hiệu giao tiếp rõ ràng, khác biệt và có độ tự tin trên mọi touchpoint."
+          "eyebrow": "Hiện diện số",
+          "title": "Thương hiệu số (Website)",
+          "description": "Chuyển hóa chiến lược thương hiệu thành trải nghiệm website rõ ràng, thuyết phục và tối ưu cho hành trình người dùng trên môi trường số.",
+          "highlights": [
+            "UX/UI website",
+            "Cấu trúc nội dung",
+            "Wireframe & prototype",
+            "Landing page",
+            "Tối ưu hành trình"
+          ]
         },
         "identity": {
-          "eyebrow": "Nhận diện hình ảnh",
-          "title": "Hệ Thống Nhận Diện",
-          "description": "Tạo nên một hệ nhận diện có cảm giác cao cấp, dễ nhận biết và đủ linh hoạt cho vận hành thương hiệu hiện đại."
+          "eyebrow": "Visual identity",
+          "title": "Bộ nhận diện thương hiệu",
+          "description": "Thiết kế bộ nhận diện với logo, màu sắc, kiểu chữ, hình ảnh và các ứng dụng cốt lõi để thương hiệu xuất hiện đồng bộ trên mọi điểm chạm.",
+          "highlights": [
+            "Logo system",
+            "Color palette",
+            "Typography",
+            "Brand application",
+            "Social kit"
+          ]
         },
         "digital": {
-          "eyebrow": "Định hướng digital",
-          "title": "Website Và Digital Brand Direction",
-          "description": "Chuyển chiến lược và nhận diện thành trải nghiệm số, nơi brand presence, user flow và mục tiêu chuyển đổi cùng được sắp đặt đúng."
+          "eyebrow": "Truyền thông tích hợp",
+          "title": "Truyền thông đa nền tảng",
+          "description": "Xây dựng hệ nội dung và định hướng triển khai giúp thương hiệu kể cùng một câu chuyện trên social, sự kiện, PR, digital và các kênh bán hàng.",
+          "highlights": [
+            "Social campaign",
+            "PR định hướng",
+            "Thông điệp chiến dịch",
+            "Nội dung đa kênh",
+            "Kế hoạch ra mắt"
+          ]
         },
         "guidelines": {
-          "eyebrow": "Quản trị thương hiệu",
-          "title": "Guidelines Và Governance",
-          "description": "Biến thương hiệu thành một hệ thống nội bộ có thể dùng được hằng ngày, thay vì chỉ đẹp trong một bản trình bày."
+          "eyebrow": "Tăng trưởng số",
+          "title": "Digital Marketing",
+          "description": "Lập kế hoạch tăng trưởng số gắn với nội dung, quảng cáo, SEO và hiệu quả chuyển đổi để thương hiệu tiếp cận đúng người và tạo ra kết quả đo được.",
+          "highlights": [
+            "SEO & nội dung",
+            "Paid media",
+            "Tối ưu chuyển đổi",
+            "Phân tích dữ liệu",
+            "Tối ưu phễu"
+          ]
         },
         "rollout": {
-          "eyebrow": "Triển khai ra mắt",
-          "title": "Launch Và Rollout Enablement",
-          "description": "Chuẩn bị tài sản, thứ tự rollout và các điểm chạm nội bộ cần thiết để thương hiệu mới được ra mắt một cách tự tin."
+          "eyebrow": "Media production",
+          "title": "Media",
+          "description": "Sản xuất hình ảnh, video và các media asset có chất lượng thẩm mỹ cao để chiến dịch, thương hiệu và sản phẩm được truyền tải sống động hơn.",
+          "highlights": [
+            "Key visual chụp hình",
+            "Video thương hiệu",
+            "Motion content",
+            "Media asset",
+            "Sản xuất chiến dịch"
+          ]
         }
       }
     },
@@ -287,6 +343,38 @@
         }
       }
     },
+    "News": {
+      "title": "Tin tức",
+      "order": [
+        "brand-pattern-language",
+        "launch-shelves",
+        "palette-codes",
+        "cover-story",
+        "packaging-editorial"
+      ],
+      "items": {
+        "brand-pattern-language": {
+          "title": "Khi hệ pattern trở thành một ngôn ngữ nhận diện có thể mở rộng",
+          "description": "Từ bề mặt đồ họa đến cách thương hiệu xuất hiện trên nhiều touchpoint, pattern chỉ thực sự hiệu quả khi nó có quy tắc, nhịp điệu và lý do tồn tại rõ ràng."
+        },
+        "launch-shelves": {
+          "title": "Một launch visual tốt phải đủ nổi bật trên phố và đủ nhất quán trên digital",
+          "description": "Thiết kế launch không chỉ là gây chú ý trong khoảnh khắc đầu tiên, mà còn phải giữ được độ nhận diện khi được cắt nhỏ cho social, banner và retail assets."
+        },
+        "palette-codes": {
+          "title": "Màu sắc thương hiệu không nên chỉ đẹp trên palette",
+          "description": "Điều quan trọng là cách màu hoạt động khi đặt cạnh typography, material, nền ảnh và những bề mặt thật mà khách hàng nhìn thấy mỗi ngày."
+        },
+        "cover-story": {
+          "title": "Editorial cover có thể định hình cảm giác thương hiệu nhanh hơn cả một deck dài",
+          "description": "Một khung bìa đủ mạnh thường giúp đội ngũ nhìn ra tinh thần thương hiệu rõ hơn, từ đó ra quyết định nhanh hơn cho campaign, social và nội dung dài hạn."
+        },
+        "packaging-editorial": {
+          "title": "Khi packaging và editorial mockup cùng kể một câu chuyện thị giác",
+          "description": "Sự đồng bộ giữa hình ảnh sản phẩm, chất liệu và cách trình bày trên layout giúp thương hiệu đọc lên cao cấp hơn mà không cần thêm quá nhiều yếu tố trang trí."
+        }
+      }
+    },
     "About": {
       "eyebrow": "Về Radiant",
       "title": "Chiến lược, ngôn ngữ và hình ảnh được xây như một hệ thống thống nhất.",
@@ -323,7 +411,7 @@
             },
             {
               "label": "Tin tức",
-              "href": "#projects"
+              "href": "#news"
             },
             {
               "label": "FAQs",

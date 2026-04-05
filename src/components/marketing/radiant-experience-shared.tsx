@@ -1,12 +1,10 @@
 "use client";
-import {
-  useEffect,
-  useId,
-  useState,
-  type RefObject,
-  type ReactNode,
-} from "react";
+import { ArrowRightIcon } from "lucide-react";
+import { useId, type RefObject, type ReactNode } from "react";
 
+import type { ShowcaseImage } from "@/content/showcase-images";
+import { showcaseVariantImages } from "@/content/showcase-images";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export const serviceVisuals = [
@@ -21,168 +19,92 @@ export const serviceVisuals = [
 ] as const;
 
 export type VisualVariant = (typeof serviceVisuals)[number];
-const imageCycleIntervalMs = 3000;
+const serviceOverlayPreviewLimit = 4;
 
-type VisualFrame = {
-  fallbackSrc: string;
-  position?: string;
-  src: string;
-};
+export function getOverlayHighlights(highlights: string[], otherLabel: string) {
+  if (highlights.length <= serviceOverlayPreviewLimit) {
+    return highlights;
+  }
 
-const makeUnsplashFrame = ({
-  fallbackSrc,
-  id,
-  position = "50% 50%",
+  return [
+    ...highlights.slice(0, serviceOverlayPreviewLimit - 1),
+    otherLabel,
+  ];
+}
+
+export function ServiceHoverOverlay({
+  highlights,
+  linkHref = "#contact",
+  otherLabel = "Other",
+  title,
+  viewMoreLabel = "Learn more",
 }: {
-  fallbackSrc: string;
-  id: string;
-  position?: string;
-}): VisualFrame => ({
-  fallbackSrc,
-  position,
-  src: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80`,
-});
-
-const visualFrameLibrary = {
-  brandingDesk: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/global-brand-systems.jpg",
-    id: "photo-1497366754035-f200968a6e72",
-    position: "50% 45%",
-  }),
-  cinematicStudio: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/nocturne-orbit.jpg",
-    id: "photo-1500530855697-b586d89ba3ee",
-    position: "50% 42%",
-  }),
-  socialContent: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/signal-25-launch.jpg",
-    id: "photo-1516321318423-f06f85e504b3",
-    position: "50% 48%",
-  }),
-  marketingAnalytics: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/atlas-blueprint.jpg",
-    id: "photo-1517248135467-4c7edcad34c4",
-    position: "50% 42%",
-  }),
-  packagingMockup: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/mono-curve.jpg",
-    id: "photo-1520607162513-77705c0f0d4a",
-    position: "50% 44%",
-  }),
-  editorialMoodboard: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/luma-gallery.jpg",
-    id: "photo-1515377905703-c4788e51af15",
-    position: "50% 38%",
-  }),
-  campaignPlanning: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/gradient-campaign.jpg",
-    id: "photo-1498050108023-c5249f4df085",
-    position: "50% 46%",
-  }),
-  productDisplay: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/apple-architecture.jpg",
-    id: "photo-1524758631624-e2822e304c36",
-    position: "50% 40%",
-  }),
-  visualStory: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/still-young-issue.jpg",
-    id: "photo-1519389950473-47ba0277781c",
-    position: "50% 36%",
-  }),
-  studioPortrait: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/north-south-market.jpg",
-    id: "photo-1487412720507-e7ab37603c6f",
-    position: "50% 28%",
-  }),
-  cinematicDetail: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/kinetic-type.jpg",
-    id: "photo-1504384308090-c894fdcc538d",
-    position: "50% 42%",
-  }),
-  socialBranding: makeUnsplashFrame({
-    fallbackSrc: "/project-gallery/meridian-columns.jpg",
-    id: "photo-1505373877841-8d25f7d46678",
-    position: "50% 44%",
-  }),
-} as const;
-
-const visualSurfaceImageSequences: Record<VisualVariant, VisualFrame[]> = {
-  vista: [
-    visualFrameLibrary.brandingDesk,
-    visualFrameLibrary.editorialMoodboard,
-    visualFrameLibrary.productDisplay,
-  ],
-  portrait: [
-    visualFrameLibrary.studioPortrait,
-    visualFrameLibrary.visualStory,
-    visualFrameLibrary.brandingDesk,
-  ],
-  studio: [
-    visualFrameLibrary.cinematicStudio,
-    visualFrameLibrary.cinematicDetail,
-    visualFrameLibrary.campaignPlanning,
-  ],
-  clinic: [
-    visualFrameLibrary.productDisplay,
-    visualFrameLibrary.packagingMockup,
-    visualFrameLibrary.brandingDesk,
-  ],
-  emerald: [
-    visualFrameLibrary.packagingMockup,
-    visualFrameLibrary.productDisplay,
-    visualFrameLibrary.editorialMoodboard,
-  ],
-  rose: [
-    visualFrameLibrary.socialContent,
-    visualFrameLibrary.socialBranding,
-    visualFrameLibrary.visualStory,
-  ],
-  sand: [
-    visualFrameLibrary.marketingAnalytics,
-    visualFrameLibrary.campaignPlanning,
-    visualFrameLibrary.brandingDesk,
-  ],
-  noir: [
-    visualFrameLibrary.cinematicDetail,
-    visualFrameLibrary.cinematicStudio,
-    visualFrameLibrary.socialBranding,
-  ],
-};
-
-function CyclingImageBackground({
-  frames,
-}: {
-  frames: VisualFrame[];
+  highlights?: string[];
+  linkHref?: string;
+  otherLabel?: string;
+  title: string;
+  viewMoreLabel?: string;
 }) {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const overlayHighlights = highlights?.length
+    ? getOverlayHighlights(highlights, otherLabel)
+    : [];
 
-  useEffect(() => {
-    if (frames.length <= 1) {
-      return undefined;
-    }
-
-    const intervalId = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % frames.length);
-    }, imageCycleIntervalMs);
-
-    return () => {
-      window.clearInterval(intervalId);
-    };
-  }, [frames]);
-
-  const activeFrame = frames[activeIndex];
-
-  if (!activeFrame) {
+  if (!overlayHighlights.length) {
     return null;
   }
 
   return (
     <div
       aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden rounded-[inherit]"
+    >
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,16,23,0.04)_0%,rgba(14,16,23,0.16)_28%,rgba(14,16,23,0.52)_62%,rgba(14,16,23,0.88)_100%)] opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:opacity-100" />
+      <div className="absolute inset-0 bg-black/8 opacity-0 backdrop-blur-[1.5px] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:opacity-100 group-hover/service:backdrop-blur-[3px]" />
+      <div className="absolute inset-x-0 bottom-0 flex flex-col gap-4 p-4 sm:p-5">
+        <ul className="space-y-1.5">
+          {overlayHighlights.map((item, index) => (
+            <li
+              key={`${title}-${item}`}
+              className="flex items-center gap-2 text-sm font-medium tracking-[0.01em] text-white/92 opacity-0 translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:translate-y-0 group-hover/service:opacity-100"
+              style={{ transitionDelay: `${110 + index * 45}ms` }}
+            >
+              <span className="size-1.5 shrink-0 rounded-full bg-[#F7EFE4]/90" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+        <a
+          className={buttonVariants({
+            className:
+              "pointer-events-auto w-fit rounded-full border-white/20 bg-white/10 px-3.5 text-sm text-white shadow-none backdrop-blur-sm opacity-0 translate-y-3 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:translate-y-0 group-hover/service:opacity-100 hover:border-white/34 hover:bg-white/16 hover:text-white",
+            size: "sm",
+            variant: "outline",
+          })}
+          href={linkHref}
+          style={{
+            transitionDelay: `${110 + overlayHighlights.length * 45}ms`,
+          }}
+        >
+          <span>{viewMoreLabel}</span>
+          <ArrowRightIcon className="size-3.5" />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function StaticImageBackground({
+  image,
+}: {
+  image: ShowcaseImage;
+}) {
+  return (
+    <div
+      aria-hidden="true"
       className="absolute inset-0 bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: `url("${activeFrame.src}"), url("${activeFrame.fallbackSrc}")`,
-        backgroundPosition: `${activeFrame.position ?? "50% 50%"}, ${activeFrame.position ?? "50% 50%"}`,
+        backgroundImage: `url("${image.src}"), url("${image.fallbackSrc}")`,
+        backgroundPosition: `${image.position ?? "50% 50%"}, ${image.position ?? "50% 50%"}`,
       }}
     />
   );
@@ -253,6 +175,52 @@ export function BrandMonogram({
   );
 }
 
+export function SectionAccent({
+  className,
+  label,
+  tone = "dark",
+}: {
+  className?: string;
+  label?: string;
+  tone?: "dark" | "gold" | "light";
+}) {
+  const starClassName =
+    tone === "light"
+      ? "text-[#C9A15D]"
+      : tone === "gold"
+        ? "text-[#B88547]"
+        : "text-[rgba(140,87,37,0.78)]";
+  const labelClassName =
+    tone === "light"
+      ? "text-[rgba(214,188,144,0.86)]"
+      : tone === "gold"
+        ? "text-[rgba(151,102,48,0.82)]"
+        : "text-[rgba(120,86,44,0.62)]";
+  const lineClassName =
+    tone === "light"
+      ? "bg-[rgba(201,161,93,0.34)]"
+      : tone === "gold"
+        ? "bg-[rgba(184,133,71,0.38)]"
+        : "bg-[rgba(120,86,44,0.24)]";
+
+  return (
+    <div className={cn("flex flex-col items-center gap-2.5", className)}>
+      <span className={cn("inline-block text-[0.98rem] sm:text-[1.06rem]", starClassName)}>
+        ✦
+      </span>
+      <div className="flex items-center justify-center gap-3">
+        <span className={cn("h-px w-12 sm:w-16", lineClassName)} />
+        {label ? (
+          <p className={cn("text-[0.68rem] font-medium uppercase tracking-[0.32em] sm:text-[0.74rem]", labelClassName)}>
+            {label}
+          </p>
+        ) : null}
+        <span className={cn("h-px w-12 sm:w-16", lineClassName)} />
+      </div>
+    </div>
+  );
+}
+
 export function RadiantBrandLogo({ className }: { className?: string }) {
   return (
     <svg
@@ -320,14 +288,19 @@ export function RadiantHeroLogo({ className }: { className?: string }) {
 export function VisualSurface({
   children,
   className,
+  image,
   innerClassName,
   variant,
 }: {
   children?: ReactNode;
   className?: string;
+  image?: ShowcaseImage;
   innerClassName?: string;
-  variant: VisualVariant;
+  variant?: VisualVariant;
 }) {
+  const resolvedImage =
+    image ?? (variant ? showcaseVariantImages[variant] : undefined);
+
   return (
     <div
       className={cn(
@@ -335,25 +308,28 @@ export function VisualSurface({
         className,
       )}
     >
-      <div
-        className={cn(
-          "absolute inset-0 bg-transparent",
-          innerClassName,
-        )}
-      >
-        <CyclingImageBackground frames={visualSurfaceImageSequences[variant]} />
-      </div>
+      {resolvedImage ? (
+        <div className={cn("absolute inset-0 bg-transparent", innerClassName)}>
+          <StaticImageBackground image={resolvedImage} />
+        </div>
+      ) : null}
       <div className="relative z-10 size-full">{children}</div>
     </div>
   );
 }
 
 export function ServiceTile({
+  children,
   className,
+  image,
+  innerClassName,
   variant,
 }: {
+  children?: ReactNode;
   className?: string;
-  variant: VisualVariant;
+  image?: ShowcaseImage;
+  innerClassName?: string;
+  variant?: VisualVariant;
 }) {
   return (
     <VisualSurface
@@ -361,8 +337,12 @@ export function ServiceTile({
         "aspect-video rounded-[2.2rem] border border-white/20",
         className,
       )}
+      innerClassName={innerClassName}
+      image={image}
       variant={variant}
-    />
+    >
+      {children}
+    </VisualSurface>
   );
 }
 
@@ -417,26 +397,61 @@ export function ServiceCard({
   className,
   description,
   eyebrow,
+  highlights,
   hideDescription = false,
   hideEyebrow = false,
+  image,
+  interactive = false,
+  linkHref = "#contact",
+  otherLabel = "Other",
   tileClassName,
   titleClassName,
   title,
   variant,
+  viewMoreLabel = "Learn more",
 }: {
   className?: string;
   description: string;
   eyebrow: string;
+  highlights?: string[];
   hideDescription?: boolean;
   hideEyebrow?: boolean;
+  image?: ShowcaseImage;
+  interactive?: boolean;
+  linkHref?: string;
+  otherLabel?: string;
   tileClassName?: string;
   titleClassName?: string;
   title: string;
-  variant: VisualVariant;
+  variant?: VisualVariant;
+  viewMoreLabel?: string;
 }) {
   return (
-    <article className={cn("flex flex-col gap-3", className)}>
-      <ServiceTile className={tileClassName} variant={variant} />
+    <article
+      className={cn(
+        "group/service flex flex-col gap-3 md:transition-transform md:duration-500 md:ease-[cubic-bezier(0.22,1,0.36,1)] md:hover:-translate-y-1",
+        className,
+      )}
+    >
+      <ServiceTile
+        className={tileClassName}
+        image={image}
+        innerClassName={cn(
+          interactive &&
+            "md:transition-transform md:duration-[900ms] md:ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover/service:scale-[1.06]",
+        )}
+        variant={variant}
+      >
+        {interactive ? (
+          <ServiceHoverOverlay
+            highlights={highlights}
+            linkHref={linkHref}
+            otherLabel={otherLabel}
+            title={title}
+            viewMoreLabel={viewMoreLabel}
+          />
+        ) : null}
+      </ServiceTile>
       <div className="flex flex-col gap-2">
         <h3
           className={cn(

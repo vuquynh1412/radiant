@@ -2,6 +2,7 @@ import { ArrowRightIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 import type {
   RadiantExperienceContent,
@@ -9,16 +10,17 @@ import type {
 } from "./radiant-experience.types";
 import {
   HeroTitleCopy,
-  RadiantHeroLogo,
+  SectionAccent,
   ServiceCard,
   ServiceCopy,
+  ServiceHoverOverlay,
   ServiceTile,
   VisualSurface,
-  serviceVisuals,
 } from "./radiant-experience-shared";
 
 type RadiantShowcaseSectionProps = {
   content: RadiantExperienceContent;
+  desktopShowcaseReady: boolean;
   showcaseSectionRef: RadiantExperienceRefs["showcaseSectionRef"];
   mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
   mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
@@ -44,7 +46,7 @@ const desktopShowcaseGridStyle = {
   "--showcase-grid-columns": "4",
   "--showcase-grid-column-gap": "24px",
   "--showcase-grid-footer-margin-top": "20px",
-  "--showcase-grid-header-gap": "36px",
+  "--showcase-grid-header-gap": "84px",
   "--showcase-grid-content-height": "32rem",
   "--showcase-grid-item-gap": "10px",
   "--showcase-grid-row-gap": "24px",
@@ -91,7 +93,7 @@ function MobileShowcaseHero({
           className="site-gutter relative z-10 flex h-full items-center justify-center pt-24 will-change-transform"
         >
           <div className="mx-auto flex max-w-[20rem] items-center justify-center">
-            <div className="space-y-1.5 text-center text-[#27272A]">
+            <div className="space-y-3 text-center text-[#27272A]">
               <p className="hero-title-display">{content.hero.title.premium}</p>
               <p className="hero-title-display">
                 {content.hero.title.esthetic}
@@ -110,7 +112,7 @@ function MobileShowcaseHero({
 
       <div
         data-mobile-hero-media=""
-        className="relative z-20 h-svh overflow-hidden bg-[#171614]"
+        className="dark-editorial-gradient relative z-20 h-svh overflow-hidden bg-[#171614]"
       >
         <VisualSurface
           className="size-full rounded-none"
@@ -121,9 +123,6 @@ function MobileShowcaseHero({
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,8,8,0.06)_0%,rgba(9,8,8,0.12)_32%,rgba(9,8,8,0.28)_56%,rgba(9,8,8,0.62)_100%)]" />
         <div className="absolute left-[-12%] top-[14%] h-40 w-40 rounded-full bg-[#8bc6ff]/12 blur-3xl" />
         <div className="absolute bottom-[-8%] right-[-6%] h-48 w-48 rounded-full bg-[#ffe1c3]/12 blur-3xl" />
-        <div className="pointer-events-none absolute right-[-20%] top-[8%] h-72 w-56 text-white/8">
-          <RadiantHeroLogo className="size-full" />
-        </div>
       </div>
 
       <div className="pointer-events-none absolute inset-0 z-30">
@@ -145,14 +144,18 @@ function MobileShowcaseHero({
 
 function ReducedMotionDesktopShowcase({
   content,
+  forceVisible = false,
 }: {
   content: RadiantExperienceContent;
+  forceVisible?: boolean;
 }) {
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
+  const otherLabel = content.locale === "vi" ? "Khác" : "Other";
+  const viewMoreLabel = content.locale === "vi" ? "Xem thêm" : "Learn more";
 
   return (
-    <div className="hidden md:motion-reduce:block">
-      <div className="relative overflow-hidden bg-[#171614] text-white">
+    <div className={forceVisible ? "hidden md:block" : "hidden md:motion-reduce:block"}>
+      <div className="dark-editorial-gradient relative overflow-hidden bg-[#171614] text-white">
         <div className="absolute inset-0">
           <VisualSurface
             className="size-full rounded-none"
@@ -164,10 +167,6 @@ function ReducedMotionDesktopShowcase({
         </div>
 
         <div className="site-gutter relative mx-auto flex min-h-168 max-w-384 flex-col items-center justify-center py-24 text-center">
-          <div className="mb-10 h-[min(18rem,24vw)] w-[min(13rem,18vw)] text-white/16">
-            <RadiantHeroLogo className="size-full" />
-          </div>
-
           <div className="w-full max-w-6xl text-white">
             <HeroTitleCopy
               className="h-[clamp(12rem,18vw,15.5rem)]"
@@ -189,17 +188,21 @@ function ReducedMotionDesktopShowcase({
       <div className="site-gutter bg-[#F9F0E8] py-16 lg:py-20">
         <div className="mx-auto max-w-6xl">
           <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {content.services.items.map((item, index) => (
+            {content.services.items.map((item) => (
               <ServiceCard
                 key={`${item.title}-reduced-motion`}
                 className="h-full gap-4"
                 description={item.description}
                 eyebrow={item.eyebrow}
+                highlights={item.highlights}
                 hideDescription
                 hideEyebrow
+                image={item.image}
+                interactive
+                otherLabel={otherLabel}
                 tileClassName="h-full min-h-56 rounded-[24px]"
                 title={item.title}
-                variant={serviceVisuals[index % serviceVisuals.length]}
+                viewMoreLabel={viewMoreLabel}
               />
             ))}
           </div>
@@ -215,6 +218,7 @@ function ReducedMotionDesktopShowcase({
 
 export function RadiantShowcaseSection({
   content,
+  desktopShowcaseReady,
   showcaseSectionRef,
   mobileHeroSectionRef,
   mobileHeroMarqueeRef,
@@ -236,6 +240,8 @@ export function RadiantShowcaseSection({
   sampleTileRef,
 }: RadiantShowcaseSectionProps) {
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
+  const otherLabel = content.locale === "vi" ? "Khác" : "Other";
+  const viewMoreLabel = content.locale === "vi" ? "Xem thêm" : "Learn more";
 
   return (
     <section id="showcase">
@@ -249,7 +255,10 @@ export function RadiantShowcaseSection({
 
       <div
         ref={showcaseSectionRef}
-        className="relative hidden min-h-svh md:block md:h-[660svh] md:motion-reduce:hidden"
+        className={cn(
+          "relative hidden min-h-svh md:block md:h-[660svh] md:motion-reduce:hidden",
+          !desktopShowcaseReady && "md:invisible md:pointer-events-none",
+        )}
         style={
           {
             "--hero-mask-x": "50vw",
@@ -266,35 +275,28 @@ export function RadiantShowcaseSection({
 
           <div
             ref={heroMediaRef}
-            className="absolute left-0 top-0 z-10 hidden overflow-hidden will-change-transform md:block"
+            className="group/service absolute left-0 top-0 z-10 hidden overflow-hidden will-change-transform md:block"
             style={{ transformOrigin: "top center" }}
           >
-            <VisualSurface className="size-full rounded-none" variant="vista" />
+            <VisualSurface
+              className="size-full rounded-none"
+              image={content.services.items[0]?.image}
+              innerClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:scale-[1.06]"
+              variant="vista"
+            >
+              <ServiceHoverOverlay
+                highlights={content.services.items[0]?.highlights}
+                otherLabel={otherLabel}
+                title={content.services.items[0]?.title ?? ""}
+                viewMoreLabel={viewMoreLabel}
+              />
+            </VisualSurface>
           </div>
 
           <div
             ref={heroMonogramRef}
             className="pointer-events-none absolute inset-0 z-20 will-change-transform"
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                clipPath: "inset(0 calc(100vw - var(--hero-mask-x, 50vw)) 0 0)",
-              }}
-            >
-              <div className="absolute left-1/2 top-1/2 h-[min(76vh,34rem)] w-[min(52vw,31rem)] -translate-x-1/2 -translate-y-1/2 text-[#d8cec2]">
-                <RadiantHeroLogo className="size-full" />
-              </div>
-            </div>
-            <div
-              className="absolute inset-0"
-              style={{ clipPath: "inset(0 0 0 var(--hero-mask-x, 50vw))" }}
-            >
-              <div className="absolute left-1/2 top-1/2 h-[min(76vh,34rem)] w-[min(52vw,31rem)] -translate-x-1/2 -translate-y-1/2 text-white/92">
-                <RadiantHeroLogo className="size-full drop-shadow-[0_18px_40px_rgba(8,7,6,0.12)]" />
-              </div>
-            </div>
-          </div>
+          />
 
           <div
             ref={heroTitleRef}
@@ -380,9 +382,12 @@ export function RadiantShowcaseSection({
               >
                 <div
                   ref={serviceHeaderRef}
-                  className="pt-8 text-center xl:pt-10"
+                  className="pt-6 text-center xl:pt-8"
                 >
-                  <h2 className="font-heading text-[clamp(3rem,5vw,4.75rem)] leading-none text-[#27272A]">
+                  <SectionAccent
+                    className="mb-4"
+                  />
+                  <h2 className="font-heading text-[clamp(2.7rem,4.5vw,4.25rem)] leading-none text-[#27272A]">
                     {content.services.title}
                   </h2>
                 </div>
@@ -463,15 +468,23 @@ export function RadiantShowcaseSection({
             </div>
           </div>
 
-          <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0">
             <div
               ref={sampleTileRef}
-              className="absolute left-0 top-0 z-10 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)]"
+              className="group/service absolute left-0 top-0 z-10 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] pointer-events-auto"
             >
               <ServiceTile
                 className="size-full rounded-[inherit] border-0 shadow-none"
-                variant={serviceVisuals[1]}
-              />
+                image={content.services.items[0]?.image}
+                innerClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:scale-[1.06]"
+              >
+                <ServiceHoverOverlay
+                  highlights={content.services.items[0]?.highlights}
+                  otherLabel={otherLabel}
+                  title={content.services.items[0]?.title ?? ""}
+                  viewMoreLabel={viewMoreLabel}
+                />
+              </ServiceTile>
             </div>
 
             {content.services.items.slice(1).map((item, index) => (
@@ -480,30 +493,44 @@ export function RadiantShowcaseSection({
                 ref={(node) => {
                   serviceCardsRef.current[index] = node;
                 }}
-                className="absolute left-0 top-0 z-20 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform"
+                className="group/service absolute left-0 top-0 z-20 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform pointer-events-auto"
                 style={{ transformOrigin: "top center" }}
               >
                 <ServiceTile
                   className="size-full rounded-[inherit] border-0 shadow-none"
-                  variant={serviceVisuals[(index + 1) % serviceVisuals.length]}
-                />
+                  image={item.image}
+                  innerClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:scale-[1.06]"
+                >
+                  <ServiceHoverOverlay
+                    highlights={item.highlights}
+                    otherLabel={otherLabel}
+                    title={item.title}
+                    viewMoreLabel={viewMoreLabel}
+                  />
+                </ServiceTile>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <ReducedMotionDesktopShowcase content={content} />
+      <ReducedMotionDesktopShowcase
+        content={content}
+        forceVisible={!desktopShowcaseReady}
+      />
 
       <div className="site-gutter pb-16 pt-14 md:hidden">
         <div className="mx-auto max-w-88 text-center">
+          <SectionAccent
+            className="mb-5"
+          />
           <h2 className="font-heading text-[2.5rem] leading-[0.96] text-[#27272A]">
             {content.services.title}
           </h2>
         </div>
 
         <div className="mt-8 grid grid-cols-2 gap-4">
-          {content.services.items.map((item, index) => (
+          {content.services.items.map((item) => (
             <ServiceCard
               key={`${item.title}-mobile`}
               className="gap-3"
@@ -511,10 +538,10 @@ export function RadiantShowcaseSection({
               eyebrow={item.eyebrow}
               hideDescription
               hideEyebrow
+              image={item.image}
               tileClassName="rounded-[10px]"
               title={item.title}
               titleClassName="text-[1.2rem] leading-[1.06]"
-              variant={serviceVisuals[index % serviceVisuals.length]}
             />
           ))}
         </div>

@@ -21,6 +21,7 @@ import type {
   RadiantExperienceRefs,
 } from "./radiant-experience.types";
 import { RadiantFooterSection } from "./radiant-footer-section";
+import { RadiantNewsSection } from "./radiant-news-section";
 import { RadiantPartnerLogosSection } from "./radiant-partner-logos-section";
 import { RadiantProjectsSection } from "./radiant-projects-section";
 import { RadiantShowcaseSection } from "./radiant-showcase-section";
@@ -35,8 +36,12 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const content = getHomePageContent(locale, messages);
   const [isBooting, setIsBooting] = useState(true);
   const [matrixRevealComplete, setMatrixRevealComplete] = useState(false);
+  const [showcaseDesktopReady, setShowcaseDesktopReady] = useState(false);
   const onMatrixRevealComplete = useCallback(() => {
     setMatrixRevealComplete(true);
+  }, []);
+  const onShowcaseDesktopReady = useCallback(() => {
+    setShowcaseDesktopReady(true);
   }, []);
 
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -202,7 +207,11 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     };
   }, [isBooting]);
 
-  useRadiantShowcaseMotion({ content, refs: motionRefs });
+  useRadiantShowcaseMotion({
+    content,
+    onReady: onShowcaseDesktopReady,
+    refs: motionRefs,
+  });
   useRadiantCapabilityMatrixMotion({ refs: motionRefs, onRevealComplete: onMatrixRevealComplete });
 
   return (
@@ -220,6 +229,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
           <RadiantShowcaseSection
             activeServiceCopyShellRef={activeServiceCopyShellRef}
             content={content}
+            desktopShowcaseReady={showcaseDesktopReady}
             mobileHeroMarqueeRef={mobileHeroMarqueeRef}
             mobileHeroSectionRef={mobileHeroSectionRef}
             mobileHeroTopContentRef={mobileHeroTopContentRef}
@@ -258,6 +268,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
             projectsSectionRef={projectsSectionRef}
           />
           <RadiantPartnerLogosSection />
+          <RadiantNewsSection content={content} />
           <RadiantCallToActionSection content={content} />
           <RadiantFooterSection content={content} />
         </main>

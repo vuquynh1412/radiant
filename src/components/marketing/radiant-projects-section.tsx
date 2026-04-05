@@ -14,6 +14,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
+import { SectionAccent } from "./radiant-experience-shared";
 
 type RadiantProjectsSectionProps = {
   content: RadiantExperienceContent;
@@ -28,6 +29,7 @@ export function RadiantProjectsSection({
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
   const projectsThemeStyle = {
     "--projects-bg": "#e9ddd1",
+    "--projects-accent-line": "rgba(201,161,93,0.32)",
     "--projects-button-border-color": "rgba(39,39,42,0.38)",
     "--projects-button-hover-bg": "rgba(39,39,42,0.04)",
     "--projects-button-text-color": "#27272A",
@@ -54,8 +56,13 @@ export function RadiantProjectsSection({
       className="site-gutter relative overflow-hidden bg-(--projects-bg) py-16 sm:py-20 lg:py-24"
       style={projectsThemeStyle}
     >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-0 left-1/2 hidden h-66 w-[min(112vw,92rem)] -translate-x-1/2 rounded-b-full border-b border-(--projects-accent-line) opacity-72 [mask-image:linear-gradient(90deg,transparent,black_16%,black_84%,transparent)] md:block"
+      />
       <div className="mx-auto max-w-336">
         <div className="mx-auto max-w-4xl text-center">
+          <SectionAccent className="mb-5" />
           <h2 className="title-display-inika mt-4 text-(--projects-title-color)">
             {projects.title}
           </h2>

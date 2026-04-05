@@ -211,11 +211,13 @@ function applyHeroRect(setters: HeroMediaSetters, rect: HeroRect) {
 
 type UseRadiantShowcaseMotionProps = {
   content: RadiantExperienceContent;
+  onReady?: () => void;
   refs: RadiantExperienceRefs;
 };
 
 export function useRadiantShowcaseMotion({
   content,
+  onReady,
   refs,
 }: UseRadiantShowcaseMotionProps) {
   useGSAP(
@@ -710,6 +712,7 @@ export function useRadiantShowcaseMotion({
 
           const initialMetrics = updateMetrics();
           applyMetricBoundLayout(initialMetrics);
+          onReady?.();
 
           refs.showcaseSectionRef.current.style.setProperty(
             "--hero-mask-x",

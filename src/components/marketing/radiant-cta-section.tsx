@@ -10,6 +10,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
+import { SectionAccent } from "./radiant-experience-shared";
 import type { RadiantExperienceContent } from "./radiant-experience.types";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -23,6 +24,8 @@ const ctaStarPath =
 const ctaStarMaskId = "radiant-cta-star-mask";
 
 type CallToActionBodyProps = {
+  accentClassName?: string;
+  accentRef?: RefObject<HTMLDivElement | null>;
   actionsClassName?: string;
   actionsRef?: RefObject<HTMLDivElement | null>;
   bodyClassName?: string;
@@ -37,6 +40,8 @@ type CallToActionBodyProps = {
 };
 
 function CallToActionBody({
+  accentClassName,
+  accentRef,
   actionsClassName,
   actionsRef,
   bodyClassName,
@@ -56,10 +61,17 @@ function CallToActionBody({
 
   return (
     <div className={cn("w-full", containerClassName)}>
+      <div ref={accentRef} className={accentClassName}>
+        <SectionAccent
+          className="mb-4"
+          label={content.cta.eyebrow}
+          tone="gold"
+        />
+      </div>
       <p
         ref={eyebrowRef}
         className={cn(
-          "text-base font-medium text-[#27272A] uppercase",
+          "sr-only text-base font-medium text-[#27272A] uppercase",
           eyebrowClassName,
         )}
       >
@@ -68,7 +80,7 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "title-display-inika mx-auto mt-4 flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
+          "title-display-inika mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
           titleClassName,
         )}
       >
@@ -131,6 +143,7 @@ function ReducedMotionCallToAction({
 
         <div className="relative rounded-[2rem] bg-[#E8DDD3] px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-14">
           <CallToActionBody
+            accentClassName="opacity-100"
             bodyClassName="opacity-100"
             containerClassName="mx-auto"
             content={content}
@@ -154,6 +167,7 @@ export function RadiantCallToActionSection({
   const fullPanelRef = useRef<HTMLDivElement | null>(null);
   const starMaskTranslateRef = useRef<SVGGElement | null>(null);
   const starMaskTransformRef = useRef<SVGGElement | null>(null);
+  const accentRef = useRef<HTMLDivElement | null>(null);
   const eyebrowRef = useRef<HTMLParagraphElement | null>(null);
   const titleRef = useRef<HTMLHeadingElement | null>(null);
   const bodyRef = useRef<HTMLParagraphElement | null>(null);
@@ -173,6 +187,7 @@ export function RadiantCallToActionSection({
         const easeInOut = gsap.parseEase("power2.inOut");
         const riseScaleCurve = gsap.parseEase("power2.in");
         const copyNodes = [
+          accentRef.current,
           eyebrowRef.current,
           titleRef.current,
           bodyRef.current,
@@ -308,8 +323,6 @@ export function RadiantCallToActionSection({
           ref={stageRef}
           className="sticky top-0 h-svh overflow-hidden bg-[#171614]"
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_34%,rgba(255,255,255,0.04),transparent_36%)]" />
-
           <div
             ref={surfaceRef}
             className="absolute inset-0 z-20 overflow-hidden will-change-transform"
@@ -355,6 +368,8 @@ export function RadiantCallToActionSection({
 
             <div className="site-gutter relative z-20 flex h-full items-center justify-center pt-20 text-center">
               <CallToActionBody
+                accentClassName="opacity-0"
+                accentRef={accentRef}
                 actionsClassName="opacity-0"
                 actionsRef={actionsRef}
                 bodyClassName="opacity-0"

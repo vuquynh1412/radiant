@@ -48,9 +48,9 @@
       "marquee": "Clarity for where your brand goes next"
     },
     "Services": {
-      "eyebrow": "Capability Sequence",
+      "eyebrow": "Core Capabilities",
       "title": "Core Services",
-      "intro": "Eight core workstreams structured from strategic clarity through rollout readiness.",
+      "intro": "Eight core services that move from strategy and brand systems to digital growth and media production.",
       "order": [
         "strategy",
         "positioning",
@@ -63,44 +63,100 @@
       ],
       "items": {
         "strategy": {
-          "eyebrow": "Brand strategy",
-          "title": "Brand Strategy Foundations",
-          "description": "Clarify ambition, audience tension, competitive context, and the strategic decisions the brand must support next."
+          "eyebrow": "Strategic advisory",
+          "title": "Brand Consulting",
+          "description": "Partner with leadership to clarify business ambition, market tension, customer priorities, and the brand direction needed for the next phase of growth.",
+          "highlights": [
+            "Brand audit",
+            "Customer insight",
+            "Strategy workshop",
+            "Growth direction",
+            "Repositioning advice"
+          ]
         },
         "positioning": {
-          "eyebrow": "Market positioning",
-          "title": "Positioning For Growth",
-          "description": "Define a sharper place in the market so the business reads as more distinct, more credible, and easier to choose."
+          "eyebrow": "Brand systems",
+          "title": "Brand Systems Development",
+          "description": "Build the structure behind the brand across architecture, messaging logic, operating principles, and the systems teams need to execute consistently.",
+          "highlights": [
+            "Brand architecture",
+            "Messaging system",
+            "Touchpoint standards",
+            "Internal frameworks",
+            "Execution principles"
+          ]
         },
         "naming": {
-          "eyebrow": "Naming & architecture",
-          "title": "Naming And Brand Architecture",
-          "description": "Structure portfolios, offers, and naming systems so they scale cleanly across products, sub-brands, and new market entry."
+          "eyebrow": "Creative direction",
+          "title": "Brand Design",
+          "description": "Shape creative concepts, visual language, and aesthetic direction so the brand feels distinctive, memorable, and emotionally clear.",
+          "highlights": [
+            "Visual concept",
+            "Creative moodboard",
+            "Key visual system",
+            "Art direction",
+            "Image language"
+          ]
         },
         "messaging": {
-          "eyebrow": "Verbal identity",
-          "title": "Messaging And Verbal Systems",
-          "description": "Build the core language the brand needs to sound clear, differentiated, and confident across every touchpoint."
+          "eyebrow": "Digital presence",
+          "title": "Digital Brand (Website)",
+          "description": "Translate brand strategy into a website experience that feels cohesive, persuasive, and aligned with the user journey across digital touchpoints.",
+          "highlights": [
+            "Website UX/UI",
+            "Content structure",
+            "Wireframe & prototype",
+            "Landing pages",
+            "Journey optimization"
+          ]
         },
         "identity": {
           "eyebrow": "Visual identity",
-          "title": "Identity Systems",
-          "description": "Create visual systems that feel premium, recognizable, and flexible enough for modern brand operations."
+          "title": "Brand Identity Suite",
+          "description": "Design the core identity system across logo, color, typography, image direction, and brand applications so every touchpoint feels aligned.",
+          "highlights": [
+            "Logo system",
+            "Color palette",
+            "Typography",
+            "Brand applications",
+            "Social kit"
+          ]
         },
         "digital": {
-          "eyebrow": "Digital direction",
-          "title": "Website And Digital Brand Direction",
-          "description": "Translate strategy and identity into a digital expression that aligns brand presence, user flow, and conversion intent."
+          "eyebrow": "Integrated communications",
+          "title": "Cross-Platform Communication",
+          "description": "Develop communication direction that helps the brand tell one clear story across social, events, PR, digital, and sales channels.",
+          "highlights": [
+            "Social campaigns",
+            "PR direction",
+            "Campaign messaging",
+            "Multi-channel content",
+            "Launch planning"
+          ]
         },
         "guidelines": {
-          "eyebrow": "Governance",
-          "title": "Guidelines And Governance",
-          "description": "Turn the brand into an internal system that teams can use consistently, not just admire in a presentation."
+          "eyebrow": "Growth marketing",
+          "title": "Digital Marketing",
+          "description": "Plan and activate digital growth through content, paid media, SEO, and conversion thinking so the brand reaches the right audience and drives measurable results.",
+          "highlights": [
+            "SEO & content",
+            "Paid media",
+            "Conversion optimization",
+            "Data analysis",
+            "Funnel tuning"
+          ]
         },
         "rollout": {
-          "eyebrow": "Launch enablement",
-          "title": "Launch And Rollout Enablement",
-          "description": "Prepare the assets, rollout sequence, and internal adoption touchpoints needed to launch the new brand with confidence."
+          "eyebrow": "Media production",
+          "title": "Media",
+          "description": "Produce visual, video, and campaign assets with a strong aesthetic standard so the brand and its stories land with more energy and clarity.",
+          "highlights": [
+            "Campaign visuals",
+            "Brand video",
+            "Motion content",
+            "Media assets",
+            "Production planning"
+          ]
         }
       }
     },
@@ -287,6 +343,38 @@
         }
       }
     },
+    "News": {
+      "title": "News",
+      "order": [
+        "brand-pattern-language",
+        "launch-shelves",
+        "palette-codes",
+        "cover-story",
+        "packaging-editorial"
+      ],
+      "items": {
+        "brand-pattern-language": {
+          "title": "When a pattern system becomes a scalable brand language",
+          "description": "From graphic surfaces to multi-touchpoint applications, patterns only become valuable when they carry clear rules, rhythm, and a reason to exist."
+        },
+        "launch-shelves": {
+          "title": "A launch visual should work on the street and still hold on digital",
+          "description": "Strong launch design is not only about grabbing attention in one moment. It also needs to stay recognizable when adapted into social, banners, and retail assets."
+        },
+        "palette-codes": {
+          "title": "Brand color should do more than look good inside a palette",
+          "description": "What matters is how color behaves next to typography, materials, image treatments, and the real surfaces customers encounter every day."
+        },
+        "cover-story": {
+          "title": "An editorial cover can define brand feeling faster than a long deck",
+          "description": "A strong cover frame often helps teams see the emotional center of the brand faster, making campaign, social, and content decisions easier to align."
+        },
+        "packaging-editorial": {
+          "title": "When packaging and editorial mockups tell one visual story",
+          "description": "Consistency between product imagery, material feel, and layout presentation can make a brand feel more premium without relying on too much decoration."
+        }
+      }
+    },
     "About": {
       "eyebrow": "About Radiant",
       "title": "Brand strategy, language, and visual systems built as one.",
@@ -323,7 +411,7 @@
             },
             {
               "label": "News",
-              "href": "#projects"
+              "href": "#news"
             },
             {
               "label": "FAQs",

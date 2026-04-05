@@ -4,13 +4,20 @@ import {
   capabilityMatrixImageSlots,
   type CapabilityMatrixSlotKey,
 } from "@/content/capability-matrix-images";
+import {
+  serviceImages,
+  type ShowcaseImage,
+} from "@/content/showcase-images";
+import { newsGalleryImages } from "@/content/news-gallery-images";
 
 type ServiceKey = keyof HomePageMessages["Services"]["items"] & string;
 type ProjectKey = keyof HomePageMessages["Projects"]["items"] & string;
 type ProjectFilterKey = keyof HomePageMessages["Projects"]["filters"] & string;
 type PlanKey = keyof HomePageMessages["Plans"]["items"] & string;
+type NewsKey = keyof HomePageMessages["News"]["items"] & string;
 
 export type OrderedServiceItem = HomePageMessages["Services"]["items"][ServiceKey] & {
+  image: ShowcaseImage;
   key: ServiceKey;
 };
 
@@ -29,6 +36,11 @@ export type OrderedPlanItem = HomePageMessages["Plans"]["items"][PlanKey] & {
   key: PlanKey;
 };
 
+export type OrderedNewsItem = HomePageMessages["News"]["items"][NewsKey] & {
+  image: (typeof newsGalleryImages)[keyof typeof newsGalleryImages];
+  key: NewsKey;
+};
+
 export type HomePageContent = {
   common: AppMessages["Common"];
   locale: Locale;
@@ -42,6 +54,9 @@ export type HomePageContent = {
   };
   plans: Pick<HomePageMessages["Plans"], "title"> & {
     items: OrderedPlanItem[];
+  };
+  news: Pick<HomePageMessages["News"], "title"> & {
+    items: OrderedNewsItem[];
   };
   projects: Omit<
     HomePageMessages["Projects"],
@@ -65,7 +80,9 @@ export function getHomePageContent(
   const projectOrder = home.Projects.order as ProjectKey[];
   const projectFilterOrder = home.Projects.filterOrder as ProjectFilterKey[];
   const planOrder = home.Plans.order as PlanKey[];
+  const newsOrder = home.News.order as NewsKey[];
   const items = serviceOrder.map((key) => ({
+    image: serviceImages[key],
     key,
     ...home.Services.items[key],
   }));
@@ -82,6 +99,11 @@ export function getHomePageContent(
     key,
     ...home.Plans.items[key],
   }));
+  const newsItems = newsOrder.map((key) => ({
+    image: newsGalleryImages[key],
+    key,
+    ...home.News.items[key],
+  }));
 
   return {
     about: home.About,
@@ -95,6 +117,10 @@ export function getHomePageContent(
     footer: home.Footer,
     hero: home.Hero,
     locale,
+    news: {
+      items: newsItems,
+      title: home.News.title,
+    },
     plans: {
       items: planItems,
       title: home.Plans.title,

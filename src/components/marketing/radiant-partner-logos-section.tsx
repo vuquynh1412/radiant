@@ -20,7 +20,7 @@ function PartnerLogoMark({
     <div
       aria-label={label}
       className={cn(
-        "flex h-16 w-16 items-center justify-center text-[rgba(220,212,201,0.48)] sm:h-[4.5rem] sm:w-[4.5rem] md:h-20 md:w-20",
+        "flex h-16 w-16 items-center justify-center text-[rgba(201,161,93,0.74)] sm:h-[4.5rem] sm:w-[4.5rem] md:h-20 md:w-20",
         className,
       )}
       role="img"
@@ -240,17 +240,26 @@ export function RadiantPartnerLogosSection() {
     "--partner-logos-bg": "#171614",
     "--partner-logos-fade-width": "clamp(2.25rem, 7vw, 7rem)",
     "--partner-logos-gap": "clamp(1.5rem, 3vw, 3rem)",
+    "--partner-logos-safe-block": "clamp(2.2rem, 4vw, 3rem)",
     "--partner-logos-speed": "28s",
   } as CSSProperties;
 
   return (
     <section
       aria-label="Partner logos"
-      className="relative overflow-hidden bg-(--partner-logos-bg) py-8 md:py-10"
+      className="relative overflow-hidden bg-(--partner-logos-bg) py-0"
       style={sectionStyle}
     >
-      <div className="site-gutter">
-        <div className="relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-18 bg-[linear-gradient(180deg,#171614_0%,rgba(23,22,20,0.94)_38%,rgba(23,22,20,0)_100%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-18 bg-[linear-gradient(0deg,#171614_0%,rgba(23,22,20,0.94)_38%,rgba(23,22,20,0)_100%)]"
+      />
+      <div className="site-gutter flex min-h-[11.5rem] items-center py-[var(--partner-logos-safe-block)] md:min-h-[12.5rem] lg:min-h-[13rem]">
+        <div className="relative w-full overflow-hidden">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-y-0 left-0 z-10 w-(--partner-logos-fade-width) bg-[linear-gradient(90deg,var(--partner-logos-bg)_12%,rgba(23,22,20,0)_100%)]"
