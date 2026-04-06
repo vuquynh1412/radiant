@@ -1,7 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import type {
@@ -59,15 +58,13 @@ function ShowcaseViewAllButton({ label }: { label: string }) {
     <button
       type="button"
       onClick={() => {}}
-      className={buttonVariants({
-        className:
-          "border-[#27272A]/38 cursor-pointer bg-transparent text-[#27272A] hover:bg-white hover:text-blue-900",
-        size: "marketing",
-        variant: "outline",
-      })}
+      className={cn(
+        "group inline-flex items-center gap-3 text-base font-medium text-[#27272A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+        "hover:text-primary",
+      )}
     >
-      <span>{label}</span>
-      <ArrowRightIcon className="size-4" />
+      <span className="underline-offset-4 group-hover:underline">{label}</span>
+      <ArrowRightIcon className="size-4 transition-colors duration-200" />
     </button>
   );
 }
@@ -154,7 +151,11 @@ function ReducedMotionDesktopShowcase({
   const viewMoreLabel = content.locale === "vi" ? "Xem thêm" : "Learn more";
 
   return (
-    <div className={forceVisible ? "hidden md:block" : "hidden md:motion-reduce:block"}>
+    <div
+      className={
+        forceVisible ? "hidden md:block" : "hidden md:motion-reduce:block"
+      }
+    >
       <div className="dark-editorial-gradient relative overflow-hidden bg-[#171614] text-white">
         <div className="absolute inset-0">
           <VisualSurface
@@ -384,9 +385,7 @@ export function RadiantShowcaseSection({
                   ref={serviceHeaderRef}
                   className="pt-6 text-center xl:pt-8"
                 >
-                  <SectionAccent
-                    className="mb-4"
-                  />
+                  <SectionAccent className="mb-4" />
                   <h2 className="font-heading text-[clamp(2.7rem,4.5vw,4.25rem)] leading-none text-[#27272A]">
                     {content.services.title}
                   </h2>
@@ -521,9 +520,7 @@ export function RadiantShowcaseSection({
 
       <div className="site-gutter pb-16 pt-14 md:hidden">
         <div className="mx-auto max-w-88 text-center">
-          <SectionAccent
-            className="mb-5"
-          />
+          <SectionAccent className="mb-5" />
           <h2 className="font-heading text-[2.5rem] leading-[0.96] text-[#27272A]">
             {content.services.title}
           </h2>

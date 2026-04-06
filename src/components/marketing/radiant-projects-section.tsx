@@ -10,7 +10,6 @@ import {
 } from "react";
 
 import { projectGalleryImages } from "@/content/project-gallery-images";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
@@ -19,6 +18,16 @@ import { SectionAccent } from "./radiant-experience-shared";
 type RadiantProjectsSectionProps = {
   content: RadiantExperienceContent;
   projectsSectionRef: RefObject<HTMLElement | null>;
+};
+
+const projectDisplayAspectRatios: Partial<
+  Record<keyof typeof projectGalleryImages, string>
+> = {
+  "luma-gallery": "1400 / 1540",
+  "mono-curve": "1300 / 1160",
+  "nocturne-orbit": "1100 / 1320",
+  "north-south-market": "1400 / 1240",
+  "still-young-issue": "1200 / 1420",
 };
 
 export function RadiantProjectsSection({
@@ -68,7 +77,7 @@ export function RadiantProjectsSection({
           </h2>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-base sm:mt-10 sm:justify-start">
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-base sm:mt-10 ">
           {projects.filters.map((filter) => {
             const isActive = filter.key === activeFilter;
 
@@ -98,15 +107,15 @@ export function RadiantProjectsSection({
           {visibleItems.map((item) => {
             const image = projectGalleryImages[item.key];
             const titleWords = item.title.split(" ");
+            const displayAspectRatio =
+              projectDisplayAspectRatios[item.key] ??
+              `${image.width} / ${image.height}`;
 
             return (
-              <article
-                key={item.key}
-                className="group mb-4 break-inside-avoid"
-              >
+              <article key={item.key} className="group mb-4 break-inside-avoid">
                 <div
                   className="relative w-full overflow-hidden rounded-[10px]"
-                  style={{ aspectRatio: `${image.width} / ${image.height}` }}
+                  style={{ aspectRatio: displayAspectRatio }}
                 >
                   <Image
                     alt={item.title}
@@ -145,15 +154,15 @@ export function RadiantProjectsSection({
                 setActiveFilter("all");
               });
             }}
-            className={buttonVariants({
-              className:
-                "border-(--projects-button-border-color) bg-transparent text-(--projects-button-text-color) hover:bg-(--projects-button-hover-bg)",
-              size: "marketing",
-              variant: "outline",
-            })}
+            className={cn(
+              "group inline-flex items-center gap-3 text-base font-medium text-(--projects-button-text-color) transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
+              "hover:text-primary",
+            )}
           >
-            <span>{viewAllLabel}</span>
-            <ArrowRightIcon className="size-4" />
+            <span className="underline-offset-4 group-hover:underline">
+              {viewAllLabel}
+            </span>
+            <ArrowRightIcon className="size-4 transition-colors duration-200" />
           </button>
         </div>
       </div>

@@ -4,7 +4,6 @@ import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
@@ -62,7 +61,6 @@ function NewsCard({
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,11,0.04)_0%,rgba(10,10,11,0.14)_24%,rgba(10,10,11,0.56)_68%,rgba(10,10,11,0.93)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_110%,rgba(201,161,93,0.18),transparent_48%)] opacity-80" />
       <div className="absolute inset-0 bg-black/8 opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100" />
-      <div className="pointer-events-none absolute inset-x-5 bottom-0 h-px bg-[linear-gradient(90deg,rgba(201,161,93,0.7),rgba(201,161,93,0))] opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:opacity-100" />
 
       <div className={cn("absolute inset-x-0 bottom-0", mobile ? "p-4" : "p-4 sm:p-5")}>
         <div className={cn("relative overflow-hidden", mobile ? "min-h-[6.7rem]" : "min-h-[6.8rem] sm:min-h-[7.2rem]")}>
@@ -164,15 +162,15 @@ export function RadiantNewsSection({
           <button
             type="button"
             onClick={() => {}}
-            className={buttonVariants({
-              className:
-                "border-(--news-button-border) bg-transparent text-white shadow-[0_18px_40px_-34px_rgba(0,0,0,0.9)] hover:bg-(--news-button-hover-bg) hover:border-(--news-accent-line)",
-              size: "marketing",
-              variant: "outline",
-            })}
+            className={cn(
+              "group inline-flex items-center gap-3 text-base font-medium text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30",
+              "hover:text-primary",
+            )}
           >
-            <span>{viewAllLabel}</span>
-            <ArrowRightIcon className="size-4" />
+            <span className="underline-offset-4 group-hover:underline">
+              {viewAllLabel}
+            </span>
+            <ArrowRightIcon className="size-4 transition-colors duration-200" />
           </button>
         </div>
       </div>

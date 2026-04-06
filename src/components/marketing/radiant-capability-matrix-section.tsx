@@ -353,7 +353,7 @@ function DesktopMatrix({
   useBubbleSystem(pills, wordRefs, isActive && bubblesEnabled);
 
   const rowClassName =
-    "relative grid items-center gap-6 pt-[2.2rem] pb-[3.4rem] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-black/10";
+    "relative grid items-center gap-6 pt-[2.2rem] pb-[3.4rem] after:absolute after:bottom-0 after:left-0 after:h-px after:w-full";
   const imageClassName = "h-[clamp(5.5rem,11vw,10.7rem)] min-w-0";
 
   return (
