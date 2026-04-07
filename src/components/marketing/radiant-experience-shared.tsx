@@ -497,7 +497,7 @@ export function ServiceCard({
   return (
     <article
       className={cn(
-        "group/service flex flex-col gap-3 md:transition-transform md:duration-500 md:ease-[cubic-bezier(0.22,1,0.36,1)] md:hover:-translate-y-1",
+        "group/service flex flex-col gap-3",
         className,
       )}
     >
@@ -506,7 +506,7 @@ export function ServiceCard({
         image={image}
         innerClassName={cn(
           interactive &&
-            "md:transition-transform md:duration-[900ms] md:ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover/service:scale-[1.06]",
+            "md:transition-transform md:duration-700 md:ease-[cubic-bezier(0.22,1,0.36,1)] md:group-hover/service:scale-[1.04]",
         )}
         variant={variant}
       >

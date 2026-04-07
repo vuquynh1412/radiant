@@ -127,7 +127,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
   const footerActions = [...utilityItems, ...socialItems];
 
   return (
-    <footer className="site-gutter relative z-10 -mt-[1svh] min-h-svh overflow-hidden bg-[#1b1a18] pb-20 pt-[10svh] text-white sm:pt-[9svh] lg:pt-[8svh]">
+    <footer className="site-gutter relative z-10 -mt-[1svh] min-h-svh overflow-hidden bg-[#1b1a18] pb-6 pt-[10svh] text-white sm:pt-[9svh] lg:pt-[8svh]">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-black/24 via-black/8 to-transparent" />
 
       <div className="relative mx-auto flex min-h-[calc(100svh-7rem)] max-w-352 flex-col">

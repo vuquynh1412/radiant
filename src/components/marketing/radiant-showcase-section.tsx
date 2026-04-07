@@ -13,7 +13,6 @@ import {
   SectionAccent,
   ServiceCard,
   ServiceCopy,
-  ServiceHoverOverlay,
   ServiceTile,
   ViewAllButton,
   VisualSurface,
@@ -129,7 +128,7 @@ function OpeningHeroButton({ label }: { label: string }) {
     <a
       className={buttonVariants({
         className:
-          "pointer-events-auto relative overflow-hidden rounded-full border-secondary/70 bg-secondary/14 px-6 text-secondary shadow-none backdrop-blur-sm hover:border-secondary/70 hover:bg-secondary/14 hover:text-secondary",
+          "pointer-events-auto relative overflow-hidden rounded-full border-2 border-secondary ring-1 ring-secondary bg-secondary/14 px-6 text-secondary shadow-[0_16px_40px_-24px_rgba(39,24,9,0.35)] backdrop-blur-[8px] hover:border-secondary hover:bg-secondary/14 hover:text-secondary",
         size: "marketing",
         variant: "outline",
       })}
@@ -286,8 +285,6 @@ function ReducedMotionDesktopShowcase({
   const openingCopy = getOpeningHeroCopy(content.locale);
   const transitionTitle = getTransitionHeroTitle(content);
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
-  const otherLabel = content.locale === "vi" ? "Khác" : "Other";
-  const viewMoreLabel = content.locale === "vi" ? "Xem thêm" : "Learn more";
 
   return (
     <div
@@ -352,15 +349,11 @@ function ReducedMotionDesktopShowcase({
                 className="h-full gap-4"
                 description={item.description}
                 eyebrow={item.eyebrow}
-                highlights={item.highlights}
                 hideDescription
                 hideEyebrow
                 image={item.image}
-                interactive
-                otherLabel={otherLabel}
                 tileClassName="h-full min-h-56 rounded-[24px]"
                 title={item.title}
-                viewMoreLabel={viewMoreLabel}
               />
             ))}
           </div>
@@ -403,8 +396,6 @@ export function RadiantShowcaseSection({
   sampleTileRef,
 }: RadiantShowcaseSectionProps) {
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
-  const otherLabel = content.locale === "vi" ? "Khác" : "Other";
-  const viewMoreLabel = content.locale === "vi" ? "Xem thêm" : "Learn more";
   const openingCopy = getOpeningHeroCopy(content.locale);
   const transitionTitle = getTransitionHeroTitle(content);
 
@@ -638,14 +629,7 @@ export function RadiantShowcaseSection({
                 className="size-full rounded-[inherit] border-0 shadow-none"
                 image={content.services.items[0]?.image}
                 innerClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:scale-[1.06]"
-              >
-                <ServiceHoverOverlay
-                  highlights={content.services.items[0]?.highlights}
-                  otherLabel={otherLabel}
-                  title={content.services.items[0]?.title ?? ""}
-                  viewMoreLabel={viewMoreLabel}
-                />
-              </ServiceTile>
+              />
             </div>
 
             {content.services.items.slice(1).map((item, index) => (
@@ -661,14 +645,7 @@ export function RadiantShowcaseSection({
                   className="size-full rounded-[inherit] border-0 shadow-none"
                   image={item.image}
                   innerClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover/service:scale-[1.06]"
-                >
-                  <ServiceHoverOverlay
-                    highlights={item.highlights}
-                    otherLabel={otherLabel}
-                    title={item.title}
-                    viewMoreLabel={viewMoreLabel}
-                  />
-                </ServiceTile>
+                />
               </div>
             ))}
           </div>

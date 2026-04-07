@@ -113,16 +113,25 @@ function CallToActionBody({
           className={cn(
             buttonVariants({
               className:
-                "border-[#171614]/16 bg-[#171614] text-white hover:bg-[#171614]/92",
+                "group relative overflow-hidden border-[#171614]/16 bg-[#171614] text-white shadow-[0_24px_56px_-36px_rgba(0,0,0,0.28)] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-secondary/40 hover:bg-[#171614] focus-visible:ring-secondary/30",
               size: "marketing",
               variant: "default",
             }),
           )}
           href="mailto:hello@radiant.studio?subject=Radiant%20strategy%20call"
         >
-          <span className="inline-flex items-center justify-center gap-2">
-            <span>{content.cta.buttonLabel}</span>
-            <ArrowUpRightIcon data-icon="inline-end" />
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 translate-y-full rounded-full bg-secondary transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none group-hover:translate-y-0"
+          />
+          <span className="relative z-10 inline-flex items-center justify-center gap-2">
+            <span className="whitespace-nowrap transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:text-[#1C1107]">
+              {content.cta.buttonLabel}
+            </span>
+            <ArrowUpRightIcon
+              data-icon="inline-end"
+              className="transition-[color,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1 group-hover:text-[#1C1107]"
+            />
           </span>
         </a>
       </div>
