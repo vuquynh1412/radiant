@@ -182,7 +182,7 @@
       ]
     },
     "Projects": {
-      "title": "Các dự án nổi bật",
+      "title": "Dự án nổi bật",
       "filterOrder": [
         "all",
         "strategy",
@@ -414,7 +414,7 @@
               "href": "#news"
             },
             {
-              "label": "FAQs",
+              "label": "Liên hệ ngay",
               "href": "#contact"
             },
             {

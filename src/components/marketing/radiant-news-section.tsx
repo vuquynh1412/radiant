@@ -1,6 +1,5 @@
 "use client";
 
-import { ArrowRightIcon } from "lucide-react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 
@@ -8,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
 import type { RadiantNewsItem } from "./radiant-experience.types";
-import { SectionAccent } from "./radiant-experience-shared";
+import { SectionAccent, ViewAllButton } from "./radiant-experience-shared";
 
 type RadiantNewsSectionProps = {
   content: RadiantExperienceContent;
@@ -159,19 +158,7 @@ export function RadiantNewsSection({
         </div>
 
         <div className="mt-6 flex justify-center">
-          <button
-            type="button"
-            onClick={() => {}}
-            className={cn(
-              "group inline-flex items-center gap-3 text-base font-medium text-white transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30",
-              "hover:text-primary",
-            )}
-          >
-            <span className="underline-offset-4 group-hover:underline">
-              {viewAllLabel}
-            </span>
-            <ArrowRightIcon className="size-4 transition-colors duration-200" />
-          </button>
+          <ViewAllButton label={viewAllLabel} tone="light" />
         </div>
       </div>
     </section>

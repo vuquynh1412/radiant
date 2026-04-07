@@ -1,4 +1,5 @@
 import type { HomePageMessages } from "@/i18n/messages";
+import { clientGalleryImages } from "@/content/client-gallery-images";
 
 export type ShowcaseImage = {
   fallbackSrc: string;
@@ -8,102 +9,84 @@ export type ShowcaseImage = {
 
 type ServiceKey = keyof HomePageMessages["Services"]["items"] & string;
 
-const makeUnsplashImage = ({
-  fallbackSrc,
-  id,
+const makeLocalImage = ({
+  src,
   position = "50% 50%",
 }: {
-  fallbackSrc: string;
-  id: string;
+  src: string;
   position?: string;
 }): ShowcaseImage => ({
-  fallbackSrc,
+  fallbackSrc: src,
   position,
-  src: `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80`,
+  src,
 });
 
 export const showcaseVariantImages = {
-  clinic: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/apple-architecture.jpg",
-    id: "photo-1524758631624-e2822e304c36",
+  clinic: makeLocalImage({
+    src: clientGalleryImages["2053011-full"].src,
     position: "50% 40%",
   }),
-  emerald: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/mono-curve.jpg",
-    id: "photo-1520607162513-77705c0f0d4a",
+  emerald: makeLocalImage({
+    src: clientGalleryImages["4-style-guide"].src,
     position: "50% 44%",
   }),
-  noir: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/kinetic-type.jpg",
-    id: "photo-1504384308090-c894fdcc538d",
+  noir: makeLocalImage({
+    src: clientGalleryImages["brand-bloom"].src,
     position: "50% 42%",
   }),
-  portrait: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/north-south-market.jpg",
-    id: "photo-1487412720507-e7ab37603c6f",
+  portrait: makeLocalImage({
+    src: clientGalleryImages["2333724-full"].src,
     position: "50% 28%",
   }),
-  rose: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/signal-25-launch.jpg",
-    id: "photo-1516321318423-f06f85e504b3",
+  rose: makeLocalImage({
+    src: clientGalleryImages["brand-guidelines-template"].src,
     position: "50% 48%",
   }),
-  sand: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/atlas-blueprint.jpg",
-    id: "photo-1517248135467-4c7edcad34c4",
+  sand: makeLocalImage({
+    src: clientGalleryImages["5-white-stationery"].src,
     position: "50% 42%",
   }),
-  studio: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/nocturne-orbit.jpg",
-    id: "photo-1500530855697-b586d89ba3ee",
+  studio: makeLocalImage({
+    src: clientGalleryImages["yellow-mockup"].src,
     position: "50% 42%",
   }),
-  vista: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/global-brand-systems.jpg",
-    id: "photo-1497366754035-f200968a6e72",
+  vista: makeLocalImage({
+    src: clientGalleryImages["01-fe14bd1f"].src,
     position: "50% 45%",
   }),
 } as const;
 
 export const serviceImages: Record<ServiceKey, ShowcaseImage> = {
-  digital: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/gradient-campaign.jpg",
-    id: "photo-FSF_QaPoImo",
+  digital: makeLocalImage({
+    src: clientGalleryImages["5-white-stationery"].src,
     position: "50% 42%",
   }),
-  guidelines: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/meridian-columns.jpg",
-    id: "photo-1551288049-bebda4e38f71",
+  guidelines: makeLocalImage({
+    src: clientGalleryImages["yellow-mockup"].src,
     position: "50% 42%",
   }),
-  identity: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/mono-curve.jpg",
-    id: "photo-AtzuwAG8qfY",
+  identity: makeLocalImage({
+    src: clientGalleryImages["brand-guidelines-template"].src,
     position: "50% 46%",
   }),
-  messaging: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/atlas-blueprint.jpg",
-    id: "photo-nAC-dcdeINE",
+  messaging: makeLocalImage({
+    src: clientGalleryImages["2333724-full"].src,
     position: "50% 48%",
   }),
-  naming: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/luma-gallery.jpg",
-    id: "photo-4Yk9jteo7KQ",
+  naming: makeLocalImage({
+    src: clientGalleryImages["brand-bloom"].src,
     position: "50% 50%",
   }),
-  positioning: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/global-brand-systems.jpg",
-    id: "photo-OC767IXSmMs",
+  positioning: makeLocalImage({
+    src: clientGalleryImages["4-style-guide"].src,
     position: "50% 48%",
   }),
-  rollout: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/signal-25-launch.jpg",
-    id: "photo-8jJ-Bw7c_d4",
+  rollout: makeLocalImage({
+    src: clientGalleryImages["01-fe14bd1f"].src,
     position: "50% 48%",
   }),
-  strategy: makeUnsplashImage({
-    fallbackSrc: "/project-gallery/apple-architecture.jpg",
-    id: "photo-fQOyF0D0cDU",
+  strategy: makeLocalImage({
+    src: clientGalleryImages["2053011-full"].src,
     position: "50% 44%",
   }),
 };

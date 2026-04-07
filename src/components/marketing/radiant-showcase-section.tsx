@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 
 import { cn } from "@/lib/utils";
@@ -14,6 +13,7 @@ import {
   ServiceCopy,
   ServiceHoverOverlay,
   ServiceTile,
+  ViewAllButton,
   VisualSurface,
 } from "./radiant-experience-shared";
 
@@ -55,17 +55,7 @@ const desktopShowcaseGridStyle = {
 
 function ShowcaseViewAllButton({ label }: { label: string }) {
   return (
-    <button
-      type="button"
-      onClick={() => {}}
-      className={cn(
-        "group inline-flex items-center gap-3 text-base font-medium text-[#27272A] transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/40",
-        "hover:text-primary",
-      )}
-    >
-      <span className="underline-offset-4 group-hover:underline">{label}</span>
-      <ArrowRightIcon className="size-4 transition-colors duration-200" />
-    </button>
+    <ViewAllButton label={label} />
   );
 }
 
@@ -426,7 +416,10 @@ export function RadiantShowcaseSection({
                   ))}
                 </div>
 
-                <div ref={serviceGridFooterRef} className="flex justify-center">
+                <div
+                  ref={serviceGridFooterRef}
+                  className="relative z-50 flex justify-center pointer-events-auto"
+                >
                   <ShowcaseViewAllButton label={viewAllLabel} />
                 </div>
               </div>

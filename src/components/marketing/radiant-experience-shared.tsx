@@ -221,6 +221,74 @@ export function SectionAccent({
   );
 }
 
+export function ViewAllButton({
+  className,
+  label,
+  onClick,
+  tone = "dark",
+}: {
+  className?: string;
+  label: string;
+  onClick?: () => void;
+  tone?: "dark" | "light";
+}) {
+  const borderClassName =
+    tone === "light"
+      ? "border-white/44"
+      : "border-[rgba(39,39,42,0.28)]";
+  const textClassName = tone === "light" ? "text-white" : "text-[#27272A]";
+  const fillClassName =
+    tone === "light"
+      ? "bg-white"
+      : "bg-[#27272A]";
+  const hoverTextClassName =
+    tone === "light"
+      ? "group-hover:text-[#171614]"
+      : "group-hover:text-[#F7EFE4]";
+  const ringClassName =
+    tone === "light"
+      ? "focus-visible:ring-white/30"
+      : "focus-visible:ring-ring/40";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group relative inline-flex items-center gap-4 overflow-hidden rounded-full border bg-transparent px-6 py-3.5 text-left transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] focus-visible:outline-none focus-visible:ring-2 md:gap-5 md:px-7 md:py-4",
+        borderClassName,
+        textClassName,
+        ringClassName,
+        className,
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute inset-0 translate-y-full rounded-full transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none group-hover:translate-y-0",
+          fillClassName,
+        )}
+      />
+      <span
+        className={cn(
+          "relative z-10 whitespace-nowrap text-[1.02rem] font-semibold tracking-[-0.02em] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] md:text-[1.08rem]",
+          hoverTextClassName,
+        )}
+      >
+        {label}
+      </span>
+      <span
+        className={cn(
+          "relative z-10 flex shrink-0 items-center transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none group-hover:translate-x-1",
+          hoverTextClassName,
+        )}
+      >
+        <ArrowRightIcon className="size-5 md:size-6" strokeWidth={2.15} />
+      </span>
+    </button>
+  );
+}
+
 export function RadiantBrandLogo({ className }: { className?: string }) {
   return (
     <svg
