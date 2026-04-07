@@ -3,6 +3,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { ArrowUpToLineIcon, PhoneCallIcon } from "lucide-react";
 import { useLocale, useMessages } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -11,6 +12,7 @@ import { getHomePageContent } from "@/i18n/get-homepage-content";
 import type { AppMessages } from "@/i18n/messages";
 
 import { cn } from "@/lib/utils";
+import { radiantSocialLinks, radiantSupportLinks } from "./radiant-social-links";
 import { RadiantAboutSection } from "./radiant-about-section";
 import { RadiantCapabilityMatrixSection } from "./radiant-capability-matrix-section";
 import { RadiantCallToActionSection } from "./radiant-cta-section";
@@ -30,6 +32,171 @@ import { useRadiantShowcaseMotion } from "./use-radiant-showcase-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
+function MessengerLogoIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 3.75c-4.83 0-8.75 3.57-8.75 7.98 0 2.52 1.28 4.77 3.28 6.24v3.78l3.63-2c.59.16 1.2.24 1.84.24 4.83 0 8.75-3.57 8.75-7.98S16.83 3.75 12 3.75Z"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+      <path
+        d="m8.72 13.56 2.53-2.69 2.1 1.77 2.08-2.21"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.8"
+      />
+    </svg>
+  );
+}
+
+function ZaloLogoIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <rect
+        x="3.5"
+        y="4"
+        width="17"
+        height="16"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+      <path
+        d="M8 9.25h7.2L8.8 15h7.2"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.9"
+      />
+      <path
+        d="M15.5 9.3v5.4"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeWidth="1.9"
+      />
+    </svg>
+  );
+}
+
+function RadiantStickySupportButtons({
+  isScrolling,
+  hotlineHref,
+  hotlineLabel,
+  messengerHref,
+  messengerLabel,
+  zaloHref,
+  zaloLabel,
+}: {
+  isScrolling: boolean;
+  hotlineHref: string;
+  hotlineLabel: string;
+  messengerHref: string;
+  messengerLabel: string;
+  zaloHref: string;
+  zaloLabel: string;
+}) {
+  const items = [
+    {
+      href: hotlineHref,
+      icon: <PhoneCallIcon className="size-4.5 stroke-[2]" />,
+      label: hotlineLabel,
+    },
+    {
+      href: messengerHref,
+      icon: <MessengerLogoIcon className="size-4.5" />,
+      label: messengerLabel,
+    },
+    {
+      href: zaloHref,
+      icon: <ZaloLogoIcon className="size-4.5" />,
+      label: zaloLabel,
+    },
+  ];
+
+  return (
+    <div
+      className={cn(
+        "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-40 flex flex-col items-start gap-2.5 transition-opacity duration-250 ease-out sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:left-[max(1.5rem,env(safe-area-inset-left))]",
+        isScrolling ? "opacity-50" : "opacity-100",
+      )}
+    >
+      {items.map((item) => (
+        <a
+          key={item.label}
+          aria-label={item.label}
+          className="group flex h-11 items-center overflow-hidden rounded-full border border-secondary/70 bg-secondary/14 text-secondary shadow-[0_16px_40px_-24px_rgba(39,24,9,0.35)] backdrop-blur-[8px] transition-[background-color,border-color,box-shadow,color] duration-350 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-primary hover:bg-primary hover:text-secondary hover:shadow-[0_18px_44px_-20px_rgba(140,87,37,0.55)] focus-visible:border-primary focus-visible:bg-primary focus-visible:text-secondary focus-visible:ring-3 focus-visible:ring-ring/50"
+          href={item.href}
+          rel={item.href.startsWith("http") ? "noreferrer" : undefined}
+          target={item.href.startsWith("http") ? "_blank" : undefined}
+        >
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center">
+            {item.icon}
+          </span>
+          <span className="pointer-events-none max-w-0 overflow-hidden pr-0 text-sm font-medium tracking-[0.02em] whitespace-nowrap opacity-0 translate-x-2 transition-[max-width,padding,opacity,transform] duration-350 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:max-w-28 group-hover:pr-4 group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:max-w-28 group-focus-visible:pr-4 group-focus-visible:translate-x-0 group-focus-visible:opacity-100">
+            {item.label}
+          </span>
+        </a>
+      ))}
+    </div>
+  );
+}
+
+function RadiantBackToTopButton({
+  isScrolling,
+  label,
+  onPress,
+}: {
+  isScrolling: boolean;
+  label: string;
+  onPress: () => void;
+}) {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const updateVisibility = () => {
+      setIsVisible(window.scrollY > 320);
+    };
+
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+    };
+  }, []);
+
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onPress}
+      className={cn(
+        "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 flex size-12 items-center justify-center rounded-full border border-secondary/70 bg-secondary/14 text-secondary shadow-[0_16px_40px_-24px_rgba(39,24,9,0.35)] backdrop-blur-[8px] transition-all duration-300 ease-out hover:border-primary hover:bg-primary hover:text-secondary hover:shadow-[0_18px_44px_-20px_rgba(140,87,37,0.55)] focus-visible:border-primary focus-visible:bg-primary focus-visible:text-secondary focus-visible:ring-3 focus-visible:ring-ring/50 sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:right-[max(1.5rem,env(safe-area-inset-right))]",
+        isVisible
+          ? "translate-y-0 opacity-100"
+          : "pointer-events-none translate-y-4 opacity-0",
+        isVisible && isScrolling ? "opacity-50" : undefined,
+      )}
+    >
+      <ArrowUpToLineIcon className="size-5 stroke-[2.25]" />
+    </button>
+  );
+}
+
 export function RadiantExperience({ }: RadiantExperienceProps) {
   const locale = useLocale() as Locale;
   const messages = useMessages() as AppMessages;
@@ -37,6 +204,8 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const [isBooting, setIsBooting] = useState(true);
   const [matrixRevealComplete, setMatrixRevealComplete] = useState(false);
   const [showcaseDesktopReady, setShowcaseDesktopReady] = useState(false);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const lenisRef = useRef<Lenis | null>(null);
   const onMatrixRevealComplete = useCallback(() => {
     setMatrixRevealComplete(true);
   }, []);
@@ -182,6 +351,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
       touchMultiplier: useTouchSync ? 0.85 : 1,
       wheelMultiplier: useTouchSync ? 0.85 : 1,
     });
+    lenisRef.current = lenis;
 
     const onScroll = () => {
       ScrollTrigger.update();
@@ -200,6 +370,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     gsap.ticker.add(advanceLenis);
 
     return () => {
+      lenisRef.current = null;
       gsap.ticker.remove(advanceLenis);
       gsap.ticker.lagSmoothing(500, 33);
       lenis.off("scroll", onScroll);
@@ -207,12 +378,48 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     };
   }, [isBooting]);
 
+  useEffect(() => {
+    let scrollStopTimer = 0;
+
+    const handleScrollActivity = () => {
+      setIsScrolling(true);
+      window.clearTimeout(scrollStopTimer);
+      scrollStopTimer = window.setTimeout(() => {
+        setIsScrolling(false);
+      }, 140);
+    };
+
+    window.addEventListener("scroll", handleScrollActivity, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollActivity);
+      window.clearTimeout(scrollStopTimer);
+    };
+  }, []);
+
   useRadiantShowcaseMotion({
     content,
     onReady: onShowcaseDesktopReady,
     refs: motionRefs,
   });
   useRadiantCapabilityMatrixMotion({ refs: motionRefs, onRevealComplete: onMatrixRevealComplete });
+
+  const handleBackToTop = useCallback(() => {
+    lenisRef.current?.scrollTo(0, { duration: 1 });
+
+    if (!lenisRef.current) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }, []);
+
+  const backToTopLabel =
+    locale === "vi" ? "Cuộn lên đầu trang" : "Back to top";
+  const hotlineHref = `tel:${content.footer.contact.phone.replace(/\s+/g, "")}`;
+  const messengerHref = radiantSocialLinks.messenger || "#contact";
+  const zaloHref = radiantSupportLinks.zalo || "#contact";
+  const hotlineLabel = locale === "vi" ? "Hotline" : "Hotline";
+  const messengerLabel = "Messenger";
+  const zaloLabel = "Zalo";
 
   return (
     <div ref={rootRef} className="bg-background text-foreground">
@@ -275,6 +482,20 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
       </div>
 
       <RadiantExperienceSplash isVisible={isBooting} />
+      <RadiantStickySupportButtons
+        isScrolling={isScrolling}
+        hotlineHref={hotlineHref}
+        hotlineLabel={hotlineLabel}
+        messengerHref={messengerHref}
+        messengerLabel={messengerLabel}
+        zaloHref={zaloHref}
+        zaloLabel={zaloLabel}
+      />
+      <RadiantBackToTopButton
+        isScrolling={isScrolling}
+        label={backToTopLabel}
+        onPress={handleBackToTop}
+      />
     </div>
   );
 }
