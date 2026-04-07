@@ -158,7 +158,12 @@ function RotatingImageSlot({
               : "scale-[1.035] opacity-0",
           )}
           fill
-          loading={priority && index === 0 ? "eager" : "lazy"}
+          loading={
+            (priority && index === 0) ||
+            image === "/capability-matrix/branding-packaging.png"
+              ? "eager"
+              : "lazy"
+          }
           priority={priority && index === 0}
           sizes="(min-width: 1280px) 272px, (min-width: 768px) 24vw, 100vw"
           src={image}
