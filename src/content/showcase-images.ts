@@ -56,6 +56,11 @@ export const showcaseVariantImages = {
   }),
 } as const;
 
+export const heroEditorialImage = makeLocalImage({
+  src: "/hero/radiant-hero-painting.jpg",
+  position: "52% 50%",
+});
+
 export const serviceImages: Record<ServiceKey, ShowcaseImage> = {
   digital: makeLocalImage({
     src: clientGalleryImages["5-white-stationery"].src,

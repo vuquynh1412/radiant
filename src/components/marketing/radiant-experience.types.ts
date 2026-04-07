@@ -32,10 +32,15 @@ export type RadiantExperienceRefs = {
   mobileHeroTopOverlayRef: RefObject<HTMLDivElement | null>;
   heroMatteRef: RefObject<HTMLDivElement | null>;
   heroMediaRef: RefObject<HTMLDivElement | null>;
+  heroMediaFrameRef: RefObject<HTMLDivElement | null>;
+  heroFinalImageRef: RefObject<HTMLDivElement | null>;
   heroTitleRef: RefObject<HTMLDivElement | null>;
   heroMonogramRef: RefObject<HTMLDivElement | null>;
+  heroTopPatternRef: RefObject<HTMLDivElement | null>;
   heroMarqueeRef: RefObject<HTMLDivElement | null>;
   heroMarqueeTrackRef: RefObject<HTMLDivElement | null>;
+  heroFinalMarqueeRef: RefObject<HTMLDivElement | null>;
+  heroFinalMarqueeTrackRef: RefObject<HTMLDivElement | null>;
   activeServiceCopyShellRef: RefObject<HTMLDivElement | null>;
   serviceGridShellRef: RefObject<HTMLDivElement | null>;
   serviceHeaderRef: RefObject<HTMLDivElement | null>;

@@ -219,6 +219,17 @@ html {
     letter-spacing: normal;
   }
 
+  .hero-pattern-track {
+    display: flex;
+    width: max-content;
+    animation: radiant-pattern-scroll 24s linear infinite;
+    will-change: transform;
+  }
+
+  .hero-pattern-track-reverse {
+    animation-direction: reverse;
+  }
+
   .dark-editorial-gradient {
     background-image:
       radial-gradient(circle at 50% 0%, rgba(201, 161, 93, 0.14), rgba(23, 22, 20, 0) 42%),
@@ -333,6 +344,16 @@ html {
   }
 
   100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes radiant-pattern-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
     transform: translate3d(-50%, 0, 0);
   }
 }

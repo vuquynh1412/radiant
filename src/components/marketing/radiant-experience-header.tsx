@@ -556,6 +556,7 @@ export function RadiantExperienceHeader({
       >
         <div className="px-0 pt-0">
           <div
+            data-radiant-header-shell=""
             className={cn(
               "mx-auto w-full bg-[#1C1107] text-[#F7F2EB] transition-all duration-300",
               "flex items-center justify-between gap-3 rounded-[16px] rounded-t-none px-4 py-2.5",

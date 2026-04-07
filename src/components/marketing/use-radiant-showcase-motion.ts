@@ -33,10 +33,6 @@ function morphState(
 const focusEase = gsap.parseEase("power2.inOut");
 const aboutContentEase = gsap.parseEase("power2.out");
 const aboutCharEase = gsap.parseEase("power1.out");
-const marqueeStartProgress = 0.22;
-const marqueeEndProgress = 0.4;
-const marqueeStartXPercent = 100;
-const marqueeEndXPercent = -110;
 
 function getSmoothFocusValue(progress: number, steps: number) {
   if (steps <= 0) {
@@ -110,8 +106,12 @@ type LayoutSetters = {
 };
 
 type HeroMediaSetters = LayoutSetters & {
+  bottomLeftRadius: NumericSetter;
+  bottomRightRadius: NumericSetter;
   borderRadius: NumericSetter;
   height: NumericSetter;
+  topLeftRadius: NumericSetter;
+  topRightRadius: NumericSetter;
   width: NumericSetter;
 };
 
@@ -133,12 +133,14 @@ type AboutCharSetters = {
 };
 
 type ShowcaseDerivedLayout = {
+  dropRect: HeroRect;
   enterStates: LayoutState[];
   fullRect: HeroRect;
   gridStates: LayoutState[];
+  introRect: HeroRect;
   rowZeroRect: HeroRect;
   rowZeroState: LayoutState;
-  splitRect: HeroRect;
+  slideRect: HeroRect;
   terminalRowStates: LayoutState[];
 };
 
@@ -164,8 +166,28 @@ function createUniformScaleSetter(node: HTMLElement): NumericSetter {
 function createHeroMediaSetters(node: HTMLElement): HeroMediaSetters {
   return {
     ...createLayoutSetters(node),
+    bottomLeftRadius: gsap.quickSetter(
+      node,
+      "borderBottomLeftRadius",
+      "px",
+    ) as NumericSetter,
+    bottomRightRadius: gsap.quickSetter(
+      node,
+      "borderBottomRightRadius",
+      "px",
+    ) as NumericSetter,
     borderRadius: gsap.quickSetter(node, "borderRadius", "px") as NumericSetter,
     height: gsap.quickSetter(node, "height", "px") as NumericSetter,
+    topLeftRadius: gsap.quickSetter(
+      node,
+      "borderTopLeftRadius",
+      "px",
+    ) as NumericSetter,
+    topRightRadius: gsap.quickSetter(
+      node,
+      "borderTopRightRadius",
+      "px",
+    ) as NumericSetter,
     width: gsap.quickSetter(node, "width", "px") as NumericSetter,
   };
 }
@@ -201,9 +223,13 @@ function applyLayoutState(setters: LayoutSetters, state: LayoutState) {
 }
 
 function applyHeroRect(setters: HeroMediaSetters, rect: HeroRect) {
+  setters.bottomLeftRadius(rect.borderRadius);
+  setters.bottomRightRadius(rect.borderRadius);
   setters.borderRadius(rect.borderRadius);
   setters.height(rect.height);
   setters.scale(rect.scale);
+  setters.topLeftRadius(rect.borderRadius);
+  setters.topRightRadius(rect.borderRadius);
   setters.width(rect.width);
   setters.x(rect.x);
   setters.y(rect.y);
@@ -231,10 +257,15 @@ export function useRadiantShowcaseMotion({
             !refs.showcaseSectionRef.current ||
             !refs.heroMatteRef.current ||
             !refs.heroMediaRef.current ||
+            !refs.heroMediaFrameRef.current ||
+            !refs.heroFinalImageRef.current ||
             !refs.heroTitleRef.current ||
             !refs.heroMonogramRef.current ||
+            !refs.heroTopPatternRef.current ||
             !refs.heroMarqueeRef.current ||
             !refs.heroMarqueeTrackRef.current ||
+            !refs.heroFinalMarqueeRef.current ||
+            !refs.heroFinalMarqueeTrackRef.current ||
             !refs.activeServiceCopyShellRef.current ||
             !refs.serviceGridShellRef.current ||
             !refs.serviceHeaderRef.current ||
@@ -279,6 +310,19 @@ export function useRadiantShowcaseMotion({
             refs.heroTitleRef.current,
             "opacity",
           ) as NumericSetter;
+          const heroMediaFrameOpacity = gsap.quickSetter(
+            refs.heroMediaFrameRef.current,
+            "opacity",
+          ) as NumericSetter;
+          const heroFinalImageOpacity = gsap.quickSetter(
+            refs.heroFinalImageRef.current,
+            "opacity",
+          ) as NumericSetter;
+          const heroTitleY = gsap.quickSetter(
+            refs.heroTitleRef.current,
+            "y",
+            "px",
+          ) as NumericSetter;
           const heroTitleScale = createUniformScaleSetter(
             refs.heroTitleRef.current,
           );
@@ -290,6 +334,16 @@ export function useRadiantShowcaseMotion({
             refs.heroMonogramRef.current,
             "opacity",
           ) as NumericSetter;
+          const heroTopPatternTop = gsap.quickSetter(
+            refs.heroTopPatternRef.current,
+            "top",
+            "px",
+          ) as NumericSetter;
+          const heroMonogramY = gsap.quickSetter(
+            refs.heroMonogramRef.current,
+            "y",
+            "px",
+          ) as NumericSetter;
           const heroMonogramScale = createUniformScaleSetter(
             refs.heroMonogramRef.current,
           );
@@ -297,8 +351,21 @@ export function useRadiantShowcaseMotion({
             refs.heroMarqueeRef.current,
             "opacity",
           ) as NumericSetter;
+          const heroMarqueeX = gsap.quickSetter(
+            refs.heroMarqueeRef.current,
+            "x",
+            "px",
+          ) as NumericSetter;
           const heroMarqueeTrackXPercent = gsap.quickSetter(
             refs.heroMarqueeTrackRef.current,
+            "xPercent",
+          ) as NumericSetter;
+          const heroFinalMarqueeOpacity = gsap.quickSetter(
+            refs.heroFinalMarqueeRef.current,
+            "opacity",
+          ) as NumericSetter;
+          const heroFinalMarqueeTrackXPercent = gsap.quickSetter(
+            refs.heroFinalMarqueeTrackRef.current,
             "xPercent",
           ) as NumericSetter;
           const activeServiceCopyShellSetters = createOpacityYSetters(
@@ -599,13 +666,14 @@ export function useRadiantShowcaseMotion({
           const getDerivedLayout = (
             metrics: ShowcaseMetrics,
           ): ShowcaseDerivedLayout => {
-            const splitRect: HeroRect = {
-              borderRadius: 0,
-              height: metrics.viewportHeight,
+            const introTop = gsap.utils.clamp(104, 120, metrics.viewportHeight * 0.132);
+            const introRect: HeroRect = {
+              borderRadius: 40,
+              height: Math.max(360, metrics.viewportHeight - introTop),
               scale: 1,
-              width: metrics.viewportWidth / 2,
-              x: metrics.viewportWidth / 2,
-              y: 0,
+              width: metrics.viewportWidth,
+              x: 0,
+              y: introTop,
             };
             const fullRect: HeroRect = {
               borderRadius: 0,
@@ -613,6 +681,18 @@ export function useRadiantShowcaseMotion({
               scale: 1,
               width: metrics.viewportWidth,
               x: 0,
+              y: 0,
+            };
+            const dropRect: HeroRect = {
+              ...introRect,
+              y: metrics.viewportHeight,
+            };
+            const slideRect: HeroRect = {
+              borderRadius: 0,
+              height: metrics.viewportHeight,
+              scale: 1,
+              width: metrics.viewportWidth,
+              x: metrics.viewportWidth,
               y: 0,
             };
             const rowZeroState = getRowState(0, 0, metrics);
@@ -640,12 +720,14 @@ export function useRadiantShowcaseMotion({
             }));
 
             return {
+              dropRect,
               enterStates,
               fullRect,
               gridStates,
+              introRect,
               rowZeroRect,
               rowZeroState,
-              splitRect,
+              slideRect,
               terminalRowStates,
             };
           };
@@ -660,6 +742,18 @@ export function useRadiantShowcaseMotion({
           };
 
           const applyMetricBoundLayout = (metrics: ShowcaseMetrics) => {
+            const headerShell = document.querySelector<HTMLElement>(
+              "[data-radiant-header-shell]",
+            );
+            const headerBottom = headerShell?.getBoundingClientRect().bottom ?? 0;
+            const patternHeight = refs.heroTopPatternRef.current?.offsetHeight ?? 0;
+            const availableGap = Math.max(
+              0,
+              derivedLayout.introRect.y - headerBottom - patternHeight,
+            );
+            const topPatternOffset = headerBottom + availableGap / 2;
+
+            heroTopPatternTop(topPatternOffset);
             heroMatteScaleX(0.5);
             heroMatteWidth(metrics.viewportWidth);
             refs.showcaseSectionRef.current?.style.setProperty(
@@ -714,18 +808,21 @@ export function useRadiantShowcaseMotion({
           applyMetricBoundLayout(initialMetrics);
           onReady?.();
 
-          refs.showcaseSectionRef.current.style.setProperty(
-            "--hero-mask-x",
-            `${initialMetrics.viewportWidth / 2}px`,
-          );
-          applyHeroRect(heroMediaSetters, derivedLayout.splitRect);
+          applyHeroRect(heroMediaSetters, derivedLayout.introRect);
           heroTitleOpacity(1);
+          heroTitleY(0);
           heroTitleScale(1);
           heroTitleYPercent(0);
           heroMonogramOpacity(1);
+          heroMonogramY(0);
           heroMonogramScale(1);
+          heroMediaFrameOpacity(1);
+          heroFinalImageOpacity(0);
           heroMarqueeOpacity(0);
-          heroMarqueeTrackXPercent(marqueeStartXPercent);
+          heroMarqueeX(0);
+          heroMarqueeTrackXPercent(0);
+          heroFinalMarqueeOpacity(0);
+          heroFinalMarqueeTrackXPercent(100);
           activeServiceCopyShellSetters.opacity(0);
           activeServiceCopyShellSetters.y(0);
           serviceGridShellSetters.opacity(0);
@@ -754,93 +851,123 @@ export function useRadiantShowcaseMotion({
             metrics: ShowcaseMetrics = cachedMetrics,
           ) => {
             const {
+              dropRect,
               enterStates,
               fullRect,
               gridStates,
+              introRect,
               rowZeroRect,
               rowZeroState,
-              splitRect,
+              slideRect,
               terminalRowStates,
             } = derivedLayout;
-            const expandProgress = gsap.utils.clamp(0, 1, progress / 0.18);
-            const titleFadeProgress = gsap.utils.clamp(
+            const introMediaProgress = gsap.utils.clamp(0, 1, progress / 0.24);
+            const patternFadeProgress = gsap.utils.clamp(0, 1, progress / 0.08);
+            const openingFadeProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.08) / 0.12,
+              (progress - 0.14) / 0.1,
             );
-            const marqueeProgress = gsap.utils.clamp(
+            const shineSlideProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - marqueeStartProgress) /
-              (marqueeEndProgress - marqueeStartProgress),
+              (progress - 0.24) / 0.18,
+            );
+            const finalMarqueeRevealProgress = gsap.utils.clamp(
+              0,
+              1,
+              (progress - 0.42) / 0.06,
+            );
+            const finalMarqueeRunProgress = gsap.utils.clamp(
+              0,
+              1,
+              (progress - 0.42) / 0.3,
             );
             const shrinkProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.4) / 0.16,
+              (progress - 0.72) / 0.12,
             );
             const rowRevealProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.52) / 0.1,
+              (progress - 0.84) / 0.06,
             );
             const holdProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.62) / 0.1,
+              (progress - 0.9) / 0.03,
             );
             const focusPhaseProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.69) / 0.13,
+              (progress - 0.93) / 0.04,
             );
             const gridProgress = gsap.utils.clamp(
               0,
               1,
-              (progress - 0.86) / 0.1,
+              (progress - 0.97) / 0.03,
             );
             const focusIndex = getSmoothFocusValue(
               focusPhaseProgress,
               serviceItemCount - 1,
             );
             const activeCopyIndex =
-              progress < 0.69 ? 0 : Math.round(focusIndex);
+              progress < 0.93 ? 0 : Math.round(focusIndex);
             const rowStates = new Array<LayoutState>(serviceItemCount);
 
             for (let index = 0; index < serviceItemCount; index += 1) {
               rowStates[index] = getRowState(index, focusIndex, metrics);
             }
 
-            const maskX =
-              progress <= 0.4
-                ? lerp(metrics.viewportWidth / 2, 0, expandProgress)
-                : 0;
-            const matteScale =
-              metrics.viewportWidth > 0 ? maskX / metrics.viewportWidth : 0;
-
-            refs.showcaseSectionRef.current?.style.setProperty(
-              "--hero-mask-x",
-              `${maskX}px`,
+            const introTravelDistance = dropRect.y - introRect.y;
+            const openingLayerY = introTravelDistance * introMediaProgress;
+            const openingVisibility =
+              progress <= 0.14 ? 1 : 1 - aboutContentEase(openingFadeProgress);
+            const patternOpacity = 1 - aboutContentEase(patternFadeProgress);
+            const makeBrandOpacity = progress <= 0.42 ? 1 : 0;
+            const finalImageRevealProgress = gsap.utils.clamp(
+              0,
+              1,
+              (progress - 0.22) / 0.04,
             );
-            heroMatteScaleX(matteScale);
-            heroTitleOpacity(1 - titleFadeProgress);
-            heroTitleScale(1 - titleFadeProgress * 0.035);
-            heroTitleYPercent(-titleFadeProgress * 8);
-            heroMonogramOpacity(1 - titleFadeProgress);
-            heroMonogramScale(1 - titleFadeProgress * 0.08);
 
-            const marqueeOpacity =
-              progress < marqueeStartProgress || progress > marqueeEndProgress
+            heroMatteScaleX(0);
+            heroMediaFrameOpacity(1 - finalImageRevealProgress);
+            heroFinalImageOpacity(finalImageRevealProgress);
+            heroTitleOpacity(openingVisibility);
+            heroTitleY(openingLayerY);
+            heroTitleScale(1);
+            heroTitleYPercent(0);
+            heroMonogramOpacity(patternOpacity);
+            heroMonogramY(0);
+            heroMonogramScale(1);
+            heroMarqueeOpacity(makeBrandOpacity);
+            heroMarqueeX(
+              progress < 0.24
                 ? 0
-                : Math.sin(marqueeProgress * Math.PI);
-
-            heroMarqueeOpacity(marqueeOpacity);
-            heroMarqueeTrackXPercent(
-              lerp(marqueeStartXPercent, marqueeEndXPercent, marqueeProgress),
+                : lerp(0, -metrics.viewportWidth, shineSlideProgress),
+            );
+            heroMarqueeTrackXPercent(0);
+            heroFinalMarqueeOpacity(
+              progress < 0.42
+                ? 0
+                : progress < 0.48
+                  ? aboutContentEase(finalMarqueeRevealProgress)
+                  : progress < 0.84
+                    ? 1
+                    : 1 - gsap.utils.clamp(0, 1, (progress - 0.84) / 0.08),
+            );
+            heroFinalMarqueeTrackXPercent(
+              progress < 0.42
+                ? 100
+                : progress < 0.72
+                  ? lerp(100, -110, finalMarqueeRunProgress)
+                  : -110,
             );
 
             const activeFocusState =
-              progress < 0.69 ? rowZeroState : rowStates[activeCopyIndex];
+              progress < 0.93 ? rowZeroState : rowStates[activeCopyIndex];
             const currentHeroRowState =
               gridProgress > 0
                 ? morphState(
@@ -850,20 +977,33 @@ export function useRadiantShowcaseMotion({
                 )
                 : rowStates[0];
 
-            if (progress <= 0.4) {
-              heroMediaSetters.borderRadius(
-                lerp(splitRect.borderRadius, fullRect.borderRadius, expandProgress),
-              );
+            if (progress <= 0.24) {
+              const introTopRadius = lerp(introRect.borderRadius, 0, introMediaProgress);
+
+              heroMediaSetters.borderRadius(0);
+              heroMediaSetters.topLeftRadius(introTopRadius);
+              heroMediaSetters.topRightRadius(introTopRadius);
+              heroMediaSetters.bottomLeftRadius(0);
+              heroMediaSetters.bottomRightRadius(0);
               heroMediaSetters.height(
-                lerp(splitRect.height, fullRect.height, expandProgress),
+                lerp(introRect.height, dropRect.height, introMediaProgress),
               );
               heroMediaSetters.scale(1);
               heroMediaSetters.width(
-                lerp(splitRect.width, fullRect.width, expandProgress),
+                lerp(introRect.width, dropRect.width, introMediaProgress),
               );
-              heroMediaSetters.x(lerp(splitRect.x, fullRect.x, expandProgress));
-              heroMediaSetters.y(lerp(splitRect.y, fullRect.y, expandProgress));
-            } else if (progress <= 0.69) {
+              heroMediaSetters.x(lerp(introRect.x, dropRect.x, introMediaProgress));
+              heroMediaSetters.y(lerp(introRect.y, dropRect.y, introMediaProgress));
+            } else if (progress <= 0.42) {
+              applyHeroRect(heroMediaSetters, {
+                borderRadius: 0,
+                height: fullRect.height,
+                scale: 1,
+                width: fullRect.width,
+                x: lerp(slideRect.x, fullRect.x, shineSlideProgress),
+                y: 0,
+              });
+            } else if (progress <= 0.94) {
               heroMediaSetters.borderRadius(
                 lerp(fullRect.borderRadius, rowZeroRect.borderRadius, shrinkProgress),
               );
@@ -888,9 +1028,9 @@ export function useRadiantShowcaseMotion({
             }
 
             const copyShellOpacity =
-              progress < 0.48
+              progress < 0.84
                 ? 0
-                : progress < 0.69
+                : progress < 0.93
                   ? rowRevealProgress
                   : 1 - gsap.utils.clamp(0, 1, gridProgress * 1.24);
 
@@ -904,7 +1044,7 @@ export function useRadiantShowcaseMotion({
 
             serviceCopySetters.forEach((setters, index) => {
               const revealStrength =
-                progress < 0.69
+                progress < 0.93
                   ? index === 0
                     ? rowRevealProgress
                     : 0
@@ -915,7 +1055,7 @@ export function useRadiantShowcaseMotion({
               const clampedRevealStrength = gsap.utils.clamp(0, 1, revealStrength);
 
               setters.opacity(
-                progress < 0.52 ? 0 : (1 - gridProgress) * clampedRevealStrength,
+                progress < 0.84 ? 0 : (1 - gridProgress) * clampedRevealStrength,
               );
               setters.y(18 - clampedRevealStrength * 18);
             });
@@ -948,7 +1088,7 @@ export function useRadiantShowcaseMotion({
                   : rowStates[itemIndex];
 
               const currentState =
-                progress < 0.69
+                progress < 0.93
                   ? morphState(enterStates[nodeIndex], rowState, rowRevealProgress)
                   : rowState;
 

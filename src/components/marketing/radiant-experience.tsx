@@ -221,10 +221,15 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const mobileHeroTopOverlayRef = useRef<HTMLDivElement | null>(null);
   const heroMatteRef = useRef<HTMLDivElement | null>(null);
   const heroMediaRef = useRef<HTMLDivElement | null>(null);
+  const heroMediaFrameRef = useRef<HTMLDivElement | null>(null);
+  const heroFinalImageRef = useRef<HTMLDivElement | null>(null);
   const heroTitleRef = useRef<HTMLDivElement | null>(null);
   const heroMonogramRef = useRef<HTMLDivElement | null>(null);
+  const heroTopPatternRef = useRef<HTMLDivElement | null>(null);
   const heroMarqueeRef = useRef<HTMLDivElement | null>(null);
   const heroMarqueeTrackRef = useRef<HTMLDivElement | null>(null);
+  const heroFinalMarqueeRef = useRef<HTMLDivElement | null>(null);
+  const heroFinalMarqueeTrackRef = useRef<HTMLDivElement | null>(null);
   const activeServiceCopyShellRef = useRef<HTMLDivElement | null>(null);
   const serviceGridShellRef = useRef<HTMLDivElement | null>(null);
   const serviceHeaderRef = useRef<HTMLDivElement | null>(null);
@@ -251,10 +256,15 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     mobileHeroTopOverlayRef,
     heroMatteRef,
     heroMediaRef,
+    heroMediaFrameRef,
+    heroFinalImageRef,
     heroTitleRef,
     heroMonogramRef,
+    heroTopPatternRef,
     heroMarqueeRef,
     heroMarqueeTrackRef,
+    heroFinalMarqueeRef,
+    heroFinalMarqueeTrackRef,
     activeServiceCopyShellRef,
     serviceGridShellRef,
     serviceHeaderRef,
@@ -441,11 +451,16 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
             mobileHeroSectionRef={mobileHeroSectionRef}
             mobileHeroTopContentRef={mobileHeroTopContentRef}
             mobileHeroTopOverlayRef={mobileHeroTopOverlayRef}
+            heroMediaFrameRef={heroMediaFrameRef}
+            heroFinalImageRef={heroFinalImageRef}
             heroMarqueeRef={heroMarqueeRef}
             heroMarqueeTrackRef={heroMarqueeTrackRef}
+            heroFinalMarqueeRef={heroFinalMarqueeRef}
+            heroFinalMarqueeTrackRef={heroFinalMarqueeTrackRef}
             heroMatteRef={heroMatteRef}
             heroMediaRef={heroMediaRef}
             heroMonogramRef={heroMonogramRef}
+            heroTopPatternRef={heroTopPatternRef}
             heroTitleRef={heroTitleRef}
             sampleTileRef={sampleTileRef}
             serviceCardsRef={serviceCardsRef}
