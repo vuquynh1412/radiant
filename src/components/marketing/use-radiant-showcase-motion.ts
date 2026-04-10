@@ -78,6 +78,7 @@ type ShowcaseMetrics = {
   gridShellWidth: number;
   gridTop: number;
   gridTitleHeight: number;
+  headerHeight: number;
   mediaHeight: number;
   previewGap: number;
   previewScale: number;
@@ -391,6 +392,10 @@ export function useRadiantShowcaseMotion({
           const getMetrics = (): ShowcaseMetrics => {
             const viewportWidth = window.innerWidth;
             const viewportHeight = getStableViewportHeight();
+            const headerShell = document.querySelector<HTMLElement>(
+              "[data-radiant-header-shell]",
+            );
+            const headerHeight = headerShell?.offsetHeight ?? 80;
             const cardWidth =
               refs.sampleTileRef.current?.offsetWidth ??
               Math.min(Math.max(viewportWidth * 0.48, 608), 736);
@@ -530,6 +535,7 @@ export function useRadiantShowcaseMotion({
               gridShellWidth,
               gridTop: gridClusterTop + gridHeaderHeight + gridHeaderGap,
               gridTitleHeight,
+              headerHeight,
               mediaHeight,
               previewGap,
               previewScale,
@@ -666,7 +672,7 @@ export function useRadiantShowcaseMotion({
           const getDerivedLayout = (
             metrics: ShowcaseMetrics,
           ): ShowcaseDerivedLayout => {
-            const introTop = gsap.utils.clamp(104, 120, metrics.viewportHeight * 0.132);
+            const introTop = metrics.headerHeight + 6;
             const introRect: HeroRect = {
               borderRadius: 40,
               height: Math.max(360, metrics.viewportHeight - introTop),
@@ -742,23 +748,18 @@ export function useRadiantShowcaseMotion({
           };
 
           const applyMetricBoundLayout = (metrics: ShowcaseMetrics) => {
-            const headerShell = document.querySelector<HTMLElement>(
-              "[data-radiant-header-shell]",
-            );
-            const headerBottom = headerShell?.getBoundingClientRect().bottom ?? 0;
-            const patternHeight = refs.heroTopPatternRef.current?.offsetHeight ?? 0;
-            const availableGap = Math.max(
-              0,
-              derivedLayout.introRect.y - headerBottom - patternHeight,
-            );
-            const topPatternOffset = headerBottom + availableGap / 2;
+            const openingTop = metrics.headerHeight + 6;
 
-            heroTopPatternTop(topPatternOffset);
+            heroTopPatternTop(openingTop);
             heroMatteScaleX(0.5);
             heroMatteWidth(metrics.viewportWidth);
             refs.showcaseSectionRef.current?.style.setProperty(
               "--showcase-focus-copy-width",
               `${metrics.cardWidth * metrics.focusScale}px`,
+            );
+            refs.showcaseSectionRef.current?.style.setProperty(
+              "--showcase-opening-top",
+              `${openingTop}px`,
             );
             refs.serviceGridShellRef.current?.style.setProperty(
               "--showcase-grid-columns",

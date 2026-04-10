@@ -54,6 +54,7 @@ const desktopShowcaseGridStyle = {
   "--showcase-grid-header-gap": "84px",
   "--showcase-grid-content-height": "32rem",
   "--showcase-grid-item-gap": "10px",
+  "--showcase-opening-top": "96px",
   "--showcase-grid-row-gap": "24px",
   "--showcase-grid-slot-width": "15rem",
   "--showcase-grid-title-height": "3.75rem",
@@ -91,7 +92,12 @@ function RadiantPatternTicker({
   const items = Array.from({ length: 14 }, (_, index) => `${label}-${index}`);
 
   return (
-    <div className={cn("overflow-hidden bg-[#F7ECE2]/96", className)}>
+    <div
+      className={cn(
+        "overflow-hidden bg-[#F7ECE2]/96 hidden md:block",
+        className,
+      )}
+    >
       <div
         className={cn(
           "hero-pattern-track",
@@ -181,7 +187,7 @@ function MobileShowcaseHero({
 
   return (
     <div className="md:hidden">
-      <section className="relative min-h-svh overflow-hidden bg-[#17120F]">
+      <section className="relative mt-20 min-h-svh overflow-hidden rounded-t-[16px] bg-[#17120F]">
         <VisualSurface
           className="absolute inset-0 rounded-none"
           image={heroEditorialImage}
@@ -189,10 +195,10 @@ function MobileShowcaseHero({
         >
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,5,0.16)_0%,rgba(13,8,5,0.22)_30%,rgba(13,8,5,0.56)_72%,rgba(13,8,5,0.84)_100%)]" />
         </VisualSurface>
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 pt-[calc(env(safe-area-inset-top)+1rem)]">
+        {/* <div className="pointer-events-none absolute inset-x-0 top-0 z-20 pt-[calc(env(safe-area-inset-top)+1rem)]">
           <RadiantPatternTicker label={content.brand.name} />
-        </div>
-        <div className="site-gutter relative z-10 flex min-h-svh items-center justify-center py-[max(2rem,env(safe-area-inset-bottom)+1.25rem)] pt-[calc(env(safe-area-inset-top)+3.5rem)]">
+        </div> */}
+        <div className="site-gutter relative z-10 flex min-h-svh items-center justify-center py-[max(2rem,env(safe-area-inset-bottom)+1.25rem)] pt-[calc(env(safe-area-inset-top)+76px)]">
           <div className="flex flex-col items-center space-y-5 text-center">
             <h1 className="font-heading text-[clamp(1rem,8vw,4.5rem)] leading-[1.2] font-bold tracking-[-0.04em] text-[#E2B649] text-shadow-[0_8px_24px_rgba(15,9,4,0.22)]">
               <span className="block">{openingCopy.lineOne}</span>
@@ -293,11 +299,10 @@ function ReducedMotionDesktopShowcase({
       }
     >
       <div className="relative overflow-hidden bg-[#F7ECE2] text-[#27272A]">
-        <div className="absolute inset-x-0 top-0 z-20 pt-[4.7rem]">
-          <RadiantPatternTicker label={content.brand.name} />
-        </div>
-
-        <div className="site-gutter relative mx-auto flex min-h-168 max-w-384 flex-col justify-center py-12">
+        <div
+          className="site-gutter relative mx-auto flex min-h-168 max-w-384 flex-col justify-center pb-12"
+          style={{ paddingTop: "var(--showcase-opening-top, 96px)" }}
+        >
           <div className="relative min-h-[72svh] overflow-hidden rounded-t-[2.5rem]">
             <VisualSurface
               className="size-full rounded-[inherit]"
@@ -419,6 +424,7 @@ export function RadiantShowcaseSection({
           {
             "--hero-mask-x": "50vw",
             "--showcase-focus-copy-width": "46rem",
+            "--showcase-opening-top": "96px",
           } as CSSProperties
         }
       >
@@ -433,9 +439,11 @@ export function RadiantShowcaseSection({
             ref={heroMonogramRef}
             className="pointer-events-none absolute inset-0 z-20 will-change-transform"
           >
-            <div ref={heroTopPatternRef} className="absolute inset-x-0 top-0">
-              <RadiantPatternTicker label={content.brand.name} />
-            </div>
+            <div
+              ref={heroTopPatternRef}
+              aria-hidden="true"
+              className="absolute inset-x-0 top-0 h-0 overflow-hidden"
+            />
             <div className="absolute inset-x-0 bottom-[1.25rem]">
               <RadiantPatternTicker
                 className="bg-transparent"
@@ -447,7 +455,8 @@ export function RadiantShowcaseSection({
 
           <div
             ref={heroTitleRef}
-            className="absolute inset-0 z-30 will-change-transform"
+            className="absolute inset-x-0 bottom-0 z-30 will-change-transform"
+            style={{ top: "var(--showcase-opening-top, 96px)" }}
           >
             <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-6">
               <div className="w-full text-center">
