@@ -676,7 +676,7 @@ export function useRadiantShowcaseMotion({
                 x: lerp(slideRect.x, fullRect.x, shineSlideProgress),
                 y: 0,
               });
-            } else if (progress <= 0.94) {
+            } else if (progress < 0.93) {
               heroMediaSetters.borderRadius(
                 lerp(fullRect.borderRadius, rowZeroRect.borderRadius, shrinkProgress),
               );
@@ -690,6 +690,8 @@ export function useRadiantShowcaseMotion({
               heroMediaSetters.x(lerp(fullRect.x, rowZeroRect.x, shrinkProgress));
               heroMediaSetters.y(lerp(fullRect.y, rowZeroRect.y, shrinkProgress));
             } else {
+              // The hero tile is also the first service card, so it needs to
+              // join the shared focus/grid choreography as soon as that phase starts.
               applyHeroRect(heroMediaSetters, {
                 borderRadius: 24,
                 height: metrics.mediaHeight,

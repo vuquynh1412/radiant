@@ -52,7 +52,7 @@ export function useRadiantCtaMotion({ refs }: UseRadiantCtaMotionProps) {
     scope: refs.sectionRef,
     trigger: refs.sectionRef,
     start: "top bottom",
-    end: "bottom-=100% bottom",
+    end: "bottom top",
     mediaQuery: "(prefers-reduced-motion: no-preference)",
     reducedMotionProgress: false,
     setup: () => {

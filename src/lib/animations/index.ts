@@ -12,6 +12,7 @@ export {
   type SmoothScrollMode,
   type UseLenisScrollSyncOptions,
 } from "./use-lenis-scroll-sync";
+export { useBatchReveal, type BatchRevealOptions } from "./use-batch-reveal";
 export {
   useScrollScene,
   type ScrollSceneConfig,

@@ -291,7 +291,7 @@ export function RadiantCallToActionSection({
                   height="996"
                   preserveAspectRatio="xMidYMid slice"
                 />
-                <rect width="1512" height="996" fill="rgba(232,221,211,0.62)" />
+                <rect width="1512" height="996" fill="#E8DDD3" fillOpacity="0.62" />
                 <rect
                   width="1512"
                   height="520"

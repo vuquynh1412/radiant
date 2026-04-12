@@ -1,9 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { MailIcon, MapPinIcon, PhoneCallIcon } from "lucide-react";
-
-import { ensureMotionRuntime, gsap, ScrollTrigger } from "@/lib/animations";
 
 import { sanitizePhoneNumber } from "@/lib/utils";
 
@@ -13,7 +10,6 @@ import {
   ZaloLogoIcon,
 } from "./radiant-experience-shared";
 import { radiantSocialLinks, radiantSupportLinks } from "./radiant-social-links";
-
 
 type RadiantFooterSectionProps = {
   content: RadiantExperienceContent;
@@ -80,8 +76,6 @@ function SocialGlyph({
 }
 
 export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
-  const footerParallaxRef = useRef<HTMLDivElement | null>(null);
-  const footerRef = useRef<HTMLElement | null>(null);
   const mainColumns = [
     content.footer.columns.studio,
     content.footer.columns.services,
@@ -135,63 +129,14 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
   ];
   const footerActions = [...utilityItems, ...socialItems];
 
-  useEffect(() => {
-    ensureMotionRuntime();
-
-    const parallaxTrigger = footerParallaxRef.current;
-    const footer = footerRef.current;
-
-    if (!parallaxTrigger || !footer) {
-      return undefined;
-    }
-
-    const mm = gsap.matchMedia();
-
-    mm.add("(prefers-reduced-motion: no-preference)", () => {
-      const setFooterY = gsap.quickSetter(footer, "y", "px");
-      const renderFooterParallax = () => {
-        const { top } = parallaxTrigger.getBoundingClientRect();
-        const progress = gsap.utils.clamp(
-          0,
-          1,
-          (window.innerHeight - top) / window.innerHeight,
-        );
-
-        setFooterY(window.innerHeight * (1 - progress));
-      };
-
-      renderFooterParallax();
-
-      const trigger = ScrollTrigger.create({
-        start: 0,
-        end: "max",
-        invalidateOnRefresh: true,
-        onRefresh: renderFooterParallax,
-        onUpdate: renderFooterParallax,
-      });
-
-      return () => {
-        trigger.kill();
-      };
-    });
-
-    return () => {
-      mm.revert();
-    };
-  }, []);
-
   return (
-    <div
-      ref={footerParallaxRef}
-      className="relative z-30 -mt-[100svh] h-[200svh] motion-reduce:mt-0 motion-reduce:h-auto"
+    <footer
+      id="site-footer"
+      className="site-gutter relative z-10 overflow-visible bg-[#1b1a18] pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-14 text-white sm:pt-16 lg:pt-20"
     >
-      <footer
-        ref={footerRef}
-        className="site-gutter sticky top-0 min-h-svh overflow-hidden bg-[#1b1a18] pb-6 pt-[10svh] text-white sm:pt-[9svh] lg:pt-[8svh]"
-      >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-black/24 via-black/8 to-transparent" />
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-7rem)] max-w-352 flex-col">
+      <div className="relative mx-auto flex max-w-352 flex-col">
         <div className="flex flex-col items-center text-center">
           <div className="text-primary">
             <RadiantBrandLogo className="h-12 w-auto sm:h-14" />
@@ -364,7 +309,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
           {content.footer.copyright}
         </div>
 
-        <div className="pointer-events-none mt-auto overflow-hidden pt-6">
+        <div className="pointer-events-none mt-10 overflow-hidden pt-6">
           <div className="flex whitespace-nowrap mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div className="animate-[radiant-footer-ticker_26s_linear_infinite]">
               {Array.from({ length: footerTickerRepeats }).map((_, index) => (
@@ -394,7 +339,6 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
           </div>
         </div>
       </div>
-      </footer>
-    </div>
+    </footer>
   );
 }

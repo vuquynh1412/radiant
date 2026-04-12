@@ -57,7 +57,7 @@ function MessengerLogoIcon({ className }: { className?: string }) {
 }
 
 function RadiantStickySupportButtons({
-  isScrolling,
+  hidden,
   hotlineHref,
   hotlineLabel,
   messengerHref,
@@ -65,7 +65,7 @@ function RadiantStickySupportButtons({
   zaloHref,
   zaloLabel,
 }: {
-  isScrolling: boolean;
+  hidden: boolean;
   hotlineHref: string;
   hotlineLabel: string;
   messengerHref: string;
@@ -94,8 +94,10 @@ function RadiantStickySupportButtons({
   return (
     <div
       className={cn(
-        "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-40 flex flex-col items-start gap-2.5 transition-opacity duration-250 ease-out sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:left-[max(1.5rem,env(safe-area-inset-left))]",
-        isScrolling ? "opacity-50" : "opacity-100",
+        "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[max(1rem,env(safe-area-inset-left))] z-40 flex flex-col items-start gap-2.5 transition-[opacity,transform] duration-300 ease-out sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:left-[max(1.5rem,env(safe-area-inset-left))]",
+        hidden
+          ? "pointer-events-none translate-y-4 opacity-0"
+          : "translate-y-0 opacity-100",
       )}
     >
       {items.map((item) => (
@@ -120,11 +122,11 @@ function RadiantStickySupportButtons({
 }
 
 function RadiantBackToTopButton({
-  isScrolling,
+  hidden,
   label,
   onPress,
 }: {
-  isScrolling: boolean;
+  hidden: boolean;
   label: string;
   onPress: () => void;
 }) {
@@ -150,10 +152,9 @@ function RadiantBackToTopButton({
       onClick={onPress}
       className={cn(
         "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] right-[max(1rem,env(safe-area-inset-right))] z-40 flex size-12 items-center justify-center rounded-full border border-secondary/70 bg-secondary/14 text-secondary shadow-[0_16px_40px_-24px_rgba(39,24,9,0.35)] backdrop-blur-[8px] transition-all duration-300 ease-out hover:border-primary hover:bg-primary hover:text-secondary hover:shadow-[0_18px_44px_-20px_rgba(140,87,37,0.55)] focus-visible:border-primary focus-visible:bg-primary focus-visible:text-secondary focus-visible:ring-3 focus-visible:ring-ring/50 sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:right-[max(1.5rem,env(safe-area-inset-right))]",
-        isVisible
+        isVisible && !hidden
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0",
-        isVisible && isScrolling ? "opacity-50" : undefined,
       )}
     >
       <ArrowUpToLineIcon className="size-5 stroke-[2.25]" />
@@ -166,9 +167,9 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const messages = useMessages() as AppMessages;
   const content = getHomePageContent(locale, messages);
   const [isBooting, setIsBooting] = useState(true);
+  const [isFooterInView, setIsFooterInView] = useState(false);
   const [matrixRevealComplete, setMatrixRevealComplete] = useState(false);
   const [showcaseDesktopReady, setShowcaseDesktopReady] = useState(false);
-  const [isScrolling, setIsScrolling] = useState(false);
   const onMatrixRevealComplete = useCallback(() => {
     setMatrixRevealComplete(true);
   }, []);
@@ -283,6 +284,30 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   }, []);
 
   useEffect(() => {
+    const footer = document.getElementById("site-footer");
+
+    if (!footer || typeof IntersectionObserver === "undefined") {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsFooterInView(entry.isIntersecting);
+      },
+      {
+        rootMargin: "0px 0px 120px 0px",
+        threshold: 0.01,
+      },
+    );
+
+    observer.observe(footer);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     const previousBodyOverflow = document.body.style.overflow;
     const previousHtmlOverflow = document.documentElement.style.overflow;
 
@@ -310,25 +335,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     mode: "all",
     options: lenisOptions,
   });
-
-  useEffect(() => {
-    let scrollStopTimer = 0;
-
-    const handleScrollActivity = () => {
-      setIsScrolling(true);
-      window.clearTimeout(scrollStopTimer);
-      scrollStopTimer = window.setTimeout(() => {
-        setIsScrolling(false);
-      }, 140);
-    };
-
-    window.addEventListener("scroll", handleScrollActivity, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScrollActivity);
-      window.clearTimeout(scrollStopTimer);
-    };
-  }, []);
 
   useRadiantShowcaseMotion({
     content,
@@ -388,7 +394,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
 
       <RadiantExperienceSplash isVisible={isBooting} />
       <RadiantStickySupportButtons
-        isScrolling={isScrolling}
+        hidden={isFooterInView}
         hotlineHref={hotlineHref}
         hotlineLabel={hotlineLabel}
         messengerHref={messengerHref}
@@ -397,7 +403,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
         zaloLabel={zaloLabel}
       />
       <RadiantBackToTopButton
-        isScrolling={isScrolling}
+        hidden={isFooterInView}
         label={backToTopLabel}
         onPress={handleBackToTop}
       />
