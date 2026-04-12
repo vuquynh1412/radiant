@@ -2,6 +2,8 @@
 
 import { MailIcon, MapPinIcon, PhoneCallIcon } from "lucide-react";
 
+import { sanitizePhoneNumber } from "@/lib/utils";
+
 import type { RadiantExperienceContent } from "./radiant-experience.types";
 import { RadiantBrandLogo } from "./radiant-experience-shared";
 import { radiantSocialLinks } from "./radiant-social-links";
@@ -81,7 +83,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
     },
     {
       key: "phone",
-      href: `tel:${content.footer.contact.phone.replace(/\s+/g, "")}`,
+      href: `tel:${sanitizePhoneNumber(content.footer.contact.phone)}`,
       icon: <PhoneCallIcon className="size-4 stroke-[1.85]" />,
       label: content.footer.contact.phone,
     },
@@ -218,7 +220,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
             <div className="space-y-5">
               <a
                 className="flex items-start gap-3 text-white/84 transition-colors hover:text-white"
-                href={`tel:${content.footer.contact.phone.replace(/\s+/g, "")}`}
+                href={`tel:${sanitizePhoneNumber(content.footer.contact.phone)}`}
               >
                 <PhoneCallIcon className="mt-1 size-4.5 shrink-0 stroke-[1.8]" />
                 <span className="text-[1.05rem] leading-7">
@@ -271,7 +273,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
             <div className="space-y-5">
               <a
                 className="flex items-start gap-3 text-white/84 transition-colors hover:text-white"
-                href={`tel:${content.footer.contact.phone.replace(/\s+/g, "")}`}
+                href={`tel:${sanitizePhoneNumber(content.footer.contact.phone)}`}
               >
                 <PhoneCallIcon className="mt-1 size-4.5 shrink-0 stroke-[1.8]" />
                 <span className="text-[1.05rem] leading-7">

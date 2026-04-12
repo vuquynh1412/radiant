@@ -1,13 +1,15 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from "react";
 
-import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
-import type { RadiantExperienceRefs } from "./radiant-experience.types";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
+import {
+  ensureMotionRuntime,
+  gsap,
+  lerp,
+  ScrollTrigger,
+} from "@/lib/animations";
+import { getRadiantScrollProfile } from "@/lib/motion/radiant-scroll-profiles";
+import type { RadiantExperienceRefs } from "@/components/marketing/radiant-experience.types";
 
 type UseRadiantCapabilityMatrixMotionProps = {
   refs: RadiantExperienceRefs;
@@ -80,8 +82,10 @@ export function useRadiantCapabilityMatrixMotion({
   refs,
   onRevealComplete,
 }: UseRadiantCapabilityMatrixMotionProps) {
-  useGSAP(
+  useEffect(
     () => {
+      ensureMotionRuntime();
+
       const mm = gsap.matchMedia();
 
       mm.add(
@@ -257,7 +261,7 @@ export function useRadiantCapabilityMatrixMotion({
             },
           });
 
-          // --- Ticker parallax (scroll-linked, unchanged) ---
+          // --- Ticker parallax (scroll-linked) ---
           gsap.set(refs.capabilityMatrixTopTickerRef.current, { xPercent: 6 });
           gsap.set(refs.capabilityMatrixBottomTickerRef.current, {
             xPercent: -6,
@@ -270,15 +274,15 @@ export function useRadiantCapabilityMatrixMotion({
             scrub: scrubAmount,
             onUpdate: (self) => {
               gsap.set(refs.capabilityMatrixTopTickerRef.current, {
-                xPercent: gsap.utils.interpolate(6, -18, self.progress),
+                xPercent: lerp(6, -18, self.progress),
               });
               gsap.set(refs.capabilityMatrixBottomTickerRef.current, {
-                xPercent: gsap.utils.interpolate(-18, 6, self.progress),
+                xPercent: lerp(-18, 6, self.progress),
               });
             },
           });
 
-          // --- Theme switching (unchanged) ---
+          // --- Theme switching ---
           gsap.set(refs.capabilityMatrixSectionRef.current, {
             backgroundColor: capabilityMatrixBackground,
             "--matrix-divider-color": matrixLightDivider,
@@ -404,6 +408,7 @@ export function useRadiantCapabilityMatrixMotion({
         mm.revert();
       };
     },
-    { scope: refs.rootRef },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 }

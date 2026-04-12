@@ -1,19 +1,14 @@
 "use client";
 
 import { useRef, type RefObject } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRightIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { useRadiantCtaMotion } from "@/hooks/use-radiant-cta-motion";
 import { cn } from "@/lib/utils";
 
-import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
 import { SectionAccent } from "./radiant-experience-shared";
 import type { RadiantExperienceContent } from "./radiant-experience.types";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type RadiantCallToActionSectionProps = {
   content: RadiantExperienceContent;
@@ -118,7 +113,7 @@ function CallToActionBody({
               variant: "default",
             }),
           )}
-          href="mailto:hello@radiant.studio?subject=Radiant%20strategy%20call"
+          href="mailto:hello@radiant.com?subject=Radiant%20strategy%20call"
         >
           <span
             aria-hidden="true"
@@ -182,145 +177,21 @@ export function RadiantCallToActionSection({
   const bodyRef = useRef<HTMLParagraphElement | null>(null);
   const actionsRef = useRef<HTMLDivElement | null>(null);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        if (!sectionRef.current || !stageRef.current || !surfaceRef.current) {
-          return undefined;
-        }
-
-        const { useTouchProfile } = getRadiantScrollProfile();
-        const easeOut = gsap.parseEase("power3.out");
-        const easeInOut = gsap.parseEase("power2.inOut");
-        const riseScaleCurve = gsap.parseEase("power2.in");
-        const copyNodes = [
-          accentRef.current,
-          eyebrowRef.current,
-          titleRef.current,
-          bodyRef.current,
-          actionsRef.current,
-        ].filter(Boolean);
-
-        if (maskedRevealRef.current) {
-          maskedRevealRef.current.style.filter = useTouchProfile ? "none" : "";
-        }
-
-        const renderStage = (progress: number) => {
-          const riseStart = 0.05;
-          const riseEnd = 0.38;
-          const bloomEnd = 0.78;
-          const riseProgress = gsap.utils.clamp(
-            0,
-            1,
-            (progress - riseStart) / (riseEnd - riseStart),
-          );
-          const copyProgress = gsap.utils.clamp(0, 1, (progress - 0.46) / 0.18);
-          const panelProgress = gsap.utils.clamp(
-            0,
-            1,
-            (progress - 0.78) / 0.12,
-          );
-          const riseEase = easeOut(riseProgress);
-          const totalStarProgress = gsap.utils.clamp(
-            0,
-            1,
-            (progress - riseStart) / (bloomEnd - riseStart),
-          );
-          const midStarProgress =
-            (riseEnd - riseStart) / (bloomEnd - riseStart);
-          const riseScaleProgress = gsap.utils.clamp(
-            0,
-            1,
-            totalStarProgress / midStarProgress,
-          );
-          const bloomScaleProgress = gsap.utils.clamp(
-            0,
-            1,
-            (totalStarProgress - midStarProgress) / (1 - midStarProgress),
-          );
-          const copyEase = easeOut(copyProgress);
-          const panelEase = easeInOut(panelProgress);
-          const panelVisible = panelProgress > 0;
-
-          const riseScale = gsap.utils.interpolate(
-            0.0014,
-            9.5,
-            riseScaleCurve(riseScaleProgress),
-          );
-          const bloomScale = gsap.utils.interpolate(
-            9.5,
-            76,
-            bloomScaleProgress,
-          );
-          const starScale =
-            totalStarProgress <= midStarProgress ? riseScale : bloomScale;
-          const starY = gsap.utils.interpolate(760, 0, riseEase);
-          const starRotation = gsap.utils.interpolate(
-            -18,
-            342,
-            totalStarProgress,
-          );
-
-          const starTransform = `translate(756.5 498.5) rotate(${starRotation}) scale(${starScale}) translate(-756.5 -498.5)`;
-          const starTranslate = `translate(0 ${starY})`;
-
-          gsap.set(maskedRevealRef.current, {
-            opacity: panelVisible ? 1 - panelEase : 1,
-          });
-          gsap.set(fullPanelRef.current, {
-            opacity: panelVisible ? panelEase : 0,
-            scaleX: 1,
-            scaleY: 1,
-          });
-          gsap.set(starMaskTranslateRef.current, {
-            attr: { transform: starTranslate },
-          });
-          gsap.set(starMaskTransformRef.current, {
-            attr: { transform: starTransform },
-          });
-
-          gsap.set(surfaceRef.current, {
-            borderRadius: 0,
-            opacity: 1,
-            scaleX: 1,
-            scaleY: 1,
-            transformOrigin: "center top",
-            y: 0,
-          });
-
-          gsap.set(copyNodes, {
-            opacity: panelVisible
-              ? gsap.utils.interpolate(copyEase, 0.94, panelEase)
-              : copyEase,
-            y: gsap.utils.interpolate(64, 0, copyEase),
-          });
-        };
-
-        renderStage(0);
-
-        const trigger = ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            renderStage(self.progress);
-          },
-        });
-
-        return () => {
-          trigger.kill();
-        };
-      });
-
-      return () => {
-        mm.revert();
-      };
+  useRadiantCtaMotion({
+    refs: {
+      accentRef,
+      actionsRef,
+      bodyRef,
+      eyebrowRef,
+      fullPanelRef,
+      maskedRevealRef,
+      sectionRef,
+      starMaskTransformRef,
+      starMaskTranslateRef,
+      surfaceRef,
+      titleRef,
     },
-    { scope: sectionRef },
-  );
+  });
 
   return (
     <section id="contact" className="relative z-20">

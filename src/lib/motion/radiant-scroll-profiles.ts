@@ -1,6 +1,6 @@
 "use client";
 
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollTrigger } from "@/lib/animations";
 
 export type RadiantScrollProfile = {
   aboutScrub: number;

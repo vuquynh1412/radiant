@@ -21,30 +21,7 @@ import {
 type RadiantShowcaseSectionProps = {
   content: RadiantExperienceContent;
   desktopShowcaseReady: boolean;
-  showcaseSectionRef: RadiantExperienceRefs["showcaseSectionRef"];
-  mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
-  mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
-  mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
-  mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
-  heroMatteRef: RadiantExperienceRefs["heroMatteRef"];
-  heroMediaRef: RadiantExperienceRefs["heroMediaRef"];
-  heroMediaFrameRef: RadiantExperienceRefs["heroMediaFrameRef"];
-  heroFinalImageRef: RadiantExperienceRefs["heroFinalImageRef"];
-  heroTitleRef: RadiantExperienceRefs["heroTitleRef"];
-  heroMonogramRef: RadiantExperienceRefs["heroMonogramRef"];
-  heroTopPatternRef: RadiantExperienceRefs["heroTopPatternRef"];
-  heroMarqueeRef: RadiantExperienceRefs["heroMarqueeRef"];
-  heroMarqueeTrackRef: RadiantExperienceRefs["heroMarqueeTrackRef"];
-  heroFinalMarqueeRef: RadiantExperienceRefs["heroFinalMarqueeRef"];
-  heroFinalMarqueeTrackRef: RadiantExperienceRefs["heroFinalMarqueeTrackRef"];
-  activeServiceCopyShellRef: RadiantExperienceRefs["activeServiceCopyShellRef"];
-  serviceGridShellRef: RadiantExperienceRefs["serviceGridShellRef"];
-  serviceHeaderRef: RadiantExperienceRefs["serviceHeaderRef"];
-  serviceGridFooterRef: RadiantExperienceRefs["serviceGridFooterRef"];
-  serviceGridItemRefs: RadiantExperienceRefs["serviceGridItemRefs"];
-  serviceCardsRef: RadiantExperienceRefs["serviceCardsRef"];
-  serviceCopyRefs: RadiantExperienceRefs["serviceCopyRefs"];
-  sampleTileRef: RadiantExperienceRefs["sampleTileRef"];
+  refs: RadiantExperienceRefs;
 };
 
 const desktopShowcaseGridStyle = {
@@ -172,17 +149,17 @@ function ShowcaseFrameStar({ className }: { className?: string }) {
 
 function MobileShowcaseHero({
   content,
-  mobileHeroMarqueeRef,
-  mobileHeroSectionRef,
-  mobileHeroTopContentRef,
-  mobileHeroTopOverlayRef,
+  refs,
 }: {
   content: RadiantExperienceContent;
-  mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
-  mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
-  mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
-  mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
+  refs: RadiantExperienceRefs;
 }) {
+  const {
+    mobileHeroMarqueeRef,
+    mobileHeroSectionRef,
+    mobileHeroTopContentRef,
+    mobileHeroTopOverlayRef,
+  } = refs;
   const openingCopy = getOpeningHeroCopy(content.locale);
 
   return (
@@ -375,44 +352,37 @@ function ReducedMotionDesktopShowcase({
 export function RadiantShowcaseSection({
   content,
   desktopShowcaseReady,
-  showcaseSectionRef,
-  mobileHeroSectionRef,
-  mobileHeroMarqueeRef,
-  mobileHeroTopContentRef,
-  mobileHeroTopOverlayRef,
-  heroMatteRef,
-  heroMediaRef,
-  heroMediaFrameRef,
-  heroFinalImageRef,
-  heroTitleRef,
-  heroMonogramRef,
-  heroTopPatternRef,
-  heroMarqueeRef,
-  heroMarqueeTrackRef,
-  heroFinalMarqueeRef,
-  heroFinalMarqueeTrackRef,
-  activeServiceCopyShellRef,
-  serviceGridShellRef,
-  serviceHeaderRef,
-  serviceGridFooterRef,
-  serviceGridItemRefs,
-  serviceCardsRef,
-  serviceCopyRefs,
-  sampleTileRef,
+  refs,
 }: RadiantShowcaseSectionProps) {
+  const {
+    activeServiceCopyShellRef,
+    heroFinalImageRef,
+    heroFinalMarqueeRef,
+    heroFinalMarqueeTrackRef,
+    heroMarqueeRef,
+    heroMarqueeTrackRef,
+    heroMatteRef,
+    heroMediaFrameRef,
+    heroMediaRef,
+    heroMonogramRef,
+    heroTopPatternRef,
+    heroTitleRef,
+    sampleTileRef,
+    serviceCardsRef,
+    serviceCopyRefs,
+    serviceGridFooterRef,
+    serviceGridItemRefs,
+    serviceGridShellRef,
+    serviceHeaderRef,
+    showcaseSectionRef,
+  } = refs;
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
   const openingCopy = getOpeningHeroCopy(content.locale);
   const transitionTitle = getTransitionHeroTitle(content);
 
   return (
     <section id="showcase">
-      <MobileShowcaseHero
-        content={content}
-        mobileHeroMarqueeRef={mobileHeroMarqueeRef}
-        mobileHeroSectionRef={mobileHeroSectionRef}
-        mobileHeroTopContentRef={mobileHeroTopContentRef}
-        mobileHeroTopOverlayRef={mobileHeroTopOverlayRef}
-      />
+      <MobileShowcaseHero content={content} refs={refs} />
 
       <div
         ref={showcaseSectionRef}

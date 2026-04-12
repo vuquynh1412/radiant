@@ -22,10 +22,7 @@ import type {
 type RadiantCapabilityMatrixSectionProps = {
   bubblesEnabled: boolean;
   content: RadiantExperienceContent;
-  capabilityMatrixSectionRef: RadiantExperienceRefs["capabilityMatrixSectionRef"];
-  capabilityMatrixContentRef: RadiantExperienceRefs["capabilityMatrixContentRef"];
-  capabilityMatrixTopTickerRef: RadiantExperienceRefs["capabilityMatrixTopTickerRef"];
-  capabilityMatrixBottomTickerRef: RadiantExperienceRefs["capabilityMatrixBottomTickerRef"];
+  refs: RadiantExperienceRefs;
 };
 
 type RotatingImageSlotProps = {
@@ -510,11 +507,14 @@ function MobileMatrix({
 export function RadiantCapabilityMatrixSection({
   bubblesEnabled,
   content,
-  capabilityMatrixSectionRef,
-  capabilityMatrixContentRef,
-  capabilityMatrixTopTickerRef,
-  capabilityMatrixBottomTickerRef,
+  refs,
 }: RadiantCapabilityMatrixSectionProps) {
+  const {
+    capabilityMatrixBottomTickerRef,
+    capabilityMatrixContentRef,
+    capabilityMatrixSectionRef,
+    capabilityMatrixTopTickerRef,
+  } = refs;
   const matrix = content.capabilityMatrix;
   const pills = matrix.pills ?? [];
   const matrixThemeStyle = {

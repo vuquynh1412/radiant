@@ -5,24 +5,27 @@ import {
   startTransition,
   useState,
   type CSSProperties,
-  type RefObject,
 } from "react";
 
 import { projectGalleryImages } from "@/content/project-gallery-images";
 import { cn } from "@/lib/utils";
 
-import type { RadiantExperienceContent } from "./radiant-experience.types";
+import type {
+  RadiantExperienceContent,
+  RadiantExperienceRefs,
+} from "./radiant-experience.types";
 import { SectionAccent, ViewAllButton } from "./radiant-experience-shared";
 
 type RadiantProjectsSectionProps = {
   content: RadiantExperienceContent;
-  projectsSectionRef: RefObject<HTMLElement | null>;
+  refs: RadiantExperienceRefs;
 };
 
 export function RadiantProjectsSection({
   content,
-  projectsSectionRef,
+  refs,
 }: RadiantProjectsSectionProps) {
+  const { projectsSectionRef } = refs;
   const { projects } = content;
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
   const projectsThemeStyle = {

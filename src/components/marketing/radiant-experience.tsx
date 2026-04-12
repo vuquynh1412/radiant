@@ -1,17 +1,18 @@
 "use client";
 
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
+import { useLenisScrollSync } from "@/lib/animations";
 import { ArrowUpToLineIcon, PhoneCallIcon } from "lucide-react";
 import { useLocale, useMessages } from "next-intl";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import type { Locale } from "@/i18n/config";
 import { getHomePageContent } from "@/i18n/get-homepage-content";
 import type { AppMessages } from "@/i18n/messages";
 
-import { cn } from "@/lib/utils";
+import { useRadiantAboutMotion } from "@/hooks/use-radiant-about-motion";
+import { useRadiantCapabilityMatrixMotion } from "@/hooks/use-radiant-capability-matrix-motion";
+import { useRadiantShowcaseMotion } from "@/hooks/use-radiant-showcase-motion";
+import { cn, sanitizePhoneNumber } from "@/lib/utils";
 import { radiantSocialLinks, radiantSupportLinks } from "./radiant-social-links";
 import { RadiantAboutSection } from "./radiant-about-section";
 import { RadiantCapabilityMatrixSection } from "./radiant-capability-matrix-section";
@@ -27,10 +28,6 @@ import { RadiantNewsSection } from "./radiant-news-section";
 import { RadiantPartnerLogosSection } from "./radiant-partner-logos-section";
 import { RadiantProjectsSection } from "./radiant-projects-section";
 import { RadiantShowcaseSection } from "./radiant-showcase-section";
-import { useRadiantCapabilityMatrixMotion } from "./use-radiant-capability-matrix-motion";
-import { useRadiantShowcaseMotion } from "./use-radiant-showcase-motion";
-
-gsap.registerPlugin(ScrollTrigger);
 
 function MessengerLogoIcon({ className }: { className?: string }) {
   return (
@@ -205,7 +202,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const [matrixRevealComplete, setMatrixRevealComplete] = useState(false);
   const [showcaseDesktopReady, setShowcaseDesktopReady] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
-  const lenisRef = useRef<Lenis | null>(null);
   const onMatrixRevealComplete = useCallback(() => {
     setMatrixRevealComplete(true);
   }, []);
@@ -284,13 +280,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   };
 
   useEffect(() => {
-    ScrollTrigger.config({
-      ignoreMobileResize: true,
-      limitCallbacks: true,
-    });
-  }, []);
-
-  useEffect(() => {
     let isCancelled = false;
     let hasRevealed = false;
     let firstFrame = 0;
@@ -341,52 +330,19 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     };
   }, [isBooting]);
 
-  useEffect(() => {
-    if (
-      isBooting ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return undefined;
-    }
+  const lenisOptions = useMemo(() => ({
+    duration: 1.15,
+    syncTouch: true,
+    syncTouchLerp: 0.12,
+    touchMultiplier: 0.85,
+    wheelMultiplier: 0.85,
+  }), []);
 
-    const useTouchSync =
-      ScrollTrigger.isTouch !== 0 ||
-      window.matchMedia("(pointer: coarse)").matches;
-    const lenis = new Lenis({
-      anchors: true,
-      duration: useTouchSync ? 1.05 : 1.15,
-      smoothWheel: true,
-      syncTouch: useTouchSync,
-      syncTouchLerp: 0.12,
-      touchMultiplier: useTouchSync ? 0.85 : 1,
-      wheelMultiplier: useTouchSync ? 0.85 : 1,
-    });
-    lenisRef.current = lenis;
-
-    const onScroll = () => {
-      ScrollTrigger.update();
-    };
-
-    // Keep Lenis on the same clock as GSAP so scroll inertia and scrubbed
-    // animations stay visually aligned.
-    const advanceLenis = (time: number) => {
-      lenis.raf(time * 1000);
-    };
-
-    lenis.on("scroll", onScroll);
-    // Lenis recommends disabling GSAP's lag smoothing so ScrollTrigger
-    // doesn't visually "catch up" after a dropped frame.
-    gsap.ticker.lagSmoothing(0);
-    gsap.ticker.add(advanceLenis);
-
-    return () => {
-      lenisRef.current = null;
-      gsap.ticker.remove(advanceLenis);
-      gsap.ticker.lagSmoothing(500, 33);
-      lenis.off("scroll", onScroll);
-      lenis.destroy();
-    };
-  }, [isBooting]);
+  const lenisRef = useLenisScrollSync({
+    enabled: !isBooting,
+    mode: "all",
+    options: lenisOptions,
+  });
 
   useEffect(() => {
     let scrollStopTimer = 0;
@@ -412,6 +368,7 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     onReady: onShowcaseDesktopReady,
     refs: motionRefs,
   });
+  useRadiantAboutMotion({ refs: motionRefs });
   useRadiantCapabilityMatrixMotion({ refs: motionRefs, onRevealComplete: onMatrixRevealComplete });
 
   const handleBackToTop = useCallback(() => {
@@ -420,11 +377,11 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
     if (!lenisRef.current) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, []);
+  }, [lenisRef]);
 
   const backToTopLabel =
     locale === "vi" ? "Cuộn lên đầu trang" : "Back to top";
-  const hotlineHref = `tel:${content.footer.contact.phone.replace(/\s+/g, "")}`;
+  const hotlineHref = `tel:${sanitizePhoneNumber(content.footer.contact.phone)}`;
   const messengerHref = radiantSocialLinks.messenger || "#contact";
   const zaloHref = radiantSupportLinks.zalo || "#contact";
   const hotlineLabel = locale === "vi" ? "Hotline" : "Hotline";
@@ -444,51 +401,17 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
 
         <main className="overflow-clip">
           <RadiantShowcaseSection
-            activeServiceCopyShellRef={activeServiceCopyShellRef}
             content={content}
             desktopShowcaseReady={showcaseDesktopReady}
-            mobileHeroMarqueeRef={mobileHeroMarqueeRef}
-            mobileHeroSectionRef={mobileHeroSectionRef}
-            mobileHeroTopContentRef={mobileHeroTopContentRef}
-            mobileHeroTopOverlayRef={mobileHeroTopOverlayRef}
-            heroMediaFrameRef={heroMediaFrameRef}
-            heroFinalImageRef={heroFinalImageRef}
-            heroMarqueeRef={heroMarqueeRef}
-            heroMarqueeTrackRef={heroMarqueeTrackRef}
-            heroFinalMarqueeRef={heroFinalMarqueeRef}
-            heroFinalMarqueeTrackRef={heroFinalMarqueeTrackRef}
-            heroMatteRef={heroMatteRef}
-            heroMediaRef={heroMediaRef}
-            heroMonogramRef={heroMonogramRef}
-            heroTopPatternRef={heroTopPatternRef}
-            heroTitleRef={heroTitleRef}
-            sampleTileRef={sampleTileRef}
-            serviceCardsRef={serviceCardsRef}
-            serviceCopyRefs={serviceCopyRefs}
-            serviceGridFooterRef={serviceGridFooterRef}
-            serviceGridItemRefs={serviceGridItemRefs}
-            serviceGridShellRef={serviceGridShellRef}
-            serviceHeaderRef={serviceHeaderRef}
-            showcaseSectionRef={showcaseSectionRef}
+            refs={motionRefs}
           />
-          <RadiantAboutSection
-            aboutCharRefs={aboutCharRefs}
-            aboutContentRef={aboutContentRef}
-            aboutSectionRef={aboutSectionRef}
-            content={content}
-          />
+          <RadiantAboutSection content={content} refs={motionRefs} />
           <RadiantCapabilityMatrixSection
             bubblesEnabled={matrixRevealComplete}
-            capabilityMatrixBottomTickerRef={capabilityMatrixBottomTickerRef}
-            capabilityMatrixContentRef={capabilityMatrixContentRef}
-            capabilityMatrixSectionRef={capabilityMatrixSectionRef}
-            capabilityMatrixTopTickerRef={capabilityMatrixTopTickerRef}
             content={content}
+            refs={motionRefs}
           />
-          <RadiantProjectsSection
-            content={content}
-            projectsSectionRef={projectsSectionRef}
-          />
+          <RadiantProjectsSection content={content} refs={motionRefs} />
           <RadiantPartnerLogosSection />
           <RadiantNewsSection content={content} />
           <RadiantCallToActionSection content={content} />

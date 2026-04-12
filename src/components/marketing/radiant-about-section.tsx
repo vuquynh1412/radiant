@@ -6,17 +6,14 @@ import { CharacterRevealText } from "./radiant-experience-shared";
 
 type RadiantAboutSectionProps = {
   content: RadiantExperienceContent;
-  aboutSectionRef: RadiantExperienceRefs["aboutSectionRef"];
-  aboutContentRef: RadiantExperienceRefs["aboutContentRef"];
-  aboutCharRefs: RadiantExperienceRefs["aboutCharRefs"];
+  refs: RadiantExperienceRefs;
 };
 
 export function RadiantAboutSection({
   content,
-  aboutSectionRef,
-  aboutContentRef,
-  aboutCharRefs,
+  refs,
 }: RadiantAboutSectionProps) {
+  const { aboutSectionRef, aboutContentRef, aboutCharRefs } = refs;
   const aboutBodyText = content.about.body.replace(/\s*[—–-]\s*/g, ", ");
 
   return (
