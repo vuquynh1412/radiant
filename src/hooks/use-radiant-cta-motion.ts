@@ -38,7 +38,6 @@ type UseRadiantCtaMotionProps = {
 };
 
 const riseEase = gsap.parseEase("power3.out");
-const panelEase = gsap.parseEase("power2.inOut");
 const riseScaleCurve = gsap.parseEase("power2.in");
 
 function createOpacityYSetters(node: HTMLElement): OpacityYSetters {
@@ -53,7 +52,7 @@ export function useRadiantCtaMotion({ refs }: UseRadiantCtaMotionProps) {
     scope: refs.sectionRef,
     trigger: refs.sectionRef,
     start: "top bottom",
-    end: "bottom top",
+    end: "bottom-=100% bottom",
     mediaQuery: "(prefers-reduced-motion: no-preference)",
     reducedMotionProgress: false,
     setup: () => {
@@ -110,7 +109,6 @@ export function useRadiantCtaMotion({ refs }: UseRadiantCtaMotionProps) {
     render: (progress, { setup }) => {
       const totalStarProgress = segment(progress, 0.05, 0.78);
       const copyProgress = segment(progress, 0.46, 0.64, riseEase);
-      const panelProgress = segment(progress, 0.78, 0.9, panelEase);
       const midStarProgress = (0.38 - 0.05) / (0.78 - 0.05);
       const riseScaleProgress = clamp(totalStarProgress / midStarProgress);
       const bloomScaleProgress = clamp(
@@ -135,15 +133,11 @@ export function useRadiantCtaMotion({ refs }: UseRadiantCtaMotionProps) {
         starTransform,
       );
 
-      setup.maskedRevealOpacity?.(1 - panelProgress);
-      setup.fullPanelOpacity?.(panelProgress);
+      setup.maskedRevealOpacity?.(1);
+      setup.fullPanelOpacity?.(0);
 
       setup.copySetters.forEach((setters) => {
-        setters.opacity(
-          panelProgress > 0
-            ? lerp(copyProgress, 0.94, panelProgress)
-            : copyProgress,
-        );
+        setters.opacity(copyProgress);
         setters.y(lerp(64, 0, copyProgress));
       });
     },

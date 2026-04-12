@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, type RefObject } from "react";
 import { ArrowUpRightIcon } from "lucide-react";
 
@@ -17,6 +18,7 @@ type RadiantCallToActionSectionProps = {
 const ctaStarPath =
   "M756.5 436L767.296 476.098C768.82 481.758 773.242 486.179 778.902 487.703L819 498.5L778.902 509.296C773.242 510.82 768.82 515.241 767.296 520.902L756.5 561L745.704 520.902C744.18 515.241 739.758 510.82 734.098 509.296L694 498.5L734.098 487.703C739.758 486.179 744.18 481.758 745.704 476.098L756.5 436Z";
 const ctaStarMaskId = "radiant-cta-star-mask";
+const ctaBackgroundImage = "/cta/rectangle-23824.jpg";
 
 type CallToActionBodyProps = {
   accentClassName?: string;
@@ -33,6 +35,24 @@ type CallToActionBodyProps = {
   titleClassName?: string;
   titleRef?: RefObject<HTMLHeadingElement | null>;
 };
+
+function CallToActionBackground() {
+  return (
+    <>
+      <Image
+        alt=""
+        className="absolute inset-0 size-full object-cover object-center"
+        fill
+        sizes="100vw"
+        src={ctaBackgroundImage}
+        unoptimized
+      />
+      <div className="absolute inset-0 bg-[#E8DDD3]/62" />
+      <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-[#E8DDD3]/92 via-[#E8DDD3]/70 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[#E8DDD3]/82 to-transparent" />
+    </>
+  );
+}
 
 function CallToActionBody({
   accentClassName,
@@ -75,7 +95,7 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "title-display-inika mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
+          "font-heading mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
           titleClassName,
         )}
       >
@@ -145,11 +165,12 @@ function ReducedMotionCallToAction({
         <div className="pointer-events-none absolute left-1/2 -top-40 h-96 w-[24rem] -translate-x-1/2 rounded-full border border-white/10 opacity-40" />
         <div className="pointer-events-none absolute left-1/2 -top-12 h-40 w-40 -translate-x-1/2 rounded-full border border-white/14 opacity-60" />
 
-        <div className="relative rounded-[2rem] bg-[#E8DDD3] px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-14">
+        <div className="relative overflow-hidden rounded-[2rem] bg-[#E8DDD3] px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-14">
+          <CallToActionBackground />
           <CallToActionBody
             accentClassName="opacity-100"
             bodyClassName="opacity-100"
-            containerClassName="mx-auto"
+            containerClassName="relative z-10 mx-auto"
             content={content}
             eyebrowClassName="opacity-100"
             hideBody
@@ -209,8 +230,10 @@ export function RadiantCallToActionSection({
           >
             <div
               ref={fullPanelRef}
-              className="absolute inset-0 z-0 bg-[#E8DDD3] opacity-0 will-change-transform"
-            />
+              className="absolute inset-0 z-0 overflow-hidden bg-[#E8DDD3] opacity-0 will-change-transform"
+            >
+              <CallToActionBackground />
+            </div>
 
             <svg
               ref={maskedRevealRef}
@@ -237,13 +260,50 @@ export function RadiantCallToActionSection({
                     </g>
                   </g>
                 </mask>
+                <linearGradient
+                  id="radiant-cta-top-wash"
+                  x1="756"
+                  x2="756"
+                  y1="0"
+                  y2="520"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#E8DDD3" stopOpacity="0.92" />
+                  <stop offset="0.62" stopColor="#E8DDD3" stopOpacity="0.7" />
+                  <stop offset="1" stopColor="#E8DDD3" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient
+                  id="radiant-cta-bottom-wash"
+                  x1="756"
+                  x2="756"
+                  y1="620"
+                  y2="996"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#E8DDD3" stopOpacity="0" />
+                  <stop offset="1" stopColor="#E8DDD3" stopOpacity="0.82" />
+                </linearGradient>
               </defs>
-              <rect
-                width="1512"
-                height="996"
-                fill="#E8DDD3"
-                mask={`url(#${ctaStarMaskId})`}
-              />
+              <g mask={`url(#${ctaStarMaskId})`}>
+                <image
+                  href={ctaBackgroundImage}
+                  width="1512"
+                  height="996"
+                  preserveAspectRatio="xMidYMid slice"
+                />
+                <rect width="1512" height="996" fill="rgba(232,221,211,0.62)" />
+                <rect
+                  width="1512"
+                  height="520"
+                  fill="url(#radiant-cta-top-wash)"
+                />
+                <rect
+                  y="620"
+                  width="1512"
+                  height="376"
+                  fill="url(#radiant-cta-bottom-wash)"
+                />
+              </g>
             </svg>
 
             <div className="site-gutter relative z-20 flex h-full items-center justify-center pt-20 text-center">

@@ -835,6 +835,11 @@ export function useRadiantShowcaseMotion({
             "x",
             "px",
           ) as NumericSetter;
+          const marqueeY = createQuickSetter(
+            refs.mobileHeroMarqueeRef.current,
+            "y",
+            "px",
+          ) as NumericSetter;
           const marqueeOpacity = createQuickSetter(
             refs.mobileHeroMarqueeRef.current,
             "opacity",
@@ -859,6 +864,7 @@ export function useRadiantShowcaseMotion({
 
           const getMetrics = () => {
             const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
             const marqueeWidth =
               refs.mobileHeroMarqueeRef.current?.offsetWidth ?? viewportWidth;
             const endInset = Math.max(24, viewportWidth * 0.06);
@@ -866,6 +872,8 @@ export function useRadiantShowcaseMotion({
             return {
               endX: Math.min(0, viewportWidth - marqueeWidth - endInset),
               startX: viewportWidth,
+              endY: Math.max(180, viewportHeight * 0.56),
+              startY: -Math.max(28, viewportHeight * 0.08),
             };
           };
 
@@ -873,14 +881,17 @@ export function useRadiantShowcaseMotion({
 
           const renderMobileHero = (progress: number) => {
             const blurProgress = clamp((progress - 0.05) / 0.28);
-            const travelProgress = clamp(progress / 0.55);
+            const marqueeRevealProgress = clamp((progress - 0.01) / 0.14);
+            const travelProgress = clamp((progress - 0.42) / 0.4);
+            const verticalProgress = clamp((progress - 0.34) / 0.24);
 
             topContentOpacity(1 - blurProgress * 0.55);
             topContentY(-blurProgress * 10);
             topContentFilter(`blur(${blurProgress * 6}px)`);
             topOverlayOpacity(blurProgress * 0.38);
-            marqueeOpacity(1);
+            marqueeOpacity(marqueeRevealProgress);
             marqueeX(lerp(metrics.startX, metrics.endX, travelProgress));
+            marqueeY(lerp(metrics.startY, metrics.endY, verticalProgress));
           };
 
           const mobileHeroTrigger = ScrollTrigger.create({

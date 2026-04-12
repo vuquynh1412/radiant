@@ -27,6 +27,7 @@ import { RadiantFooterSection } from "./radiant-footer-section";
 import { RadiantNewsSection } from "./radiant-news-section";
 import { RadiantPartnerLogosSection } from "./radiant-partner-logos-section";
 import { RadiantProjectsSection } from "./radiant-projects-section";
+import { ZaloLogoIcon } from "./radiant-experience-shared";
 import { RadiantShowcaseSection } from "./radiant-showcase-section";
 
 function MessengerLogoIcon({ className }: { className?: string }) {
@@ -50,40 +51,6 @@ function MessengerLogoIcon({ className }: { className?: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="1.8"
-      />
-    </svg>
-  );
-}
-
-function ZaloLogoIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <rect
-        x="3.5"
-        y="4"
-        width="17"
-        height="16"
-        rx="5"
-        stroke="currentColor"
-        strokeWidth="1.8"
-      />
-      <path
-        d="M8 9.25h7.2L8.8 15h7.2"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.9"
-      />
-      <path
-        d="M15.5 9.3v5.4"
-        stroke="currentColor"
-        strokeLinecap="round"
-        strokeWidth="1.9"
       />
     </svg>
   );

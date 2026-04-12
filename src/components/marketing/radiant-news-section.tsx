@@ -45,7 +45,7 @@ function NewsCard({
     <article
       key={item.key}
       className={cn(
-        "group relative overflow-hidden rounded-[10px] border border-(--news-card-border) bg-white/2",
+        "group relative cursor-pointer overflow-hidden rounded-[10px] border border-(--news-card-border) bg-white/2",
         !mobile && "h-full",
         className,
       )}
