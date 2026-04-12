@@ -44,11 +44,20 @@ const supportsIntersectionObserver =
   typeof IntersectionObserver !== "undefined";
 
 const bubbleColors = [
-  "rgb(239, 188, 174)", // orange/peach
-  "rgb(250, 218, 209)", // pink
-  "rgb(241, 231, 209)", // warm cream
-  "rgb(255, 255, 255)", // white
+  "#F7ECE2",
+  "#F9F0DB",
+  "#FFFFFF",
+  "#EED392",
 ];
+const bubblePlacementAttempts = 24;
+const bubblePlacementGap = 10;
+
+type BubbleBounds = {
+  height: number;
+  left: number;
+  top: number;
+  width: number;
+};
 
 function subscribeToDesktopBreakpoint(onStoreChange: () => void) {
   const mediaQuery = window.matchMedia(desktopMediaQuery);
@@ -77,6 +86,86 @@ function RadiantSparkIcon({ className }: { className?: string }) {
       />
     </svg>
   );
+}
+
+function overlapsBubble(a: BubbleBounds, b: BubbleBounds) {
+  return !(
+    a.left + a.width + bubblePlacementGap < b.left ||
+    b.left + b.width + bubblePlacementGap < a.left ||
+    a.top + a.height + bubblePlacementGap < b.top ||
+    b.top + b.height + bubblePlacementGap < a.top
+  );
+}
+
+function getBubbleBounds(bubble: Element): BubbleBounds {
+  const element = bubble as HTMLElement;
+
+  return {
+    height: element.offsetHeight,
+    left: element.offsetLeft,
+    top: element.offsetTop,
+    width: element.offsetWidth,
+  };
+}
+
+function getBubblePosition(
+  container: HTMLDivElement,
+  bubble: HTMLDivElement,
+) {
+  const containerWidth = container.clientWidth;
+  const containerHeight = container.clientHeight;
+  const bubbleWidth = bubble.offsetWidth;
+  const bubbleHeight = bubble.offsetHeight;
+  const maxLeft = Math.max(0, containerWidth - bubbleWidth);
+  const maxTop = Math.max(0, containerHeight - bubbleHeight);
+  const minLeft = Math.min(maxLeft, containerWidth * 0.18);
+  const minTop = Math.min(maxTop, containerHeight * 0.08);
+  const existingBubbles = Array.from(
+    container.querySelectorAll(".matrix-bubble"),
+  ).filter((item) => item !== bubble);
+  const existingBounds = existingBubbles.map(getBubbleBounds);
+
+  for (let attempt = 0; attempt < bubblePlacementAttempts; attempt += 1) {
+    const left = minLeft + Math.random() * Math.max(0, maxLeft - minLeft);
+    const top = minTop + Math.random() * Math.max(0, maxTop - minTop);
+    const candidate = {
+      height: bubbleHeight,
+      left,
+      top,
+      width: bubbleWidth,
+    };
+
+    if (!existingBounds.some((bounds) => overlapsBubble(candidate, bounds))) {
+      return { left, top };
+    }
+  }
+
+  const oldestBubble = existingBubbles[0];
+  if (oldestBubble) {
+    oldestBubble.remove();
+    const remainingBounds = existingBubbles.slice(1).map(getBubbleBounds);
+
+    for (let attempt = 0; attempt < bubblePlacementAttempts; attempt += 1) {
+      const left = minLeft + Math.random() * Math.max(0, maxLeft - minLeft);
+      const top = minTop + Math.random() * Math.max(0, maxTop - minTop);
+      const candidate = {
+        height: bubbleHeight,
+        left,
+        top,
+        width: bubbleWidth,
+      };
+
+      if (!remainingBounds.some((bounds) => overlapsBubble(candidate, bounds))) {
+        return { left, top };
+      }
+    }
+  }
+
+  const fallbackSlot = existingBounds.length % 4;
+  return {
+    left: Math.min(maxLeft, minLeft + fallbackSlot * (bubbleWidth + 8)),
+    top: Math.min(maxTop, minTop + fallbackSlot * (bubbleHeight + 8)),
+  };
 }
 
 function PatternTicker({
@@ -218,8 +307,6 @@ function useBubbleSystem(
     const bubble = document.createElement("div");
     bubble.className = "matrix-bubble";
     bubble.textContent = text;
-    bubble.style.top = `${15 + 70 * Math.random()}%`;
-    bubble.style.left = `${30 + 40 * Math.random()}%`;
     bubble.style.backgroundColor = bgColor;
     bubble.style.fontSize = "clamp(0.75rem, 1vw, 0.875rem)";
     bubble.style.padding = "0.5rem 1rem";
@@ -227,6 +314,9 @@ function useBubbleSystem(
     bubble.style.zIndex = "10";
 
     bubblesContainer.appendChild(bubble);
+    const bubblePosition = getBubblePosition(bubblesContainer, bubble);
+    bubble.style.left = `${bubblePosition.left}px`;
+    bubble.style.top = `${bubblePosition.top}px`;
 
     // Appear after 100ms
     const appearTimeout = window.setTimeout(() => {
@@ -439,13 +529,17 @@ function DesktopMatrix({
 
 function MobileMatrix({
   altLabel,
+  bubblesEnabled,
   imageSlots,
   isActive,
+  pills,
   rows,
 }: {
   altLabel: string;
+  bubblesEnabled: boolean;
   imageSlots: RadiantExperienceContent["capabilityMatrix"]["imageSlots"];
   isActive: boolean;
+  pills: string[];
   rows: RadiantExperienceContent["capabilityMatrix"]["rows"];
 }) {
   const wordRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -456,6 +550,8 @@ function MobileMatrix({
     },
     [],
   );
+
+  useBubbleSystem(pills, wordRefs, isActive && bubblesEnabled);
 
   const mobileRows: Array<{
     key: string;
@@ -520,7 +616,7 @@ export function RadiantCapabilityMatrixSection({
   const matrixThemeStyle = {
     "--matrix-bg": "#e9e4d9",
     "--matrix-divider-color": "rgba(0,0,0,0.1)",
-    "--matrix-word-color": "rgba(180, 168, 143, 0.7)",
+    "--matrix-word-color": "#D7BFA9",
     "--matrix-ticker-color": "rgba(140,87,37,0.8)",
   } as CSSProperties;
 
@@ -585,8 +681,10 @@ export function RadiantCapabilityMatrixSection({
             />
             <MobileMatrix
               altLabel={matrix.slotAltLabel}
+              bubblesEnabled={bubblesEnabled}
               imageSlots={matrix.imageSlots}
               isActive={isSectionActive && !isDesktop}
+              pills={pills}
               rows={matrix.rows}
             />
           </div>

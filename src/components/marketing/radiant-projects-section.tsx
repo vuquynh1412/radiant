@@ -99,7 +99,10 @@ export function RadiantProjectsSection({
             const displayAspectRatio = `${image.width} / ${image.height}`;
 
             return (
-              <article key={item.key} className="group mb-4 break-inside-avoid">
+              <article
+                key={item.key}
+                className="group mb-4 cursor-pointer break-inside-avoid"
+              >
                 <div
                   className="relative w-full overflow-hidden rounded-[10px]"
                   style={{ aspectRatio: displayAspectRatio }}
