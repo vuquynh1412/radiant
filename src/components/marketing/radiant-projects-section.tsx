@@ -5,24 +5,28 @@ import {
   startTransition,
   useState,
   type CSSProperties,
-  type RefObject,
 } from "react";
 
 import { projectGalleryImages } from "@/content/project-gallery-images";
+import { useBatchReveal } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
-import type { RadiantExperienceContent } from "./radiant-experience.types";
+import type {
+  RadiantExperienceContent,
+  RadiantExperienceRefs,
+} from "./radiant-experience.types";
 import { SectionAccent, ViewAllButton } from "./radiant-experience-shared";
 
 type RadiantProjectsSectionProps = {
   content: RadiantExperienceContent;
-  projectsSectionRef: RefObject<HTMLElement | null>;
+  refs: RadiantExperienceRefs;
 };
 
 export function RadiantProjectsSection({
   content,
-  projectsSectionRef,
+  refs,
 }: RadiantProjectsSectionProps) {
+  const { projectsSectionRef } = refs;
   const { projects } = content;
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
   const projectsThemeStyle = {
@@ -46,6 +50,16 @@ export function RadiantProjectsSection({
     activeFilter === "all"
       ? projects.items
       : projects.items.filter((item) => item.filter === activeFilter);
+
+  useBatchReveal({
+    duration: 0.72,
+    refreshKey: activeFilter,
+    scope: projectsSectionRef,
+    selector: "[data-project-reveal]",
+    stagger: 0.12,
+    start: "top 90%",
+    y: 36,
+  });
 
   return (
     <section
@@ -99,7 +113,11 @@ export function RadiantProjectsSection({
             const displayAspectRatio = `${image.width} / ${image.height}`;
 
             return (
-              <article key={item.key} className="group mb-4 break-inside-avoid">
+              <article
+                key={item.key}
+                className="group mb-4 cursor-pointer break-inside-avoid will-change-transform"
+                data-project-reveal
+              >
                 <div
                   className="relative w-full overflow-hidden rounded-[10px]"
                   style={{ aspectRatio: displayAspectRatio }}

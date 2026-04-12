@@ -21,30 +21,7 @@ import {
 type RadiantShowcaseSectionProps = {
   content: RadiantExperienceContent;
   desktopShowcaseReady: boolean;
-  showcaseSectionRef: RadiantExperienceRefs["showcaseSectionRef"];
-  mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
-  mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
-  mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
-  mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
-  heroMatteRef: RadiantExperienceRefs["heroMatteRef"];
-  heroMediaRef: RadiantExperienceRefs["heroMediaRef"];
-  heroMediaFrameRef: RadiantExperienceRefs["heroMediaFrameRef"];
-  heroFinalImageRef: RadiantExperienceRefs["heroFinalImageRef"];
-  heroTitleRef: RadiantExperienceRefs["heroTitleRef"];
-  heroMonogramRef: RadiantExperienceRefs["heroMonogramRef"];
-  heroTopPatternRef: RadiantExperienceRefs["heroTopPatternRef"];
-  heroMarqueeRef: RadiantExperienceRefs["heroMarqueeRef"];
-  heroMarqueeTrackRef: RadiantExperienceRefs["heroMarqueeTrackRef"];
-  heroFinalMarqueeRef: RadiantExperienceRefs["heroFinalMarqueeRef"];
-  heroFinalMarqueeTrackRef: RadiantExperienceRefs["heroFinalMarqueeTrackRef"];
-  activeServiceCopyShellRef: RadiantExperienceRefs["activeServiceCopyShellRef"];
-  serviceGridShellRef: RadiantExperienceRefs["serviceGridShellRef"];
-  serviceHeaderRef: RadiantExperienceRefs["serviceHeaderRef"];
-  serviceGridFooterRef: RadiantExperienceRefs["serviceGridFooterRef"];
-  serviceGridItemRefs: RadiantExperienceRefs["serviceGridItemRefs"];
-  serviceCardsRef: RadiantExperienceRefs["serviceCardsRef"];
-  serviceCopyRefs: RadiantExperienceRefs["serviceCopyRefs"];
-  sampleTileRef: RadiantExperienceRefs["sampleTileRef"];
+  refs: RadiantExperienceRefs;
 };
 
 const desktopShowcaseGridStyle = {
@@ -80,21 +57,37 @@ function getTransitionHeroTitle(content: RadiantExperienceContent) {
   return `${content.hero.title.premium} ${content.hero.title.esthetic} ${content.hero.title.dentistry}!`;
 }
 
+function getMobileServiceTitle(title: string) {
+  switch (title) {
+    case "Xây hệ thống thương hiệu":
+      return "Xây hệ thống\nthương hiệu";
+    case "Bộ nhận diện thương hiệu":
+      return "Bộ nhận diện\nthương hiệu";
+    case "Truyền thông đa nền tảng":
+      return "Truyền thông đa\nnền tảng";
+    default:
+      return title;
+  }
+}
+
 function RadiantPatternTicker({
   className,
   direction = "left",
   label,
+  mobileVisible = false,
 }: {
   className?: string;
   direction?: "left" | "right";
   label: string;
+  mobileVisible?: boolean;
 }) {
   const items = Array.from({ length: 14 }, (_, index) => `${label}-${index}`);
 
   return (
     <div
       className={cn(
-        "overflow-hidden bg-[#F7ECE2]/96 hidden md:block",
+        "overflow-hidden bg-[#F7ECE2]/96",
+        mobileVisible ? "block" : "hidden md:block",
         className,
       )}
     >
@@ -172,22 +165,22 @@ function ShowcaseFrameStar({ className }: { className?: string }) {
 
 function MobileShowcaseHero({
   content,
-  mobileHeroMarqueeRef,
-  mobileHeroSectionRef,
-  mobileHeroTopContentRef,
-  mobileHeroTopOverlayRef,
+  refs,
 }: {
   content: RadiantExperienceContent;
-  mobileHeroMarqueeRef: RadiantExperienceRefs["mobileHeroMarqueeRef"];
-  mobileHeroSectionRef: RadiantExperienceRefs["mobileHeroSectionRef"];
-  mobileHeroTopContentRef: RadiantExperienceRefs["mobileHeroTopContentRef"];
-  mobileHeroTopOverlayRef: RadiantExperienceRefs["mobileHeroTopOverlayRef"];
+  refs: RadiantExperienceRefs;
 }) {
+  const {
+    mobileHeroMarqueeRef,
+    mobileHeroSectionRef,
+    mobileHeroTopContentRef,
+    mobileHeroTopOverlayRef,
+  } = refs;
   const openingCopy = getOpeningHeroCopy(content.locale);
 
   return (
     <div className="md:hidden">
-      <section className="relative mt-20 min-h-svh overflow-hidden rounded-t-[16px] bg-[#17120F]">
+      <section className="relative mt-20 h-[calc(100dvh-5rem)] min-h-[34rem] overflow-hidden rounded-t-[16px] bg-[#17120F]">
         <VisualSurface
           className="absolute inset-0 rounded-none"
           image={heroEditorialImage}
@@ -195,10 +188,7 @@ function MobileShowcaseHero({
         >
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,5,0.16)_0%,rgba(13,8,5,0.22)_30%,rgba(13,8,5,0.56)_72%,rgba(13,8,5,0.84)_100%)]" />
         </VisualSurface>
-        {/* <div className="pointer-events-none absolute inset-x-0 top-0 z-20 pt-[calc(env(safe-area-inset-top)+1rem)]">
-          <RadiantPatternTicker label={content.brand.name} />
-        </div> */}
-        <div className="site-gutter relative z-10 flex min-h-svh items-center justify-center py-[max(2rem,env(safe-area-inset-bottom)+1.25rem)] pt-[calc(env(safe-area-inset-top)+76px)]">
+        <div className="site-gutter relative z-10 flex h-full items-center justify-center px-5 pb-[calc(env(safe-area-inset-bottom)+4.75rem)] pt-[calc(env(safe-area-inset-top)+76px)]">
           <div className="flex flex-col items-center space-y-5 text-center">
             <h1 className="font-heading text-[clamp(1rem,8vw,4.5rem)] leading-[1.2] font-bold tracking-[-0.04em] text-[#E2B649] text-shadow-[0_8px_24px_rgba(15,9,4,0.22)]">
               <span className="block">{openingCopy.lineOne}</span>
@@ -215,29 +205,30 @@ function MobileShowcaseHero({
             className="bg-transparent"
             direction="right"
             label={content.brand.name}
+            mobileVisible
           />
         </div>
       </section>
 
       <div
         ref={mobileHeroSectionRef}
-        className="relative min-h-[156.5svh] overflow-clip"
+        className="relative min-h-[200svh] overflow-clip"
       >
-        <div className="sticky top-0 z-10 h-[56.5svh] overflow-hidden bg-[#f6f1eb]">
+        <div className="sticky top-0 z-10 h-svh overflow-hidden bg-[#f6f1eb]">
           <div
             ref={mobileHeroTopContentRef}
             className="site-gutter relative z-10 flex h-full items-center justify-center will-change-transform"
           >
             <div className="mx-auto flex max-w-[20rem] items-center justify-center">
-              <div className="space-y-3 text-center text-[#27272A]">
+              <div className="space-y-3 text-center text-[#8C5725]">
                 <p className="hero-title-display">
                   {content.hero.title.premium}
                 </p>
                 <p className="hero-title-display">
                   {content.hero.title.esthetic}
                 </p>
-                <p className="hero-title-display italic">
-                  {content.hero.title.dentistry}
+                <p className="hero-title-display">
+                  {content.hero.title.dentistry}!
                 </p>
               </div>
             </div>
@@ -254,8 +245,8 @@ function MobileShowcaseHero({
         >
           <VisualSurface
             className="size-full rounded-none"
+            image={content.services.items[0]?.image ?? heroEditorialImage}
             innerClassName="scale-[1.08]"
-            variant="noir"
           />
           <div className="absolute inset-0 bg-black/40" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,8,8,0.06)_0%,rgba(9,8,8,0.12)_32%,rgba(9,8,8,0.28)_56%,rgba(9,8,8,0.62)_100%)]" />
@@ -265,7 +256,7 @@ function MobileShowcaseHero({
 
         <div className="pointer-events-none absolute inset-0 z-30">
           <div className="sticky top-0 h-svh overflow-hidden">
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 overflow-hidden">
+            <div className="absolute left-0 top-[20%] -translate-y-1/2">
               <p
                 ref={mobileHeroMarqueeRef}
                 data-mobile-hero-marquee=""
@@ -375,44 +366,37 @@ function ReducedMotionDesktopShowcase({
 export function RadiantShowcaseSection({
   content,
   desktopShowcaseReady,
-  showcaseSectionRef,
-  mobileHeroSectionRef,
-  mobileHeroMarqueeRef,
-  mobileHeroTopContentRef,
-  mobileHeroTopOverlayRef,
-  heroMatteRef,
-  heroMediaRef,
-  heroMediaFrameRef,
-  heroFinalImageRef,
-  heroTitleRef,
-  heroMonogramRef,
-  heroTopPatternRef,
-  heroMarqueeRef,
-  heroMarqueeTrackRef,
-  heroFinalMarqueeRef,
-  heroFinalMarqueeTrackRef,
-  activeServiceCopyShellRef,
-  serviceGridShellRef,
-  serviceHeaderRef,
-  serviceGridFooterRef,
-  serviceGridItemRefs,
-  serviceCardsRef,
-  serviceCopyRefs,
-  sampleTileRef,
+  refs,
 }: RadiantShowcaseSectionProps) {
+  const {
+    activeServiceCopyShellRef,
+    heroFinalImageRef,
+    heroFinalMarqueeRef,
+    heroFinalMarqueeTrackRef,
+    heroMarqueeRef,
+    heroMarqueeTrackRef,
+    heroMatteRef,
+    heroMediaFrameRef,
+    heroMediaRef,
+    heroMonogramRef,
+    heroTopPatternRef,
+    heroTitleRef,
+    sampleTileRef,
+    serviceCardsRef,
+    serviceCopyRefs,
+    serviceGridFooterRef,
+    serviceGridItemRefs,
+    serviceGridShellRef,
+    serviceHeaderRef,
+    showcaseSectionRef,
+  } = refs;
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
   const openingCopy = getOpeningHeroCopy(content.locale);
   const transitionTitle = getTransitionHeroTitle(content);
 
   return (
     <section id="showcase">
-      <MobileShowcaseHero
-        content={content}
-        mobileHeroMarqueeRef={mobileHeroMarqueeRef}
-        mobileHeroSectionRef={mobileHeroSectionRef}
-        mobileHeroTopContentRef={mobileHeroTopContentRef}
-        mobileHeroTopOverlayRef={mobileHeroTopOverlayRef}
-      />
+      <MobileShowcaseHero content={content} refs={refs} />
 
       <div
         ref={showcaseSectionRef}
@@ -632,7 +616,7 @@ export function RadiantShowcaseSection({
           <div className="absolute inset-0">
             <div
               ref={sampleTileRef}
-              className="group/service absolute left-0 top-0 z-10 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] pointer-events-auto"
+              className="group/service absolute left-0 top-0 z-10 aspect-video w-[clamp(38rem,48vw,46rem)] cursor-pointer overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] pointer-events-auto"
             >
               <ServiceTile
                 className="size-full rounded-[inherit] border-0 shadow-none"
@@ -647,7 +631,7 @@ export function RadiantShowcaseSection({
                 ref={(node) => {
                   serviceCardsRef.current[index] = node;
                 }}
-                className="group/service absolute left-0 top-0 z-20 aspect-video w-[clamp(38rem,48vw,46rem)] overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform pointer-events-auto"
+                className="group/service absolute left-0 top-0 z-20 aspect-video w-[clamp(38rem,48vw,46rem)] cursor-pointer overflow-hidden rounded-[24px] border border-white/20 opacity-0 shadow-[0_28px_90px_-42px_rgba(17,12,9,0.35)] will-change-transform pointer-events-auto"
                 style={{ transformOrigin: "top center" }}
               >
                 <ServiceTile
@@ -674,7 +658,7 @@ export function RadiantShowcaseSection({
           </h2>
         </div>
 
-        <div className="mt-8 grid grid-cols-2 gap-4">
+        <div className="mt-8 grid grid-cols-2 gap-2">
           {content.services.items.map((item) => (
             <ServiceCard
               key={`${item.title}-mobile`}
@@ -685,8 +669,8 @@ export function RadiantShowcaseSection({
               hideEyebrow
               image={item.image}
               tileClassName="rounded-[10px]"
-              title={item.title}
-              titleClassName="text-[1.2rem] leading-[1.06]"
+              title={getMobileServiceTitle(item.title)}
+              titleClassName="text-[14px] leading-[1.06] whitespace-pre-line"
             />
           ))}
         </div>

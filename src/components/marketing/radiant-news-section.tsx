@@ -1,8 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import {
+  useRef,
+  useSyncExternalStore,
+  type CSSProperties,
+} from "react";
 
+import { useBatchReveal } from "@/lib/animations";
 import { cn } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
@@ -12,6 +17,8 @@ import { SectionAccent, ViewAllButton } from "./radiant-experience-shared";
 type RadiantNewsSectionProps = {
   content: RadiantExperienceContent;
 };
+
+const desktopMediaQuery = "(min-width: 768px)";
 
 const newsGridLayouts = {
   "brand-pattern-language":
@@ -25,6 +32,18 @@ const newsGridLayouts = {
   "palette-codes":
     "aspect-[1.16/1] md:col-start-3 md:row-start-1 md:h-full md:aspect-auto",
 } as const;
+
+function subscribeToDesktopBreakpoint(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia(desktopMediaQuery);
+  mediaQuery.addEventListener("change", onStoreChange);
+  return () => {
+    mediaQuery.removeEventListener("change", onStoreChange);
+  };
+}
+
+function getDesktopBreakpointSnapshot() {
+  return window.matchMedia(desktopMediaQuery).matches;
+}
 
 function lineClampClass(lines: 1 | 2) {
   return lines === 1
@@ -45,10 +64,11 @@ function NewsCard({
     <article
       key={item.key}
       className={cn(
-        "group relative overflow-hidden rounded-[10px] border border-(--news-card-border) bg-white/2",
+        "group relative cursor-pointer overflow-hidden rounded-[10px] border border-(--news-card-border) bg-white/2 will-change-transform",
         !mobile && "h-full",
         className,
       )}
+      data-news-reveal={mobile ? "mobile" : "desktop"}
     >
       <Image
         alt={item.title}
@@ -92,6 +112,12 @@ function NewsCard({
 export function RadiantNewsSection({
   content,
 }: RadiantNewsSectionProps) {
+  const newsSectionRef = useRef<HTMLElement | null>(null);
+  const isDesktop = useSyncExternalStore(
+    subscribeToDesktopBreakpoint,
+    getDesktopBreakpointSnapshot,
+    () => false,
+  );
   const viewAllLabel = content.locale === "vi" ? "Xem tất cả" : "View all";
   const mobileVisibleNewsItems = content.news.items.slice(0, 3);
   const sectionEyebrow = content.locale === "vi" ? "Nhật ký thương hiệu" : "Brand Journal";
@@ -106,9 +132,20 @@ export function RadiantNewsSection({
     "--news-accent-soft": "rgba(214,188,144,0.84)",
   } as CSSProperties;
 
+  useBatchReveal({
+    duration: 0.7,
+    refreshKey: isDesktop ? "desktop" : "mobile",
+    scope: newsSectionRef,
+    selector: `[data-news-reveal="${isDesktop ? "desktop" : "mobile"}"]`,
+    stagger: 0.1,
+    start: "top 92%",
+    y: 32,
+  });
+
   return (
     <section
       id="news"
+      ref={newsSectionRef}
       className="site-gutter relative overflow-hidden bg-(--news-bg) pb-16 pt-0 text-white scroll-mt-28 sm:scroll-mt-32 sm:pb-20 lg:scroll-mt-36 lg:pb-24"
       style={themeStyle}
     >

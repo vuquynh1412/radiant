@@ -1,19 +1,15 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, type RefObject } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRightIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
+import { useRadiantCtaMotion } from "@/hooks/use-radiant-cta-motion";
 import { cn } from "@/lib/utils";
 
-import { getRadiantScrollProfile } from "./radiant-scroll-profiles";
 import { SectionAccent } from "./radiant-experience-shared";
 import type { RadiantExperienceContent } from "./radiant-experience.types";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 type RadiantCallToActionSectionProps = {
   content: RadiantExperienceContent;
@@ -22,6 +18,7 @@ type RadiantCallToActionSectionProps = {
 const ctaStarPath =
   "M756.5 436L767.296 476.098C768.82 481.758 773.242 486.179 778.902 487.703L819 498.5L778.902 509.296C773.242 510.82 768.82 515.241 767.296 520.902L756.5 561L745.704 520.902C744.18 515.241 739.758 510.82 734.098 509.296L694 498.5L734.098 487.703C739.758 486.179 744.18 481.758 745.704 476.098L756.5 436Z";
 const ctaStarMaskId = "radiant-cta-star-mask";
+const ctaBackgroundImage = "/cta/rectangle-23824.jpg";
 
 type CallToActionBodyProps = {
   accentClassName?: string;
@@ -38,6 +35,24 @@ type CallToActionBodyProps = {
   titleClassName?: string;
   titleRef?: RefObject<HTMLHeadingElement | null>;
 };
+
+function CallToActionBackground() {
+  return (
+    <>
+      <Image
+        alt=""
+        className="absolute inset-0 size-full object-cover object-center"
+        fill
+        sizes="100vw"
+        src={ctaBackgroundImage}
+        unoptimized
+      />
+      <div className="absolute inset-0 bg-[#E8DDD3]/62" />
+      <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-[#E8DDD3]/92 via-[#E8DDD3]/70 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[#E8DDD3]/82 to-transparent" />
+    </>
+  );
+}
 
 function CallToActionBody({
   accentClassName,
@@ -80,7 +95,7 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "title-display-inika mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
+          "font-heading mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
           titleClassName,
         )}
       >
@@ -118,7 +133,7 @@ function CallToActionBody({
               variant: "default",
             }),
           )}
-          href="mailto:hello@radiant.studio?subject=Radiant%20strategy%20call"
+          href="mailto:hello@radiant.com?subject=Radiant%20strategy%20call"
         >
           <span
             aria-hidden="true"
@@ -150,11 +165,12 @@ function ReducedMotionCallToAction({
         <div className="pointer-events-none absolute left-1/2 -top-40 h-96 w-[24rem] -translate-x-1/2 rounded-full border border-white/10 opacity-40" />
         <div className="pointer-events-none absolute left-1/2 -top-12 h-40 w-40 -translate-x-1/2 rounded-full border border-white/14 opacity-60" />
 
-        <div className="relative rounded-[2rem] bg-[#E8DDD3] px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-14">
+        <div className="relative overflow-hidden rounded-[2rem] bg-[#E8DDD3] px-6 py-14 text-center sm:px-10 sm:py-16 lg:px-14">
+          <CallToActionBackground />
           <CallToActionBody
             accentClassName="opacity-100"
             bodyClassName="opacity-100"
-            containerClassName="mx-auto"
+            containerClassName="relative z-10 mx-auto"
             content={content}
             eyebrowClassName="opacity-100"
             hideBody
@@ -182,145 +198,21 @@ export function RadiantCallToActionSection({
   const bodyRef = useRef<HTMLParagraphElement | null>(null);
   const actionsRef = useRef<HTMLDivElement | null>(null);
 
-  useGSAP(
-    () => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        if (!sectionRef.current || !stageRef.current || !surfaceRef.current) {
-          return undefined;
-        }
-
-        const { useTouchProfile } = getRadiantScrollProfile();
-        const easeOut = gsap.parseEase("power3.out");
-        const easeInOut = gsap.parseEase("power2.inOut");
-        const riseScaleCurve = gsap.parseEase("power2.in");
-        const copyNodes = [
-          accentRef.current,
-          eyebrowRef.current,
-          titleRef.current,
-          bodyRef.current,
-          actionsRef.current,
-        ].filter(Boolean);
-
-        if (maskedRevealRef.current) {
-          maskedRevealRef.current.style.filter = useTouchProfile ? "none" : "";
-        }
-
-        const renderStage = (progress: number) => {
-          const riseStart = 0.05;
-          const riseEnd = 0.38;
-          const bloomEnd = 0.78;
-          const riseProgress = gsap.utils.clamp(
-            0,
-            1,
-            (progress - riseStart) / (riseEnd - riseStart),
-          );
-          const copyProgress = gsap.utils.clamp(0, 1, (progress - 0.46) / 0.18);
-          const panelProgress = gsap.utils.clamp(
-            0,
-            1,
-            (progress - 0.78) / 0.12,
-          );
-          const riseEase = easeOut(riseProgress);
-          const totalStarProgress = gsap.utils.clamp(
-            0,
-            1,
-            (progress - riseStart) / (bloomEnd - riseStart),
-          );
-          const midStarProgress =
-            (riseEnd - riseStart) / (bloomEnd - riseStart);
-          const riseScaleProgress = gsap.utils.clamp(
-            0,
-            1,
-            totalStarProgress / midStarProgress,
-          );
-          const bloomScaleProgress = gsap.utils.clamp(
-            0,
-            1,
-            (totalStarProgress - midStarProgress) / (1 - midStarProgress),
-          );
-          const copyEase = easeOut(copyProgress);
-          const panelEase = easeInOut(panelProgress);
-          const panelVisible = panelProgress > 0;
-
-          const riseScale = gsap.utils.interpolate(
-            0.0014,
-            9.5,
-            riseScaleCurve(riseScaleProgress),
-          );
-          const bloomScale = gsap.utils.interpolate(
-            9.5,
-            76,
-            bloomScaleProgress,
-          );
-          const starScale =
-            totalStarProgress <= midStarProgress ? riseScale : bloomScale;
-          const starY = gsap.utils.interpolate(760, 0, riseEase);
-          const starRotation = gsap.utils.interpolate(
-            -18,
-            342,
-            totalStarProgress,
-          );
-
-          const starTransform = `translate(756.5 498.5) rotate(${starRotation}) scale(${starScale}) translate(-756.5 -498.5)`;
-          const starTranslate = `translate(0 ${starY})`;
-
-          gsap.set(maskedRevealRef.current, {
-            opacity: panelVisible ? 1 - panelEase : 1,
-          });
-          gsap.set(fullPanelRef.current, {
-            opacity: panelVisible ? panelEase : 0,
-            scaleX: 1,
-            scaleY: 1,
-          });
-          gsap.set(starMaskTranslateRef.current, {
-            attr: { transform: starTranslate },
-          });
-          gsap.set(starMaskTransformRef.current, {
-            attr: { transform: starTransform },
-          });
-
-          gsap.set(surfaceRef.current, {
-            borderRadius: 0,
-            opacity: 1,
-            scaleX: 1,
-            scaleY: 1,
-            transformOrigin: "center top",
-            y: 0,
-          });
-
-          gsap.set(copyNodes, {
-            opacity: panelVisible
-              ? gsap.utils.interpolate(copyEase, 0.94, panelEase)
-              : copyEase,
-            y: gsap.utils.interpolate(64, 0, copyEase),
-          });
-        };
-
-        renderStage(0);
-
-        const trigger = ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            renderStage(self.progress);
-          },
-        });
-
-        return () => {
-          trigger.kill();
-        };
-      });
-
-      return () => {
-        mm.revert();
-      };
+  useRadiantCtaMotion({
+    refs: {
+      accentRef,
+      actionsRef,
+      bodyRef,
+      eyebrowRef,
+      fullPanelRef,
+      maskedRevealRef,
+      sectionRef,
+      starMaskTransformRef,
+      starMaskTranslateRef,
+      surfaceRef,
+      titleRef,
     },
-    { scope: sectionRef },
-  );
+  });
 
   return (
     <section id="contact" className="relative z-20">
@@ -338,8 +230,10 @@ export function RadiantCallToActionSection({
           >
             <div
               ref={fullPanelRef}
-              className="absolute inset-0 z-0 bg-[#E8DDD3] opacity-0 will-change-transform"
-            />
+              className="absolute inset-0 z-0 overflow-hidden bg-[#E8DDD3] opacity-0 will-change-transform"
+            >
+              <CallToActionBackground />
+            </div>
 
             <svg
               ref={maskedRevealRef}
@@ -366,13 +260,50 @@ export function RadiantCallToActionSection({
                     </g>
                   </g>
                 </mask>
+                <linearGradient
+                  id="radiant-cta-top-wash"
+                  x1="756"
+                  x2="756"
+                  y1="0"
+                  y2="520"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#E8DDD3" stopOpacity="0.92" />
+                  <stop offset="0.62" stopColor="#E8DDD3" stopOpacity="0.7" />
+                  <stop offset="1" stopColor="#E8DDD3" stopOpacity="0" />
+                </linearGradient>
+                <linearGradient
+                  id="radiant-cta-bottom-wash"
+                  x1="756"
+                  x2="756"
+                  y1="620"
+                  y2="996"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop stopColor="#E8DDD3" stopOpacity="0" />
+                  <stop offset="1" stopColor="#E8DDD3" stopOpacity="0.82" />
+                </linearGradient>
               </defs>
-              <rect
-                width="1512"
-                height="996"
-                fill="#E8DDD3"
-                mask={`url(#${ctaStarMaskId})`}
-              />
+              <g mask={`url(#${ctaStarMaskId})`}>
+                <image
+                  href={ctaBackgroundImage}
+                  width="1512"
+                  height="996"
+                  preserveAspectRatio="xMidYMid slice"
+                />
+                <rect width="1512" height="996" fill="#E8DDD3" fillOpacity="0.62" />
+                <rect
+                  width="1512"
+                  height="520"
+                  fill="url(#radiant-cta-top-wash)"
+                />
+                <rect
+                  y="620"
+                  width="1512"
+                  height="376"
+                  fill="url(#radiant-cta-bottom-wash)"
+                />
+              </g>
             </svg>
 
             <div className="site-gutter relative z-20 flex h-full items-center justify-center pt-20 text-center">

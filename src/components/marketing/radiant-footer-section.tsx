@@ -2,9 +2,14 @@
 
 import { MailIcon, MapPinIcon, PhoneCallIcon } from "lucide-react";
 
+import { sanitizePhoneNumber } from "@/lib/utils";
+
 import type { RadiantExperienceContent } from "./radiant-experience.types";
-import { RadiantBrandLogo } from "./radiant-experience-shared";
-import { radiantSocialLinks } from "./radiant-social-links";
+import {
+  RadiantBrandLogo,
+  ZaloLogoIcon,
+} from "./radiant-experience-shared";
+import { radiantSocialLinks, radiantSupportLinks } from "./radiant-social-links";
 
 type RadiantFooterSectionProps = {
   content: RadiantExperienceContent;
@@ -15,8 +20,12 @@ const footerTickerRepeats = 10;
 function SocialGlyph({
   type,
 }: {
-  type: "facebook" | "instagram" | "tiktok" | "linkedin" | "youtube";
+  type: "facebook" | "instagram" | "tiktok" | "linkedin" | "youtube" | "zalo";
 }) {
+  if (type === "zalo") {
+    return <ZaloLogoIcon className="size-4.5" />;
+  }
+
   if (type === "facebook") {
     return (
       <svg aria-hidden="true" className="size-4" fill="currentColor" viewBox="0 0 24 24">
@@ -79,20 +88,20 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
       icon: <MapPinIcon className="size-4 stroke-[1.85]" />,
       label: content.footer.contact.address,
     },
-    {
-      key: "phone",
-      href: `tel:${content.footer.contact.phone.replace(/\s+/g, "")}`,
-      icon: <PhoneCallIcon className="size-4 stroke-[1.85]" />,
-      label: content.footer.contact.phone,
-    },
-    {
-      key: "mail",
-      href: `mailto:${content.footer.contact.email}`,
-      icon: <MailIcon className="size-4 stroke-[1.85]" />,
-      label: content.footer.contact.email,
-    },
   ];
   const socialItems = [
+    {
+      key: "linkedin",
+      href: radiantSocialLinks.linkedin,
+      icon: <SocialGlyph type="linkedin" />,
+      label: content.footer.socials.linkedin,
+    },
+    {
+      key: "zalo",
+      href: radiantSupportLinks.zalo,
+      icon: <SocialGlyph type="zalo" />,
+      label: "Zalo",
+    },
     {
       key: "facebook",
       href: radiantSocialLinks.facebook,
@@ -106,31 +115,28 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
       label: content.footer.socials.instagram,
     },
     {
-      key: "tiktok",
-      href: radiantSocialLinks.tiktok,
-      icon: <SocialGlyph type="tiktok" />,
-      label: content.footer.socials.tiktok,
-    },
-    {
-      key: "linkedin",
-      href: radiantSocialLinks.linkedin,
-      icon: <SocialGlyph type="linkedin" />,
-      label: content.footer.socials.linkedin,
-    },
-    {
       key: "youtube",
       href: radiantSocialLinks.youtube,
       icon: <SocialGlyph type="youtube" />,
       label: content.footer.socials.youtube,
     },
+    {
+      key: "tiktok",
+      href: radiantSocialLinks.tiktok,
+      icon: <SocialGlyph type="tiktok" />,
+      label: content.footer.socials.tiktok,
+    },
   ];
   const footerActions = [...utilityItems, ...socialItems];
 
   return (
-    <footer className="site-gutter relative z-10 -mt-[1svh] min-h-svh overflow-hidden bg-[#1b1a18] pb-6 pt-[10svh] text-white sm:pt-[9svh] lg:pt-[8svh]">
+    <footer
+      id="site-footer"
+      className="site-gutter relative z-10 overflow-visible bg-[#1b1a18] pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-14 text-white sm:pt-16 lg:pt-20"
+    >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-black/24 via-black/8 to-transparent" />
 
-      <div className="relative mx-auto flex min-h-[calc(100svh-7rem)] max-w-352 flex-col">
+      <div className="relative mx-auto flex max-w-352 flex-col">
         <div className="flex flex-col items-center text-center">
           <div className="text-primary">
             <RadiantBrandLogo className="h-12 w-auto sm:h-14" />
@@ -218,7 +224,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
             <div className="space-y-5">
               <a
                 className="flex items-start gap-3 text-white/84 transition-colors hover:text-white"
-                href={`tel:${content.footer.contact.phone.replace(/\s+/g, "")}`}
+                href={`tel:${sanitizePhoneNumber(content.footer.contact.phone)}`}
               >
                 <PhoneCallIcon className="mt-1 size-4.5 shrink-0 stroke-[1.8]" />
                 <span className="text-[1.05rem] leading-7">
@@ -271,7 +277,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
             <div className="space-y-5">
               <a
                 className="flex items-start gap-3 text-white/84 transition-colors hover:text-white"
-                href={`tel:${content.footer.contact.phone.replace(/\s+/g, "")}`}
+                href={`tel:${sanitizePhoneNumber(content.footer.contact.phone)}`}
               >
                 <PhoneCallIcon className="mt-1 size-4.5 shrink-0 stroke-[1.8]" />
                 <span className="text-[1.05rem] leading-7">
@@ -303,7 +309,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
           {content.footer.copyright}
         </div>
 
-        <div className="pointer-events-none mt-auto overflow-hidden pt-6">
+        <div className="pointer-events-none mt-10 overflow-hidden pt-6">
           <div className="flex whitespace-nowrap mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
             <div className="animate-[radiant-footer-ticker_26s_linear_infinite]">
               {Array.from({ length: footerTickerRepeats }).map((_, index) => (

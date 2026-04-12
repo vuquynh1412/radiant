@@ -2,6 +2,7 @@ import type { HomePageMessages } from "@/i18n/messages";
 import { clientGalleryImages } from "@/content/client-gallery-images";
 
 export type ShowcaseImage = {
+  alt?: string;
   fallbackSrc: string;
   position?: string;
   src: string;

@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   ArrowUpRightIcon,
   ChevronDownIcon,
+  MailIcon,
   MenuIcon,
   XIcon,
 } from "lucide-react";
@@ -39,7 +40,9 @@ type SocialLink = {
 };
 
 const bookCallHref =
-  "mailto:hello@radiant.studio?subject=Radiant%20strategy%20call";
+  "mailto:hello@radiant.com?subject=Radiant%20strategy%20call";
+const requestDeckHref =
+  "mailto:hello@radiant.com?subject=Radiant%20capability%20deck";
 const menuPanelId = "radiant-header-menu-panel";
 const servicesPanelId = "radiant-header-services-panel";
 const focusableSelector = [
@@ -448,7 +451,7 @@ export function RadiantExperienceHeader({
             data-radiant-header-shell=""
             className={cn(
               "relative z-10 mx-auto w-full bg-[#1C1107] text-[#F7F2EB] transition-all duration-300",
-              "flex items-center justify-between gap-3 rounded-[16px] rounded-t-none px-4 py-2.5",
+              "grid grid-cols-[1fr_auto_1fr] items-center gap-3 rounded-[16px] rounded-t-none px-4 py-2.5",
               "md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-5 md:rounded-[24px] md:rounded-t-none md:px-6 md:py-3",
               "lg:rounded-[40px] lg:rounded-t-none lg:px-10 lg:py-3",
               isAtTop
@@ -457,10 +460,11 @@ export function RadiantExperienceHeader({
             )}
           >
             <a
-              href="#showcase"
-              className="flex size-10 shrink-0 items-center justify-start text-secondary transition-opacity hover:opacity-85 md:hidden"
+              href={contactLink.href}
+              aria-label={contactLink.label}
+              className="flex size-12 shrink-0 items-center justify-center rounded-full border border-white/18 text-[#F7F2EB] transition-colors duration-200 hover:border-secondary/40 hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30 md:hidden"
             >
-              <RadiantHeaderLogo className="h-auto w-10" />
+              <MailIcon className="size-5 stroke-[1.9]" />
             </a>
 
             <div className="hidden min-w-0 items-center gap-7 md:flex lg:gap-10">
@@ -490,9 +494,9 @@ export function RadiantExperienceHeader({
 
             <a
               href="#showcase"
-              className="hidden items-center justify-center text-secondary transition-opacity hover:opacity-85 md:flex"
+              className="flex items-center justify-center text-secondary transition-opacity hover:opacity-85"
             >
-              <RadiantHeaderLogo className="h-10 w-auto" />
+              <RadiantHeaderLogo className="h-10 w-auto md:h-10" />
             </a>
 
             <div className="flex min-w-0 items-center justify-end gap-2 md:gap-3">
@@ -500,7 +504,7 @@ export function RadiantExperienceHeader({
                 type="button"
                 onClick={handleLocaleSwitch}
                 aria-label={`Switch language to ${nextLocaleFlag}`}
-                className="inline-flex size-5 items-center justify-center overflow-hidden rounded-[4px] bg-transparent transition-transform duration-200 hover:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30"
+                className="hidden size-5 items-center justify-center overflow-hidden rounded-[4px] bg-transparent transition-transform duration-200 hover:scale-[1.04] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30 lg:inline-flex"
               >
                 <Image
                   src={nextLocaleFlagSrc}
@@ -516,8 +520,8 @@ export function RadiantExperienceHeader({
                 aria-label={contactLink.label}
                 className={cn(
                   "group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/18 text-[#F7F2EB] transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-secondary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30",
-                  "px-5 py-3 text-[1.02rem] font-medium",
-                  "md:px-7 md:py-3.5 md:text-[1.05rem]",
+                  "hidden px-5 py-3 text-[1.02rem] font-medium",
+                  "md:inline-flex md:px-7 md:py-3.5 md:text-[1.05rem]",
                 )}
               >
                 <span
@@ -648,6 +652,26 @@ export function RadiantExperienceHeader({
                   {item.label}
                 </a>
               ))}
+
+              <button
+                type="button"
+                onClick={handleLocaleSwitch}
+                className="flex w-full items-center justify-between rounded-[18px] px-4 py-3 text-left text-[1.02rem] font-medium text-[#F7F2EB] transition-[color,background-color] duration-200 hover:bg-white/4 hover:text-secondary focus-visible:outline-none focus-visible:bg-white/4 focus-visible:text-secondary"
+              >
+                <span>
+                  {locale === "vi" ? "English" : "Tiếng Việt"}
+                </span>
+                <span className="inline-flex items-center gap-2 text-sm text-white/62">
+                  <Image
+                    src={nextLocaleFlagSrc}
+                    alt=""
+                    width={20}
+                    height={20}
+                    className="size-5 rounded-[4px] object-cover"
+                  />
+                  <span>{nextLocaleFlag}</span>
+                </span>
+              </button>
             </div>
 
             <div className="border-t border-secondary/10 px-4 py-4">
