@@ -179,10 +179,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
 
   const rootRef = useRef<HTMLDivElement | null>(null);
   const showcaseSectionRef = useRef<HTMLDivElement | null>(null);
-  const mobileHeroSectionRef = useRef<HTMLDivElement | null>(null);
-  const mobileHeroMarqueeRef = useRef<HTMLParagraphElement | null>(null);
-  const mobileHeroTopContentRef = useRef<HTMLDivElement | null>(null);
-  const mobileHeroTopOverlayRef = useRef<HTMLDivElement | null>(null);
   const heroMatteRef = useRef<HTMLDivElement | null>(null);
   const heroMediaRef = useRef<HTMLDivElement | null>(null);
   const heroMediaFrameRef = useRef<HTMLDivElement | null>(null);
@@ -214,10 +210,6 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
   const motionRefs: RadiantExperienceRefs = {
     rootRef,
     showcaseSectionRef,
-    mobileHeroSectionRef,
-    mobileHeroMarqueeRef,
-    mobileHeroTopContentRef,
-    mobileHeroTopOverlayRef,
     heroMatteRef,
     heroMediaRef,
     heroMediaFrameRef,

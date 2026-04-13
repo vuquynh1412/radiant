@@ -44,8 +44,6 @@ const projectsLightIntro = "rgba(39,39,42,0.68)";
 const projectsDarkIntro = "rgba(245,241,232,0.58)";
 const projectsLightTitle = "#27272A";
 const projectsDarkTitle = "#f8f3eb";
-const projectsThemeSwitchViewportThreshold = 0.68;
-
 // Clip-path directions for multi-directional letter reveal
 type ClipDirection = "bottom-up" | "top-down" | "center-out";
 
@@ -363,21 +361,21 @@ export function useRadiantCapabilityMatrixMotion({
           };
 
           const syncBoundaryTheme = (animate: boolean) => {
-            if (!refs.projectsSectionRef.current) return;
+            if (!refs.capabilityMatrixSectionRef.current) return;
 
-            const projectsTopPosition = ScrollTrigger.positionInViewport(
-              refs.projectsSectionRef.current,
+            const matrixTopPosition = ScrollTrigger.positionInViewport(
+              refs.capabilityMatrixSectionRef.current,
               "top",
             );
             applyBoundaryTheme(
-              projectsTopPosition <= projectsThemeSwitchViewportThreshold,
+              matrixTopPosition <= 0,
               animate,
             );
           };
 
           const backgroundTrigger = ScrollTrigger.create({
-            trigger: refs.projectsSectionRef.current,
-            start: `top ${projectsThemeSwitchViewportThreshold * 100}%`,
+            trigger: refs.capabilityMatrixSectionRef.current,
+            start: "top top",
             end: "bottom top",
             onRefresh: () => {
               syncBoundaryTheme(false);

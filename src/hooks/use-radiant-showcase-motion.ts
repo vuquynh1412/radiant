@@ -14,7 +14,6 @@ import {
   getGridShellItemPosition,
   getShowcaseDerivedLayout,
   getShowcaseRowState,
-  getSmoothFocusValue,
   morphState,
   type HeroRect,
   type ShowcaseMetrics,
@@ -26,8 +25,6 @@ import type {
 } from "@/components/marketing/radiant-experience.types";
 
 type NumericSetter = (value: number) => void;
-type StringSetter = (value: string) => void;
-
 type LayoutSetters = {
   opacity: NumericSetter;
   scale: NumericSetter;
@@ -58,6 +55,26 @@ type XYSetters = {
 };
 
 const aboutContentEase = gsap.parseEase("power2.out");
+const INTRO_SCROLL_SHARE = 3.45;
+const ROW_REVEAL_DURATION = 0.55;
+const SERVICE_STEP_DURATION = 1;
+const GRID_OUTRO_DURATION = 1.15;
+const SERVICE_SCRUB = 0.42;
+const SERVICE_SNAP_DELAY = 0.08;
+const SERVICE_COPY_FADE_DURATION = 0.32;
+
+type ShowcaseMasterState = {
+  finalMarqueeRevealProgress: number;
+  finalMarqueeRunProgress: number;
+  gridProgress: number;
+  introMediaProgress: number;
+  openingFadeProgress: number;
+  patternFadeProgress: number;
+  rowRevealProgress: number;
+  serviceFocus: number;
+  shineSlideProgress: number;
+  shrinkProgress: number;
+};
 
 function createUniformScaleSetter(node: HTMLElement): NumericSetter {
   const scaleX = createQuickSetter(node, "scaleX") as NumericSetter;
@@ -197,8 +214,7 @@ export function useRadiantShowcaseMotion({
           const serviceGridItemNodes = refs.serviceGridItemRefs.current.filter(
             (item): item is HTMLElement => item !== null,
           );
-          const { showcaseScrub, useTouchProfile } =
-            getRadiantScrollProfile();
+          const { useTouchProfile } = getRadiantScrollProfile();
           const serviceItemCount = serviceItems.length;
           const getStableViewportHeight = () =>
             refs.heroMediaRef.current?.parentElement?.clientHeight ?? window.innerHeight;
@@ -559,8 +575,21 @@ export function useRadiantShowcaseMotion({
             setters.opacity(0);
           });
 
+          const showcaseState: ShowcaseMasterState = {
+            finalMarqueeRevealProgress: 0,
+            finalMarqueeRunProgress: 0,
+            gridProgress: 0,
+            introMediaProgress: 0,
+            openingFadeProgress: 0,
+            patternFadeProgress: 0,
+            rowRevealProgress: 0,
+            serviceFocus: 0,
+            shineSlideProgress: 0,
+            shrinkProgress: 0,
+          };
+
           const renderShowcase = (
-            progress: number,
+            state: ShowcaseMasterState,
             metrics: ShowcaseMetrics = cachedMetrics,
           ) => {
             const {
@@ -570,40 +599,34 @@ export function useRadiantShowcaseMotion({
               gridStates,
               introRect,
               rowZeroRect,
-              rowZeroState,
               slideRect,
-              terminalRowStates,
             } = derivedLayout;
-            const introMediaProgress = clamp(progress / 0.24);
-            const patternFadeProgress = clamp(progress / 0.08);
-            const openingFadeProgress = clamp((progress - 0.14) / 0.1);
-            const shineSlideProgress = clamp((progress - 0.24) / 0.18);
-            const finalMarqueeRevealProgress = clamp((progress - 0.42) / 0.06);
-            const finalMarqueeRunProgress = clamp((progress - 0.42) / 0.3);
-            const shrinkProgress = clamp((progress - 0.72) / 0.12);
-            const rowRevealProgress = clamp((progress - 0.84) / 0.06);
-            const holdProgress = clamp((progress - 0.9) / 0.03);
-            const focusPhaseProgress = clamp((progress - 0.93) / 0.04);
-            const gridProgress = clamp((progress - 0.97) / 0.03);
-            const focusIndex = getSmoothFocusValue(
-              focusPhaseProgress,
-              serviceItemCount - 1,
-            );
-            const activeCopyIndex =
-              progress < 0.93 ? 0 : Math.round(focusIndex);
+            const {
+              finalMarqueeRevealProgress,
+              finalMarqueeRunProgress,
+              gridProgress,
+              introMediaProgress,
+              openingFadeProgress,
+              patternFadeProgress,
+              rowRevealProgress,
+              serviceFocus,
+              shineSlideProgress,
+              shrinkProgress,
+            } = state;
+            const activeCopyIndex = Math.round(serviceFocus);
             const rowStates = new Array<LayoutState>(serviceItemCount);
 
             for (let index = 0; index < serviceItemCount; index += 1) {
-              rowStates[index] = getShowcaseRowState(index, focusIndex, metrics);
+              rowStates[index] = getShowcaseRowState(index, serviceFocus, metrics);
             }
 
             const introTravelDistance = dropRect.y - introRect.y;
             const openingLayerY = introTravelDistance * introMediaProgress;
-            const openingVisibility =
-              progress <= 0.14 ? 1 : 1 - aboutContentEase(openingFadeProgress);
+            const openingVisibility = 1 - aboutContentEase(openingFadeProgress);
             const patternOpacity = 1 - aboutContentEase(patternFadeProgress);
-            const makeBrandOpacity = progress <= 0.42 ? 1 : 0;
-            const finalImageRevealProgress = clamp((progress - 0.22) / 0.04);
+            const finalImageRevealProgress = clamp(
+              introMediaProgress * 2.75 - 1.75,
+            );
 
             heroMatteScaleX(0);
             heroMediaFrameOpacity(1 - finalImageRevealProgress);
@@ -615,42 +638,29 @@ export function useRadiantShowcaseMotion({
             heroMonogramOpacity(patternOpacity);
             heroMonogramY(0);
             heroMonogramScale(1);
-            heroMarqueeOpacity(makeBrandOpacity);
+            heroMarqueeOpacity(1 - clamp(finalMarqueeRevealProgress * 1.35));
             heroMarqueeX(
-              progress < 0.24
-                ? 0
-                : lerp(0, -metrics.viewportWidth, shineSlideProgress),
+              lerp(0, -metrics.viewportWidth, shineSlideProgress),
             );
             heroMarqueeTrackXPercent(0);
             heroFinalMarqueeOpacity(
-              progress < 0.42
-                ? 0
-                : progress < 0.48
-                  ? aboutContentEase(finalMarqueeRevealProgress)
-                  : progress < 0.84
-                    ? 1
-                    : 1 - clamp((progress - 0.84) / 0.08),
+              rowRevealProgress > 0
+                ? 1 - clamp(rowRevealProgress)
+                : aboutContentEase(finalMarqueeRevealProgress),
             );
-            heroFinalMarqueeTrackXPercent(
-              progress < 0.42
-                ? 100
-                : progress < 0.72
-                  ? lerp(100, -110, finalMarqueeRunProgress)
-                  : -110,
-            );
+            heroFinalMarqueeTrackXPercent(lerp(100, -110, finalMarqueeRunProgress));
 
-            const activeFocusState =
-              progress < 0.93 ? rowZeroState : rowStates[activeCopyIndex];
+            const activeFocusState = rowStates[activeCopyIndex] ?? rowStates[0];
             const currentHeroRowState =
               gridProgress > 0
                 ? morphState(
-                  terminalRowStates[0],
+                  rowStates[0],
                   gridStates[0],
                   gridProgress,
                 )
                 : rowStates[0];
 
-            if (progress <= 0.24) {
+            if (introMediaProgress < 1) {
               const introTopRadius = lerp(introRect.borderRadius, 0, introMediaProgress);
 
               heroMediaSetters.borderRadius(0);
@@ -667,7 +677,7 @@ export function useRadiantShowcaseMotion({
               );
               heroMediaSetters.x(lerp(introRect.x, dropRect.x, introMediaProgress));
               heroMediaSetters.y(lerp(introRect.y, dropRect.y, introMediaProgress));
-            } else if (progress <= 0.42) {
+            } else if (shineSlideProgress < 1) {
               applyHeroRect(heroMediaSetters, {
                 borderRadius: 0,
                 height: fullRect.height,
@@ -676,7 +686,7 @@ export function useRadiantShowcaseMotion({
                 x: lerp(slideRect.x, fullRect.x, shineSlideProgress),
                 y: 0,
               });
-            } else if (progress < 0.93) {
+            } else if (shrinkProgress < 1) {
               heroMediaSetters.borderRadius(
                 lerp(fullRect.borderRadius, rowZeroRect.borderRadius, shrinkProgress),
               );
@@ -690,8 +700,6 @@ export function useRadiantShowcaseMotion({
               heroMediaSetters.x(lerp(fullRect.x, rowZeroRect.x, shrinkProgress));
               heroMediaSetters.y(lerp(fullRect.y, rowZeroRect.y, shrinkProgress));
             } else {
-              // The hero tile is also the first service card, so it needs to
-              // join the shared focus/grid choreography as soon as that phase starts.
               applyHeroRect(heroMediaSetters, {
                 borderRadius: 24,
                 height: metrics.mediaHeight,
@@ -703,35 +711,33 @@ export function useRadiantShowcaseMotion({
             }
 
             const copyShellOpacity =
-              progress < 0.84
-                ? 0
-                : progress < 0.93
-                  ? rowRevealProgress
-                  : 1 - clamp(gridProgress * 1.24);
+              rowRevealProgress < 1
+                ? rowRevealProgress
+                : 1 - clamp(gridProgress * 1.24);
 
             activeServiceCopyShellSetters.opacity(copyShellOpacity);
             activeServiceCopyShellSetters.y(
               activeFocusState.y +
               metrics.mediaHeight * activeFocusState.scale +
-              metrics.copyOffset +
-              holdProgress * 8,
+              metrics.copyOffset,
             );
 
             serviceCopySetters.forEach((setters, index) => {
               const revealStrength =
-                progress < 0.93
+                rowRevealProgress < 1
                   ? index === 0
                     ? rowRevealProgress
                     : 0
-                  : index === activeCopyIndex
-                    ? 1
-                    : 0;
+                  : clamp(
+                    1 -
+                      Math.abs(index - serviceFocus) / SERVICE_COPY_FADE_DURATION,
+                  );
 
-              const clampedRevealStrength = clamp(revealStrength);
-
-              setters.opacity(
-                progress < 0.84 ? 0 : (1 - gridProgress) * clampedRevealStrength,
+              const clampedRevealStrength = aboutContentEase(
+                clamp(revealStrength),
               );
+
+              setters.opacity((1 - gridProgress) * clampedRevealStrength);
               setters.y(18 - clampedRevealStrength * 18);
             });
 
@@ -752,14 +758,14 @@ export function useRadiantShowcaseMotion({
               const rowState =
                 gridProgress > 0
                   ? morphState(
-                    terminalRowStates[itemIndex],
+                    rowStates[itemIndex],
                     gridStates[itemIndex],
                     gridProgress,
                   )
                   : rowStates[itemIndex];
 
               const currentState =
-                progress < 0.93
+                rowRevealProgress < 1
                   ? morphState(enterStates[nodeIndex], rowState, rowRevealProgress)
                   : rowState;
 
@@ -767,22 +773,122 @@ export function useRadiantShowcaseMotion({
             });
           };
 
+          const showcaseTimeline = gsap.timeline({
+            defaults: { ease: "none" },
+            paused: true,
+            onUpdate: () => {
+              renderShowcase(showcaseState);
+            },
+          });
+          const serviceScrub = useTouchProfile ? 0.28 : SERVICE_SCRUB;
+
+          showcaseTimeline
+            .to(showcaseState, {
+              duration: 1.15,
+              introMediaProgress: 1,
+            })
+            .to(showcaseState, {
+              duration: 0.42,
+              openingFadeProgress: 1,
+            }, 0.56)
+            .to(showcaseState, {
+              duration: 0.5,
+              patternFadeProgress: 1,
+            }, 0)
+            .to(showcaseState, {
+              duration: 0.92,
+              shineSlideProgress: 1,
+            }, 1.15)
+            .to(showcaseState, {
+              duration: 0.24,
+              finalMarqueeRevealProgress: 1,
+            }, 1.68)
+            .to(showcaseState, {
+              duration: 1.18,
+              finalMarqueeRunProgress: 1,
+            }, 1.68)
+            .to(showcaseState, {
+              duration: 0.72,
+              shrinkProgress: 1,
+            }, 2.35)
+            .to(showcaseState, {
+              duration: ROW_REVEAL_DURATION,
+              rowRevealProgress: 1,
+            }, INTRO_SCROLL_SHARE)
+            .addLabel("service-0");
+
+          for (let index = 1; index < serviceItemCount; index += 1) {
+            showcaseTimeline.to(showcaseState, {
+              duration: SERVICE_STEP_DURATION,
+              ease: "power2.inOut",
+              serviceFocus: index,
+            });
+            showcaseTimeline.addLabel(`service-${index}`);
+          }
+
+          showcaseTimeline
+            .addLabel("grid")
+            .to(showcaseState, {
+              duration: GRID_OUTRO_DURATION,
+              ease: "power2.out",
+              gridProgress: 1,
+            });
+
+          const snapLabelNames = [
+            ...Array.from(
+              { length: serviceItemCount },
+              (_, index) => `service-${index}`,
+            ),
+            "grid",
+          ];
+          const snapPoints = snapLabelNames.map(
+            (label) => showcaseTimeline.labels[label] / showcaseTimeline.duration(),
+          );
+
+          const snapToDirectionalPoint = (value: number, direction: number) => {
+            if (value < snapPoints[0]) {
+              return value;
+            }
+
+            if (direction >= 0) {
+              return (
+                snapPoints.find((point) => point >= value - 0.0001) ??
+                snapPoints[snapPoints.length - 1]
+              );
+            }
+
+            for (let index = snapPoints.length - 1; index >= 0; index -= 1) {
+              if (snapPoints[index] <= value + 0.0001) {
+                return snapPoints[index];
+              }
+            }
+
+            return snapPoints[0];
+          };
+
           const showcaseTrigger = ScrollTrigger.create({
+            animation: showcaseTimeline,
             trigger: refs.showcaseSectionRef.current,
             start: "top top",
             end: "bottom bottom",
-            scrub: showcaseScrub,
+            scrub: serviceScrub,
+            snap: {
+              delay: SERVICE_SNAP_DELAY,
+              duration: { max: 0.42, min: 0.18 },
+              ease: "power1.inOut",
+              snapTo: (value, self) =>
+                snapToDirectionalPoint(value, self?.direction ?? 1),
+            },
             onRefresh: (self) => {
               const refreshedMetrics = updateMetrics();
               applyMetricBoundLayout(refreshedMetrics);
-              renderShowcase(self.progress, refreshedMetrics);
-            },
-            onUpdate: (self) => {
-              renderShowcase(self.progress);
+              showcaseTimeline.progress(self.progress);
+              renderShowcase(showcaseState, refreshedMetrics);
             },
           });
 
-          renderShowcase(showcaseTrigger.progress, cachedMetrics);
+          showcaseTimeline.progress(showcaseTrigger.progress);
+          renderShowcase(showcaseState, cachedMetrics);
 
           let resizeFrame = 0;
           let lastViewportWidth = window.innerWidth;
@@ -814,106 +920,8 @@ export function useRadiantShowcaseMotion({
           return () => {
             window.removeEventListener("resize", handleResize);
             cancelAnimationFrame(resizeFrame);
+            showcaseTimeline.kill();
             showcaseTrigger.kill();
-          };
-        },
-      );
-
-      mm.add(
-        "(prefers-reduced-motion: no-preference) and (max-width: 767px)",
-        () => {
-          if (
-            !refs.mobileHeroSectionRef.current ||
-            !refs.mobileHeroMarqueeRef.current ||
-            !refs.mobileHeroTopContentRef.current ||
-            !refs.mobileHeroTopOverlayRef.current
-          ) {
-            return undefined;
-          }
-
-          const { showcaseScrub } = getRadiantScrollProfile();
-          const marqueeX = createQuickSetter(
-            refs.mobileHeroMarqueeRef.current,
-            "x",
-            "px",
-          ) as NumericSetter;
-          const marqueeY = createQuickSetter(
-            refs.mobileHeroMarqueeRef.current,
-            "y",
-            "px",
-          ) as NumericSetter;
-          const marqueeOpacity = createQuickSetter(
-            refs.mobileHeroMarqueeRef.current,
-            "opacity",
-          ) as NumericSetter;
-          const topContentOpacity = createQuickSetter(
-            refs.mobileHeroTopContentRef.current,
-            "opacity",
-          ) as NumericSetter;
-          const topContentY = createQuickSetter(
-            refs.mobileHeroTopContentRef.current,
-            "y",
-            "px",
-          ) as NumericSetter;
-          const topContentFilter = createQuickSetter(
-            refs.mobileHeroTopContentRef.current,
-            "filter",
-          ) as StringSetter;
-          const topOverlayOpacity = createQuickSetter(
-            refs.mobileHeroTopOverlayRef.current,
-            "opacity",
-          ) as NumericSetter;
-
-          const getMetrics = () => {
-            const viewportWidth = window.innerWidth;
-            const viewportHeight = window.innerHeight;
-            const marqueeWidth =
-              refs.mobileHeroMarqueeRef.current?.offsetWidth ?? viewportWidth;
-            const endInset = Math.max(24, viewportWidth * 0.06);
-
-            return {
-              endX: Math.min(0, viewportWidth - marqueeWidth - endInset),
-              startX: viewportWidth,
-              endY: Math.max(180, viewportHeight * 0.56),
-              startY: -Math.max(28, viewportHeight * 0.08),
-            };
-          };
-
-          let metrics = getMetrics();
-
-          const renderMobileHero = (progress: number) => {
-            const blurProgress = clamp((progress - 0.05) / 0.28);
-            const marqueeRevealProgress = clamp((progress - 0.01) / 0.14);
-            const travelProgress = clamp((progress - 0.42) / 0.4);
-            const verticalProgress = clamp((progress - 0.34) / 0.24);
-
-            topContentOpacity(1 - blurProgress * 0.55);
-            topContentY(-blurProgress * 10);
-            topContentFilter(`blur(${blurProgress * 6}px)`);
-            topOverlayOpacity(blurProgress * 0.38);
-            marqueeOpacity(marqueeRevealProgress);
-            marqueeX(lerp(metrics.startX, metrics.endX, travelProgress));
-            marqueeY(lerp(metrics.startY, metrics.endY, verticalProgress));
-          };
-
-          const mobileHeroTrigger = ScrollTrigger.create({
-            trigger: refs.mobileHeroSectionRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: Math.max(showcaseScrub, 1.1),
-            onRefresh: (self) => {
-              metrics = getMetrics();
-              renderMobileHero(self.progress);
-            },
-            onUpdate: (self) => {
-              renderMobileHero(self.progress);
-            },
-          });
-
-          renderMobileHero(mobileHeroTrigger.progress);
-
-          return () => {
-            mobileHeroTrigger.kill();
           };
         },
       );

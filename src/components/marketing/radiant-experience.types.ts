@@ -26,10 +26,6 @@ export type RadiantNewsItem = OrderedNewsItem;
 export type RadiantExperienceRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
   showcaseSectionRef: RefObject<HTMLDivElement | null>;
-  mobileHeroSectionRef: RefObject<HTMLDivElement | null>;
-  mobileHeroMarqueeRef: RefObject<HTMLParagraphElement | null>;
-  mobileHeroTopContentRef: RefObject<HTMLDivElement | null>;
-  mobileHeroTopOverlayRef: RefObject<HTMLDivElement | null>;
   heroMatteRef: RefObject<HTMLDivElement | null>;
   heroMediaRef: RefObject<HTMLDivElement | null>;
   heroMediaFrameRef: RefObject<HTMLDivElement | null>;

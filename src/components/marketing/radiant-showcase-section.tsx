@@ -163,115 +163,6 @@ function ShowcaseFrameStar({ className }: { className?: string }) {
   );
 }
 
-function MobileShowcaseHero({
-  content,
-  refs,
-}: {
-  content: RadiantExperienceContent;
-  refs: RadiantExperienceRefs;
-}) {
-  const {
-    mobileHeroMarqueeRef,
-    mobileHeroSectionRef,
-    mobileHeroTopContentRef,
-    mobileHeroTopOverlayRef,
-  } = refs;
-  const openingCopy = getOpeningHeroCopy(content.locale);
-
-  return (
-    <div className="md:hidden">
-      <section className="relative mt-20 h-[calc(100dvh-5rem)] min-h-[34rem] overflow-hidden rounded-t-[16px] bg-[#17120F]">
-        <VisualSurface
-          className="absolute inset-0 rounded-none"
-          image={heroEditorialImage}
-          innerClassName="scale-[1.05]"
-        >
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,5,0.16)_0%,rgba(13,8,5,0.22)_30%,rgba(13,8,5,0.56)_72%,rgba(13,8,5,0.84)_100%)]" />
-        </VisualSurface>
-        <div className="site-gutter relative z-10 flex h-full items-center justify-center px-5 pb-[calc(env(safe-area-inset-bottom)+4.75rem)] pt-[calc(env(safe-area-inset-top)+76px)]">
-          <div className="flex flex-col items-center space-y-5 text-center">
-            <h1 className="font-heading text-[clamp(1rem,8vw,4.5rem)] leading-[1.2] font-bold tracking-[-0.04em] text-[#E2B649] text-shadow-[0_8px_24px_rgba(15,9,4,0.22)]">
-              <span className="block">{openingCopy.lineOne}</span>
-              <span className="block">{openingCopy.lineTwo}</span>
-            </h1>
-            <p className="max-w-[18.5rem] text-[0.98rem] leading-6 text-[#F7EFE4]/92">
-              {content.hero.promise}
-            </p>
-            <OpeningHeroButton label={openingCopy.ctaLabel} />
-          </div>
-        </div>
-        <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20">
-          <RadiantPatternTicker
-            className="bg-transparent"
-            direction="right"
-            label={content.brand.name}
-            mobileVisible
-          />
-        </div>
-      </section>
-
-      <div
-        ref={mobileHeroSectionRef}
-        className="relative min-h-[200svh] overflow-clip"
-      >
-        <div className="sticky top-0 z-10 h-svh overflow-hidden bg-[#f6f1eb]">
-          <div
-            ref={mobileHeroTopContentRef}
-            className="site-gutter relative z-10 flex h-full items-center justify-center will-change-transform"
-          >
-            <div className="mx-auto flex max-w-[20rem] items-center justify-center">
-              <div className="space-y-3 text-center text-[#8C5725]">
-                <p className="hero-title-display">
-                  {content.hero.title.premium}
-                </p>
-                <p className="hero-title-display">
-                  {content.hero.title.esthetic}
-                </p>
-                <p className="hero-title-display">
-                  {content.hero.title.dentistry}!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div
-            ref={mobileHeroTopOverlayRef}
-            className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(20,21,29,0)_0%,rgba(20,21,29,0.08)_36%,rgba(20,21,29,0.18)_100%)] opacity-0 backdrop-blur-md"
-          />
-        </div>
-
-        <div
-          data-mobile-hero-media=""
-          className="dark-editorial-gradient relative z-20 h-svh overflow-hidden bg-[#171614]"
-        >
-          <VisualSurface
-            className="size-full rounded-none"
-            image={content.services.items[0]?.image ?? heroEditorialImage}
-            innerClassName="scale-[1.08]"
-          />
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,8,8,0.06)_0%,rgba(9,8,8,0.12)_32%,rgba(9,8,8,0.28)_56%,rgba(9,8,8,0.62)_100%)]" />
-          <div className="absolute left-[-12%] top-[14%] h-40 w-40 rounded-full bg-[#8bc6ff]/12 blur-3xl" />
-          <div className="absolute bottom-[-8%] right-[-6%] h-48 w-48 rounded-full bg-[#ffe1c3]/12 blur-3xl" />
-        </div>
-
-        <div className="pointer-events-none absolute inset-0 z-30">
-          <div className="sticky top-0 h-svh overflow-hidden">
-            <div className="absolute left-0 top-[20%] -translate-y-1/2">
-              <p
-                ref={mobileHeroMarqueeRef}
-                data-mobile-hero-marquee=""
-                className="hero-marquee-display whitespace-nowrap px-6 text-white text-shadow-soft"
-              >
-                {content.hero.marquee}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ReducedMotionDesktopShowcase({
   content,
   forceVisible = false,
@@ -396,7 +287,37 @@ export function RadiantShowcaseSection({
 
   return (
     <section id="showcase">
-      <MobileShowcaseHero content={content} refs={refs} />
+      <div className="relative mt-20 md:hidden">
+        <section className="relative h-[calc(100dvh-5rem)] min-h-[34rem] overflow-hidden rounded-t-[16px] bg-[#17120F]">
+          <VisualSurface
+            className="absolute inset-0 rounded-none"
+            image={heroEditorialImage}
+            innerClassName="scale-[1.05]"
+          >
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,5,0.16)_0%,rgba(13,8,5,0.22)_30%,rgba(13,8,5,0.56)_72%,rgba(13,8,5,0.84)_100%)]" />
+          </VisualSurface>
+          <div className="site-gutter relative z-10 flex h-full items-center justify-center px-5 pb-[calc(env(safe-area-inset-bottom)+4.75rem)] pt-[calc(env(safe-area-inset-top)+76px)]">
+            <div className="flex flex-col items-center space-y-5 text-center">
+              <h1 className="font-heading text-[clamp(1rem,8vw,4.5rem)] leading-[1.2] font-bold tracking-[-0.04em] text-[#E2B649] text-shadow-[0_8px_24px_rgba(15,9,4,0.22)]">
+                <span className="block">{openingCopy.lineOne}</span>
+                <span className="block">{openingCopy.lineTwo}</span>
+              </h1>
+              <p className="max-w-[18.5rem] text-[0.98rem] leading-6 text-[#F7EFE4]/92">
+                {content.hero.promise}
+              </p>
+              <OpeningHeroButton label={openingCopy.ctaLabel} />
+            </div>
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-4 z-20">
+            <RadiantPatternTicker
+              className="bg-transparent"
+              direction="right"
+              label={content.brand.name}
+              mobileVisible
+            />
+          </div>
+        </section>
+      </div>
 
       <div
         ref={showcaseSectionRef}

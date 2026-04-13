@@ -154,6 +154,7 @@ export function RadiantProjectsSection({
         <div className="mt-6 flex justify-center">
           <ViewAllButton
             label={viewAllLabel}
+            tone="light"
             onClick={() => {
               startTransition(() => {
                 setActiveFilter("all");
