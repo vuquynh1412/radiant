@@ -1,6 +1,9 @@
 "use client";
 
-import { useLenisScrollSync } from "@/lib/animations";
+import {
+  getScrollSceneLabelPosition,
+  useLenisScrollSync,
+} from "@/lib/animations";
 import { ArrowUpToLineIcon, PhoneCallIcon } from "lucide-react";
 import { useLocale, useMessages } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -29,6 +32,10 @@ import { RadiantPartnerLogosSection } from "./radiant-partner-logos-section";
 import { RadiantProjectsSection } from "./radiant-projects-section";
 import { ZaloLogoIcon } from "./radiant-experience-shared";
 import { RadiantShowcaseSection } from "./radiant-showcase-section";
+import {
+  RADIANT_CTA_FULLY_VISIBLE_LABEL,
+  RADIANT_CTA_SCENE_ID,
+} from "@/hooks/use-radiant-cta-motion";
 
 function MessengerLogoIcon({ className }: { className?: string }) {
   return (
@@ -343,6 +350,55 @@ export function RadiantExperience({ }: RadiantExperienceProps) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [lenisRef]);
+
+  const handleScrollToContact = useCallback(() => {
+    const ctaLabelPosition = getScrollSceneLabelPosition(
+      RADIANT_CTA_SCENE_ID,
+      RADIANT_CTA_FULLY_VISIBLE_LABEL,
+    );
+    const contactSection = document.getElementById("contact");
+    const fallbackTop = contactSection
+      ? window.scrollY + contactSection.getBoundingClientRect().top
+      : 0;
+    const targetTop = ctaLabelPosition ?? fallbackTop;
+
+    lenisRef.current?.scrollTo(targetTop, {
+      duration: 1.1,
+      force: true,
+      lock: true,
+    });
+
+    if (!lenisRef.current) {
+      window.scrollTo({ top: targetTop, behavior: "smooth" });
+    }
+  }, [lenisRef]);
+
+  useEffect(() => {
+    const handleDocumentClick = (event: MouseEvent) => {
+      if (event.defaultPrevented) {
+        return;
+      }
+
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const anchor = target.closest<HTMLAnchorElement>('a[href="#contact"]');
+      if (!anchor) {
+        return;
+      }
+
+      event.preventDefault();
+      handleScrollToContact();
+    };
+
+    document.addEventListener("click", handleDocumentClick);
+
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, [handleScrollToContact]);
 
   const backToTopLabel =
     locale === "vi" ? "Cuộn lên đầu trang" : "Back to top";

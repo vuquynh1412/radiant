@@ -58,10 +58,12 @@ const aboutContentEase = gsap.parseEase("power2.out");
 const INTRO_SCROLL_SHARE = 3.45;
 const ROW_REVEAL_DURATION = 0.55;
 const SERVICE_STEP_DURATION = 1;
-const GRID_OUTRO_DURATION = 1.15;
+const FINAL_SERVICE_HOLD_DURATION = 1;
+const GRID_OUTRO_DURATION = 2.25;
 const SERVICE_SCRUB = 0.42;
 const SERVICE_SNAP_DELAY = 0.08;
 const SERVICE_COPY_FADE_DURATION = 0.32;
+const GRID_SNAP_DURATION = { max: 0.78, min: 0.34 } as const;
 
 type ShowcaseMasterState = {
   finalMarqueeRevealProgress: number;
@@ -827,10 +829,13 @@ export function useRadiantShowcaseMotion({
           }
 
           showcaseTimeline
+            .to({}, {
+              duration: FINAL_SERVICE_HOLD_DURATION,
+            })
             .addLabel("grid")
             .to(showcaseState, {
               duration: GRID_OUTRO_DURATION,
-              ease: "power2.out",
+              ease: "power2.inOut",
               gridProgress: 1,
             });
 
@@ -874,7 +879,7 @@ export function useRadiantShowcaseMotion({
             scrub: serviceScrub,
             snap: {
               delay: SERVICE_SNAP_DELAY,
-              duration: { max: 0.42, min: 0.18 },
+              duration: GRID_SNAP_DURATION,
               ease: "power1.inOut",
               snapTo: (value, self) =>
                 snapToDirectionalPoint(value, self?.direction ?? 1),

@@ -40,6 +40,9 @@ type UseRadiantCtaMotionProps = {
 const riseEase = gsap.parseEase("power3.out");
 const riseScaleCurve = gsap.parseEase("power2.in");
 
+export const RADIANT_CTA_SCENE_ID = "radiant-cta";
+export const RADIANT_CTA_FULLY_VISIBLE_LABEL = "fully-visible";
+
 function createOpacityYSetters(node: HTMLElement): OpacityYSetters {
   return {
     opacity: createQuickSetter(node, "opacity") as NumericSetter,
@@ -49,6 +52,10 @@ function createOpacityYSetters(node: HTMLElement): OpacityYSetters {
 
 export function useRadiantCtaMotion({ refs }: UseRadiantCtaMotionProps) {
   useScrollScene({
+    id: RADIANT_CTA_SCENE_ID,
+    labels: {
+      [RADIANT_CTA_FULLY_VISIBLE_LABEL]: 0.64,
+    },
     scope: refs.sectionRef,
     trigger: refs.sectionRef,
     start: "top bottom",

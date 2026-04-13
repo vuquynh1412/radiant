@@ -41,8 +41,6 @@ type SocialLink = {
 
 const bookCallHref =
   "mailto:hello@radiant.com?subject=Radiant%20strategy%20call";
-const requestDeckHref =
-  "mailto:hello@radiant.com?subject=Radiant%20capability%20deck";
 const menuPanelId = "radiant-header-menu-panel";
 const servicesPanelId = "radiant-header-services-panel";
 const focusableSelector = [

@@ -53,6 +53,7 @@ export function RadiantProjectsSection({
 
   useBatchReveal({
     duration: 0.72,
+    once: false,
     refreshKey: activeFilter,
     scope: projectsSectionRef,
     selector: "[data-project-reveal]",

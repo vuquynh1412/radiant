@@ -52,7 +52,7 @@ export function useBatchReveal({
       return;
     }
 
-    let batchedTriggers: ReturnType<typeof ScrollTrigger.batch> = [];
+    const scrollTriggers: ScrollTrigger[] = [];
 
     const ctx = gsap.context(() => {
       gsap.set(targets, {
@@ -60,39 +60,55 @@ export function useBatchReveal({
         y,
       });
 
-      const animateBatch = (elements: gsap.TweenTarget) => {
-        gsap.to(elements, {
+      targets.forEach((target, index) => {
+        const revealTween = gsap.to(target, {
           autoAlpha: 1,
-          delay,
+          delay: delay + index * stagger,
           duration,
           ease,
           overwrite: "auto",
-          stagger,
           y: 0,
+          paused: true,
         });
-      };
 
-      batchedTriggers = ScrollTrigger.batch(targets, {
-        once,
-        onEnter: animateBatch,
-        onEnterBack: once ? undefined : animateBatch,
-        onLeaveBack: once
-          ? undefined
-          : (elements) => {
-              gsap.set(elements, {
-                autoAlpha: 0,
-                overwrite: "auto",
-                y,
-              });
-            },
-        start,
+        const syncToTriggerState = (self: ScrollTrigger) => {
+          if (self.progress > 0 || self.isActive) {
+            revealTween.progress(1).pause();
+            return;
+          }
+
+          if (!once) {
+            revealTween.progress(0).pause();
+          }
+        };
+
+        const scrollTrigger = ScrollTrigger.create({
+          trigger: target,
+          start,
+          once,
+          invalidateOnRefresh: true,
+          onEnter: () => {
+            revealTween.play();
+          },
+          onEnterBack: () => {
+            revealTween.play();
+          },
+          onLeaveBack: () => {
+            if (!once) {
+              revealTween.reverse();
+            }
+          },
+          onRefresh: syncToTriggerState,
+        });
+
+        scrollTriggers.push(scrollTrigger);
       });
     }, root);
 
     scheduleScrollRefresh();
 
     return () => {
-      batchedTriggers.forEach((scrollTrigger) => {
+      scrollTriggers.forEach((scrollTrigger) => {
         scrollTrigger.kill();
       });
       ctx.revert();

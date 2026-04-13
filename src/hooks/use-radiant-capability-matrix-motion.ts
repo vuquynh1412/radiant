@@ -108,6 +108,7 @@ export function useRadiantCapabilityMatrixMotion({
 
           const { defaultScrub: scrubAmount } = getRadiantScrollProfile();
           const contentEl = refs.capabilityMatrixContentRef.current;
+          let hasCompletedReveal = false;
 
           const layoutSelector = isDesktop
             ? '[data-matrix-layout="desktop"]'
@@ -230,32 +231,46 @@ export function useRadiantCapabilityMatrixMotion({
             }
           }
 
-          // When timeline completes, remove clip-path entirely so glyphs
-          // aren't clipped, and fire the reveal callback.
-          const allLetters = layout
-            ? Array.from(layout.querySelectorAll<HTMLElement>("[data-matrix-letter]"))
-            : [];
-          const allImages = layout
-            ? Array.from(layout.querySelectorAll<HTMLElement>("[data-matrix-image]"))
-            : [];
+          const completeRevealTimeline = () => {
+            tl.progress(1).pause();
 
-          tl.eventCallback("onComplete", () => {
-            if (allLetters.length) {
-              gsap.set(allLetters, { clearProps: "clipPath" });
+            if (!hasCompletedReveal) {
+              hasCompletedReveal = true;
+              onRevealComplete?.();
             }
-            if (allImages.length) {
-              gsap.set(allImages, { clearProps: "clipPath,scale" });
-            }
-            onRevealComplete?.();
-          });
+          };
 
-          // ScrollTrigger: play once when section enters viewport
+          const playRevealTimeline = () => {
+            if (hasCompletedReveal) {
+              return;
+            }
+
+            tl.restart();
+          };
+
+          // ScrollTrigger: auto-play the reveal when the matrix enters view.
+          // Theme transitions stay scroll-synced below, but the letter/image
+          // reveal itself should feel autonomous.
           const revealTrigger = ScrollTrigger.create({
             trigger: refs.capabilityMatrixSectionRef.current,
             start: "top+=100 65%",
-            once: true,
+            end: "bottom 35%",
+            onRefresh: (self) => {
+              if (hasCompletedReveal || self.progress > 0) {
+                completeRevealTimeline();
+              }
+            },
             onEnter: () => {
-              tl.play();
+              playRevealTimeline();
+            },
+            onEnterBack: () => {
+              playRevealTimeline();
+            },
+            onLeave: () => {
+              completeRevealTimeline();
+            },
+            onLeaveBack: () => {
+              completeRevealTimeline();
             },
           });
 
@@ -300,8 +315,14 @@ export function useRadiantCapabilityMatrixMotion({
             "--projects-intro-color": projectsLightIntro,
             "--projects-title-color": projectsLightTitle,
           });
+          let currentBoundaryThemeIsDark: boolean | null = null;
 
           const applyBoundaryTheme = (isDark: boolean, animate: boolean) => {
+            if (currentBoundaryThemeIsDark === isDark) {
+              return;
+            }
+
+            currentBoundaryThemeIsDark = isDark;
             const apply = animate ? gsap.to : gsap.set;
 
             apply(refs.capabilityMatrixSectionRef.current, {
@@ -360,38 +381,23 @@ export function useRadiantCapabilityMatrixMotion({
             });
           };
 
-          const syncBoundaryTheme = (animate: boolean) => {
-            if (!refs.capabilityMatrixSectionRef.current) return;
-
-            const matrixTopPosition = ScrollTrigger.positionInViewport(
-              refs.capabilityMatrixSectionRef.current,
-              "top",
-            );
-            applyBoundaryTheme(
-              matrixTopPosition <= 0,
-              animate,
-            );
+          const syncBoundaryTheme = (self: ScrollTrigger, animate: boolean) => {
+            applyBoundaryTheme(self.progress > 0, animate);
           };
 
           const backgroundTrigger = ScrollTrigger.create({
             trigger: refs.capabilityMatrixSectionRef.current,
             start: "top top",
             end: "bottom top",
-            onRefresh: () => {
-              syncBoundaryTheme(false);
+            onRefresh: (self) => {
+              syncBoundaryTheme(self, false);
             },
-            onEnter: () => {
-              applyBoundaryTheme(true, true);
-            },
-            onEnterBack: () => {
-              applyBoundaryTheme(true, true);
-            },
-            onLeaveBack: () => {
-              applyBoundaryTheme(false, true);
+            onUpdate: (self) => {
+              syncBoundaryTheme(self, true);
             },
           });
 
-          syncBoundaryTheme(false);
+          syncBoundaryTheme(backgroundTrigger, false);
 
           return () => {
             tl.kill();

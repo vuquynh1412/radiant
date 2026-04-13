@@ -134,6 +134,7 @@ export function RadiantNewsSection({
 
   useBatchReveal({
     duration: 0.7,
+    once: false,
     refreshKey: isDesktop ? "desktop" : "mobile",
     scope: newsSectionRef,
     selector: `[data-news-reveal="${isDesktop ? "desktop" : "mobile"}"]`,
