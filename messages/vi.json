@@ -459,9 +459,10 @@
         }
       },
       "contact": {
+        "title": "Liên hệ",
         "phone": "0318818213",
         "email": "hello@radiant.com",
-        "address": "M4 - 21, Đường M4, Manhattan Glory, Vinhomes Grand Park, Phường Long Bình, Thành phố Hồ Chí Minh, Việt Nam"
+        "address": "M4 - 21, Đường M4, Manhattan Glory, Vinhomes Grand Park, Phường Long Bình, Thành phố Hồ Chí Minh"
       },
       "copyright": "Copyright © 2026 Radiant",
       "patternLabel": "RADIANT"

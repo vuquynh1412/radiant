@@ -47,9 +47,9 @@ function CallToActionBackground() {
         src={ctaBackgroundImage}
         unoptimized
       />
-      <div className="absolute inset-0 bg-[#E8DDD3]/62" />
-      <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-[#E8DDD3]/92 via-[#E8DDD3]/70 to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[#E8DDD3]/82 to-transparent" />
+      <div className="absolute inset-0 bg-[#E8DDD3]/31" />
+      <div className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-[#E8DDD3]/46 via-[#E8DDD3]/35 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-1/3 bg-linear-to-t from-[#E8DDD3]/41 to-transparent" />
     </>
   );
 }
@@ -268,8 +268,8 @@ export function RadiantCallToActionSection({
                   y2="520"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="#E8DDD3" stopOpacity="0.92" />
-                  <stop offset="0.62" stopColor="#E8DDD3" stopOpacity="0.7" />
+                  <stop stopColor="#E8DDD3" stopOpacity="0.46" />
+                  <stop offset="0.62" stopColor="#E8DDD3" stopOpacity="0.35" />
                   <stop offset="1" stopColor="#E8DDD3" stopOpacity="0" />
                 </linearGradient>
                 <linearGradient
@@ -281,7 +281,7 @@ export function RadiantCallToActionSection({
                   gradientUnits="userSpaceOnUse"
                 >
                   <stop stopColor="#E8DDD3" stopOpacity="0" />
-                  <stop offset="1" stopColor="#E8DDD3" stopOpacity="0.82" />
+                  <stop offset="1" stopColor="#E8DDD3" stopOpacity="0.41" />
                 </linearGradient>
               </defs>
               <g mask={`url(#${ctaStarMaskId})`}>
@@ -295,7 +295,7 @@ export function RadiantCallToActionSection({
                   width="1512"
                   height="996"
                   fill="#E8DDD3"
-                  fillOpacity="0.62"
+                  fillOpacity="0.31"
                 />
                 <rect
                   width="1512"
