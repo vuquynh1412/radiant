@@ -554,18 +554,6 @@ export function RadiantExperienceHeader({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={closeMenu}
-            aria-label="Close menu overlay"
-            className={cn(
-              "fixed inset-0 z-0 bg-black/50 transition-opacity duration-220 lg:hidden",
-              isMenuOpen
-                ? "pointer-events-auto opacity-100"
-                : "pointer-events-none opacity-0",
-            )}
-          />
-
           <div
             id={menuPanelId}
             ref={menuDialogRef}

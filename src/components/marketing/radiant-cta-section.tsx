@@ -95,7 +95,7 @@ function CallToActionBody({
       <h2
         ref={titleRef}
         className={cn(
-          "font-heading mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[0.92] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
+          "font-heading mx-auto flex w-full flex-col items-center text-center text-[clamp(2rem,8.2vw,4.5rem)] leading-[1.2] tracking-[-0.02em] text-[#27272A] sm:text-[clamp(2.5rem,6vw,4.5rem)]",
           titleClassName,
         )}
       >
@@ -291,7 +291,12 @@ export function RadiantCallToActionSection({
                   height="996"
                   preserveAspectRatio="xMidYMid slice"
                 />
-                <rect width="1512" height="996" fill="#E8DDD3" fillOpacity="0.62" />
+                <rect
+                  width="1512"
+                  height="996"
+                  fill="#E8DDD3"
+                  fillOpacity="0.62"
+                />
                 <rect
                   width="1512"
                   height="520"

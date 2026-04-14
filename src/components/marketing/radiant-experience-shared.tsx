@@ -534,7 +534,7 @@ export function ServiceCard({
   return (
     <article
       className={cn(
-        "group/service flex cursor-pointer flex-col gap-3",
+        "group/service flex cursor-pointer flex-col gap-2",
         className,
       )}
     >

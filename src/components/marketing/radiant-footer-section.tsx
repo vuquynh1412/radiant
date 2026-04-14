@@ -5,11 +5,11 @@ import { MailIcon, MapPinIcon, PhoneCallIcon } from "lucide-react";
 import { sanitizePhoneNumber } from "@/lib/utils";
 
 import type { RadiantExperienceContent } from "./radiant-experience.types";
+import { RadiantBrandLogo, ZaloLogoIcon } from "./radiant-experience-shared";
 import {
-  RadiantBrandLogo,
-  ZaloLogoIcon,
-} from "./radiant-experience-shared";
-import { radiantSocialLinks, radiantSupportLinks } from "./radiant-social-links";
+  radiantSocialLinks,
+  radiantSupportLinks,
+} from "./radiant-social-links";
 
 type RadiantFooterSectionProps = {
   content: RadiantExperienceContent;
@@ -28,7 +28,12 @@ function SocialGlyph({
 
   if (type === "facebook") {
     return (
-      <svg aria-hidden="true" className="size-4" fill="currentColor" viewBox="0 0 24 24">
+      <svg
+        aria-hidden="true"
+        className="size-4"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path d="M13.6 24v-10.2h3.4l.5-4h-3.9V7.2c0-1.2.3-2 2-2H17.7V1.6c-.4 0-1.7-.1-3.1-.1-3.1 0-5.2 1.9-5.2 5.4v3H6v4h3.4V24z" />
       </svg>
     );
@@ -36,7 +41,12 @@ function SocialGlyph({
 
   if (type === "instagram") {
     return (
-      <svg aria-hidden="true" className="size-4" fill="none" viewBox="0 0 24 24">
+      <svg
+        aria-hidden="true"
+        className="size-4"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
         <rect
           x="3.5"
           y="3.5"
@@ -54,7 +64,12 @@ function SocialGlyph({
 
   if (type === "tiktok") {
     return (
-      <svg aria-hidden="true" className="size-4" fill="currentColor" viewBox="0 0 24 24">
+      <svg
+        aria-hidden="true"
+        className="size-4"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path d="M14.8 3c.3 2.1 1.5 3.8 3.5 4.8v2.6a8.1 8.1 0 0 1-3.4-1v5.2a5.7 5.7 0 1 1-5.7-5.7c.4 0 .8 0 1.2.1v2.7a3.3 3.3 0 1 0 2.1 3.1V3z" />
       </svg>
     );
@@ -62,14 +77,24 @@ function SocialGlyph({
 
   if (type === "linkedin") {
     return (
-      <svg aria-hidden="true" className="size-4" fill="currentColor" viewBox="0 0 24 24">
+      <svg
+        aria-hidden="true"
+        className="size-4"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+      >
         <path d="M6.2 8.6H3.3V20h2.9zM4.8 7.3a1.7 1.7 0 1 0 0-3.3 1.7 1.7 0 0 0 0 3.3M20.7 20v-6.2c0-3.3-1.8-4.8-4.1-4.8-1.9 0-2.7 1-3.2 1.8V8.6h-2.9V20h2.9v-6.3c0-1.7.3-3.4 2.4-3.4 2 0 2.1 1.9 2.1 3.5V20z" />
       </svg>
     );
   }
 
   return (
-    <svg aria-hidden="true" className="size-4" fill="currentColor" viewBox="0 0 24 24">
+    <svg
+      aria-hidden="true"
+      className="size-4"
+      fill="currentColor"
+      viewBox="0 0 24 24"
+    >
       <path d="M23 7s-.2-1.7-.9-2.4c-.9-.9-2-1-2.5-1C16.1 3.3 12 3.3 12 3.3s-4.1 0-7.6.3c-.5 0-1.6.1-2.5 1C1.2 5.3 1 7 1 7S.7 9 .7 11v2c0 2 .3 4 .3 4s.2 1.7.9 2.4c.9.9 2.1.9 2.7 1 2 .2 7.4.3 7.4.3s4.1 0 7.6-.3c.5 0 1.6-.1 2.5-1 .7-.7.9-2.4.9-2.4s.3-2 .3-4v-2c0-2-.3-4-.3-4M9.3 15.2V8.8l6.2 3.2z" />
     </svg>
   );
@@ -132,7 +157,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
   return (
     <footer
       id="site-footer"
-      className="site-gutter relative z-10 overflow-visible bg-[#1b1a18] pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-14 text-white sm:pt-16 lg:pt-20"
+      className="site-gutter relative z-10 overflow-visible bg-[#1b1a18] pb-[calc(env(safe-area-inset-bottom)+5rem)] pt-14 text-white sm:pt-14 lg:pt-20"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-linear-to-b from-black/24 via-black/8 to-transparent" />
 
@@ -305,7 +330,7 @@ export function RadiantFooterSection({ content }: RadiantFooterSectionProps) {
           </div>
         </div>
 
-        <div className="relative z-10 mt-12 border-t border-white/10 py-5 text-center text-sm text-white/52">
+        <div className="relative z-10 mt-4 border-t border-white/10 py-5 text-center text-sm text-white/52">
           {content.footer.copyright}
         </div>
 

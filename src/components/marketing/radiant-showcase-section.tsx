@@ -287,8 +287,8 @@ export function RadiantShowcaseSection({
 
   return (
     <section id="showcase">
-      <div className="relative mt-20 md:hidden">
-        <section className="relative h-[calc(100dvh-5rem)] min-h-[34rem] overflow-hidden rounded-t-[16px] bg-[#17120F]">
+      <div className="relative mt-[72px] md:hidden">
+        <section className="relative h-[calc(100dvh-72px)] overflow-hidden rounded-t-[16px] bg-[#17120F]">
           <VisualSurface
             className="absolute inset-0 rounded-none"
             image={heroEditorialImage}
@@ -296,8 +296,8 @@ export function RadiantShowcaseSection({
           >
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,8,5,0.16)_0%,rgba(13,8,5,0.22)_30%,rgba(13,8,5,0.56)_72%,rgba(13,8,5,0.84)_100%)]" />
           </VisualSurface>
-          <div className="site-gutter relative z-10 flex h-full items-center justify-center px-5 pb-[calc(env(safe-area-inset-bottom)+4.75rem)] pt-[calc(env(safe-area-inset-top)+76px)]">
-            <div className="flex flex-col items-center space-y-5 text-center">
+          <div className="site-gutter relative z-10 flex h-full min-h-0 items-center justify-center px-5 pb-[calc(env(safe-area-inset-bottom)+clamp(3.25rem,9svh,4.75rem))] pt-[calc(env(safe-area-inset-top)+10px)]">
+            <div className="flex min-h-0 flex-col items-center gap-[clamp(0.75rem,2.6svh,1.25rem)] text-center">
               <h1 className="font-heading text-[clamp(1rem,8vw,4.5rem)] leading-[1.2] font-bold tracking-[-0.04em] text-[#E2B649] text-shadow-[0_8px_24px_rgba(15,9,4,0.22)]">
                 <span className="block">{openingCopy.lineOne}</span>
                 <span className="block">{openingCopy.lineTwo}</span>
@@ -583,7 +583,7 @@ export function RadiantShowcaseSection({
           {content.services.items.map((item) => (
             <ServiceCard
               key={`${item.title}-mobile`}
-              className="gap-3"
+              className="gap-2"
               description={item.description}
               eyebrow={item.eyebrow}
               hideDescription
@@ -591,7 +591,7 @@ export function RadiantShowcaseSection({
               image={item.image}
               tileClassName="rounded-[10px]"
               title={getMobileServiceTitle(item.title)}
-              titleClassName="text-[14px] leading-[1.06] whitespace-pre-line"
+              titleClassName="!font-sans text-[14px] leading-[1.06] whitespace-pre-line"
             />
           ))}
         </div>

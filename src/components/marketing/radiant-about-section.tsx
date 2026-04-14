@@ -29,7 +29,7 @@ export function RadiantAboutSection({
           <div className="flex h-full w-full items-center justify-center px-5 sm:px-6 md:rounded-[32px] md:border md:border-secondary md:p-30 lg:rounded-[40px]">
             <CharacterRevealText
               charRefs={aboutCharRefs}
-              className="w-full text-[1.5rem] font-bold leading-[1.14] text-[#27272A] md:text-[40px] md:leading-[1.08] lg:text-[44px]"
+              className="w-full text-[1.5rem] font-bold leading-[1.2] text-[#27272A] md:text-[40px] lg:text-[44px]"
               text={aboutBodyText}
             />
           </div>
